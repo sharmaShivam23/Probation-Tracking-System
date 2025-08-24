@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { name, email, rollNo, branch, password, role, code } = body;
 
-  
+
     if (!name || !email || !rollNo || !branch || !password || !role || !code) {
       return NextResponse.json(
         { success: false, message: "All fields are required" },
@@ -18,14 +18,14 @@ export async function POST(req: Request) {
       );
     }
 
-    if(code !== process.env.code){
-       return NextResponse.json(
+    if (code !== process.env.code) {
+      return NextResponse.json(
         { success: false, message: "You are not Admin" },
         { status: 400 }
-       )
+      )
     }
 
-    
+
     const existing = await Admin.findOne({ $or: [{ email }, { rollNo }] });
     if (existing) {
       return NextResponse.json(
@@ -34,11 +34,11 @@ export async function POST(req: Request) {
       );
     }
 
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedCode = await bcrypt.hash(code, 10);
 
-  
+
     const newAdmin = new Admin({
       name,
       email,
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
       branch,
       role,
       password: hashedPassword,
-      code : hashedCode
+      code: hashedCode
     });
 
     await newAdmin.save();
@@ -55,10 +55,11 @@ export async function POST(req: Request) {
       { success: true, message: "Registered successfully" },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Registration error:", error);
+    const errorMessage = error instanceof Error ? error.message : 'Server Error';
     return NextResponse.json(
-      { success: false, message: error.message || "Server Error" },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

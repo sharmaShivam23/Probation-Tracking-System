@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       );
     }
 
-    
+
     const newTask = await UplodedTask.create({
       title,
       description,
@@ -28,13 +28,13 @@ export async function POST(req: Request) {
     });
 
     await Candidate.findByIdAndUpdate(
-      uploadedBy, 
+      uploadedBy,
       { $push: { uploadedTasks: newTask._id } },
       { new: true }
     );
 
     return NextResponse.json({ success: true, task: newTask });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Task creation error:", error);
     return NextResponse.json(
       { success: false, message: "Server error" },

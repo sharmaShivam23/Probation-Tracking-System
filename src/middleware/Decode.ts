@@ -1,7 +1,7 @@
 
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 
 interface JwtPayload {
   role?: string;
@@ -40,7 +40,7 @@ export function middleware(req: NextRequest) {
 
     // ✅ Allow access
     return NextResponse.next();
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }

@@ -13,14 +13,14 @@ interface JwtPayload {
   exp?: number;
 }
 
-const Navbar = (req : Request) => {
+const Navbar = (req: Request) => {
   const [isOpen, setIsOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [token , setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
-  
+
 
   useEffect(() => {
     const match = document.cookie.match(/auth_token=([^;]+)/);
@@ -38,7 +38,7 @@ const Navbar = (req : Request) => {
           setLoggedIn(false);
           setRole(null);
         }
-      } catch (err) {
+      } catch {
         setLoggedIn(false);
         setRole(null);
       }
@@ -75,14 +75,14 @@ const Navbar = (req : Request) => {
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 text-white dark:text-gray-200">
 
-          {!token && 
-          <Link
-            href="/register"
-            className="relative group transition"
-          >
-            Register
-            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
-          </Link>
+          {!token &&
+            <Link
+              href="/register"
+              className="relative group transition"
+            >
+              Register
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+            </Link>
           }
           {token ? (
             <div

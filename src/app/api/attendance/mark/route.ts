@@ -1,52 +1,3 @@
-// import { NextResponse } from "next/server";
-// import { connectDB } from "@/lib/db";
-// import Attendance from "@/models/Attendance";
-// import Candidate from "@/models/Candidate";
-
-// function normalizeDateToUTC(dateStr: string) {
-//   // dateStr expected in "YYYY-MM-DD" (from input type=date)
-//   const d = new Date(dateStr + "T00:00:00.000Z");
-//   return d;
-// }
-
-// export async function POST(req: Request) {
-//   try {
-//     await connectDB();
-
-//     const body = await req.json();
-//     const { candidateId, date, status } = body as {
-//       candidateId?: string;
-//       date?: string;
-//       status?: "Present" | "Absent";
-//     };
-
-//     if (!candidateId || !date || !status) {
-//       return NextResponse.json({ success: false, message: "candidateId, date and status are required" }, { status: 400 });
-//     }
-
-//     // Validate candidate exists
-//     const candidate = await Candidate.findById(candidateId);
-//     if (!candidate) {
-//       return NextResponse.json({ success: false, message: "Candidate not found" }, { status: 404 });
-//     }
-
-//     const normalized = normalizeDateToUTC(date);
-
-//     // Upsert: if attendance record for candidate+date exists -> update, else create
-//     const updated = await Attendance.findOneAndUpdate(
-//       { candidate: candidateId, date: normalized },
-//       { candidate: candidateId, date: normalized, status },
-//       { upsert: true, new: true, setDefaultsOnInsert: true }
-//     );
-
-//     return NextResponse.json({ success: true, attendance: updated }, { status: 201 });
-//   } catch (error: any) {
-//     console.error("Attendance mark error:", error);
-//     return NextResponse.json({ success: false, message: error.message || "Server error" }, { status: 500 });
-//   }
-// }
-
-
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Attendance from "@/models/Attendance";
@@ -70,9 +21,9 @@ export async function POST(req: Request) {
     }
 
     // 🔹 2. Verify token
-    let decoded: any;
+    let decoded: { id: string; role: string };
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; role: string };
     } catch {
       return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
     }
@@ -116,8 +67,9 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json({ success: true, attendance: updated }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Attendance mark error:", error);
-    return NextResponse.json({ success: false, message: error.message || "Server error" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Server error';
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
   }
 }

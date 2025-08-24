@@ -22,13 +22,13 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, message: "User not found"  },
+        { success: false, message: "User not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ success: true,  tasks: user.uploadedTasks , user });
-  } catch (error: any) {
+    return NextResponse.json({ success: true, tasks: user.uploadedTasks, user });
+  } catch (error: unknown) {
     console.error("Fetch user error:", error);
     return NextResponse.json(
       { success: false, message: "Server error" },

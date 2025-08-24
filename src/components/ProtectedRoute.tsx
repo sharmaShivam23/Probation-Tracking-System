@@ -16,7 +16,7 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   if (loading) return <Loading />;
 

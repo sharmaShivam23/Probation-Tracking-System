@@ -18,7 +18,7 @@
 //     if (existing) {
 //       return NextResponse.json({ success: false, message: "Candidate already registered" }, { status: 400 });
 //     }
-   
+
 //      const hashedPassword = await bcrypt.hash(password, 10);
 
 //     const newCandidate = new Candidate({ name, email, rollNo, branch, github , password : hashedPassword });
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-  
+
     const newCandidate = new Candidate({
       name,
       email,
@@ -94,10 +94,11 @@ export async function POST(req: Request) {
       { success: true, message: "Registered successfully" },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Registration error:", error);
+    const errorMessage = error instanceof Error ? error.message : 'Server Error';
     return NextResponse.json(
-      { success: false, message: error.message || "Server Error" },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

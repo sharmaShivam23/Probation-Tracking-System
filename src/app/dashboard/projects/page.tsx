@@ -4,11 +4,24 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Globe, User, Mail, Briefcase } from "lucide-react";
-import Loading from "@/components/Loading2";
+
+interface SubmittedTask {
+  _id: string;
+  title: string;
+  description: string;
+  github?: string;
+  deploy?: string;
+  uploadedBy: {
+    name: string;
+    email: string;
+    domain: string;
+  };
+  createdAt: string;
+}
 
 export default function ProjectsPage() {
-  const [submittedTasks, setSubmittedTasks] = useState<any[]>([]);
-  const [filteredTasks, setFilteredTasks] = useState<any[]>([]);
+  const [submittedTasks, setSubmittedTasks] = useState<SubmittedTask[]>([]);
+  const [filteredTasks, setFilteredTasks] = useState<SubmittedTask[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("");
 
   const categories = [
@@ -65,22 +78,20 @@ export default function ProjectsPage() {
           <button
             key={index}
             onClick={() => handleCat(cat)}
-            className={`px-4 py-2 rounded-xl border ${
-              activeCategory === cat
+            className={`px-4 py-2 rounded-xl border ${activeCategory === cat
                 ? "bg-red-900 border-red-900"
                 : "bg-white/10 border-white/20"
-            } hover:bg-red-900 transition`}
+              } hover:bg-red-900 transition`}
           >
             {cat}
           </button>
         ))}
         <button
           onClick={() => handleCat("")}
-          className={`px-4 py-2 rounded-xl border ${
-            activeCategory === ""
+          className={`px-4 py-2 rounded-xl border ${activeCategory === ""
               ? "bg-red-900 border-red-900"
               : "bg-white/10 border-white/20"
-          } hover:bg-red-900 transition`}
+            } hover:bg-red-900 transition`}
         >
           All
         </button>

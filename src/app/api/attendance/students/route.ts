@@ -3,17 +3,13 @@ import { connectDB } from "@/lib/db";
 import Candidate from "@/models/Candidate";
 import Attendance from "@/models/Attendance";
 
-function startOfDayUTC(date: Date) {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
-}
-
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await connectDB();
 
     // fetch all students (you might want to filter only role: "Student")
     const candidates = await Candidate.find({ role: "Student" }).select("name rollNo branch").collation({ locale: "en", strength: 1 }) // case-insensitive
-  .sort({ name: 1 }); // a;
+      .sort({ name: 1 }); // a;
 
     // For each candidate compute presentCount & totalCount -> percentage
     // (for better perf, you can use aggregation pipeline; below is straightforward)
@@ -37,8 +33,9 @@ export async function GET(req: Request) {
     );
 
     return NextResponse.json({ success: true, students: result }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Fetch students attendance error:", error);
-    return NextResponse.json({ success: false, message: error.message || "Server error" }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Server error';
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
   }
 }

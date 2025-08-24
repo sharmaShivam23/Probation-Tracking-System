@@ -109,9 +109,9 @@ export async function POST(req: NextRequest) {
     }
 
     // 🔹 2. Verify token
-    let decoded: any;
+    let decoded: { id: string; role: string };
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; role: string };
     } catch {
       return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
     }
@@ -143,12 +143,12 @@ export async function POST(req: NextRequest) {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
 
-      const uploadRes: any = await new Promise((resolve, reject) => {
+      const uploadRes: { secure_url: string } = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
           { folder: "tasks", resource_type: "raw" },
           (error, result) => {
             if (error) return reject(error);
-            resolve(result);
+            resolve(result as { secure_url: string });
           }
         );
         stream.end(buffer);
@@ -172,9 +172,10 @@ export async function POST(req: NextRequest) {
     await Admin.findByIdAndUpdate(decoded.id, { $push: { uploadedTasks: task._id } });
 
     return NextResponse.json({ success: true, task }, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error uploading task:", error);
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
   }
 }
 
@@ -187,12 +188,13 @@ export async function GET() {
     const tasks = await Task.find()
       .populate("uploadedBy")
       .sort({ createdAt: -1 });
-  
+
 
     return NextResponse.json({ success: true, tasks });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: errorMessage },
       { status: 500 }
     );
   }

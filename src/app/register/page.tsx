@@ -1,12 +1,12 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Particles } from "@/components/magicui/particles";
+import Image from "next/image";
 
 const branches = [
   "CSE",
@@ -50,7 +50,7 @@ export default function RegisterPage() {
     code: "",
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleRole = (selectedRole: "Student" | "Admin") => {
     setRole(selectedRole);
@@ -65,8 +65,8 @@ export default function RegisterPage() {
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
-  const validate = () => {
-    let newErrors: any = {};
+  function validate() {
+    const newErrors: Record<string, string> = {};
     let valid = true;
 
     if (!formData.role) {
@@ -165,252 +165,252 @@ export default function RegisterPage() {
       } else {
         toast.error(res.data.message || "Registration failed");
       }
-    } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "Something went wrong");
-      } else {
-        toast.error("An unexpected error occurred");
-      }
-      console.error(error);
+    } catch (error: unknown) {
+      console.log(error);
+      const errorMessage = error instanceof Error && 'response' in error
+        ? (error as any).response?.data?.message
+        : "Something went wrong";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-<>
-    <div className="flex flex-col overflow-y-hidden relative lg:flex-row min-h-screen bg-gradient-to-b from-gray-900 via-black to-red-900 text-white">
-      <Toaster />
-      {/* <div className="p absolute top-0 w-full"> */}
-      {/* <Particles/> */}
-      {/* </div> */}
-      {/* Left Section */}
-
-      
-      <motion.div
-        initial={{ opacity: 0, x: -80 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8 }}
-        className=" w-1/2 mt-20   justify-center"
-      >
-        <h3 className="text-center text-3xl font-bold">
-          Join the millions learning <br/> to code with StudyNotion for free
-        </h3>
-        <img
-          src="/r.avif"
-          className="h m-auto mt-6 w-full bg-cover max-w-md  shadow-xl"
-          alt="register"
-        />
-      </motion.div>
-
-      {/* Right Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 80 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9 }}
-        className="flex-1 flex items-center mb-10 justify-center p-6"
-      >
-        <div className="w-full max-w-lg bg-white/10 backdrop-blur-xl shadow-xl rounded-2xl p-8 border border-white/20">
-          <h1 style={{
-            fontFamily: "'Orbitron', sans-serif",
-            WebkitBackgroundClip: "text",
-            textShadow:
-              "0 0 15px rgba(70,15,14,1), 0 0 30px rgba(99,102,241,0.5)",
-          }} 
-          className="text-3xl font-extrabold text-center mb-6 drop-shadow-lg">
-            Create your account 
-          </h1>
-
-          {/* rgba(70, 15, 14, 1) */}
+    <>
+      <div className="flex flex-col overflow-y-hidden relative lg:flex-row min-h-screen bg-gradient-to-b from-gray-900 via-black to-red-900 text-white">
+        <Toaster />
+        {/* <div className="p absolute top-0 w-full"> */}
+        {/* <Particles/> */}
+        {/* </div> */}
+        {/* Left Section */}
 
 
-          {/* Role Selector */}
-          <div className="flex justify-center mb-2 items-center">
-            <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
-              {["Student", "Admin"].map((r) => (
-                <button
-                  key={r}
-                  type="button"
-                  onClick={() => handleRole(r as "Student" | "Admin")}
-                  className={`px-4 py-1 rounded-xl transition ${
-                    role === r
-                      ? "bg-[#460F0E] text-white scale-105"
-                      : "bg-white/30 text-gray-800 hover:bg-white/40"
-                  }`}
-                >
-                  {r}
-                </button>
-              ))}
+        <motion.div
+          initial={{ opacity: 0, x: -80 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className=" w-1/2 mt-20   justify-center"
+        >
+          <h3 className="text-center text-3xl font-bold">
+            Join the millions learning <br /> to code with StudyNotion for free
+          </h3>
+          <Image
+            src="/r.avif"
+            width={400}
+            height={300}
+            className="h m-auto mt-6 w-full bg-cover max-w-md shadow-xl"
+            alt="register"
+          />
+        </motion.div>
+
+        {/* Right Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9 }}
+          className="flex-1 flex items-center mb-10 justify-center p-6"
+        >
+          <div className="w-full max-w-lg bg-white/10 backdrop-blur-xl shadow-xl rounded-2xl p-8 border border-white/20">
+            <h1 style={{
+              fontFamily: "'Orbitron', sans-serif",
+              WebkitBackgroundClip: "text",
+              textShadow:
+                "0 0 15px rgba(70,15,14,1), 0 0 30px rgba(99,102,241,0.5)",
+            }}
+              className="text-3xl font-extrabold text-center mb-6 drop-shadow-lg">
+              Create your account
+            </h1>
+
+            {/* rgba(70, 15, 14, 1) */}
+
+
+            {/* Role Selector */}
+            <div className="flex justify-center mb-2 items-center">
+              <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
+                {["Student", "Admin"].map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    onClick={() => handleRole(r as "Student" | "Admin")}
+                    className={`px-4 py-1 rounded-xl transition ${role === r
+                        ? "bg-[#460F0E] text-white scale-105"
+                        : "bg-white/30 text-gray-800 hover:bg-white/40"
+                      }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-          {errors.role && (
-            <p className="text-red-300 text-sm text-center">{errors.role}</p>
-          )}
+            {errors.role && (
+              <p className="text-red-300 text-sm text-center">{errors.role}</p>
+            )}
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-2">
-            {/* Name */}
-            <div>
-              <label className="block text-sm font-medium">Full Name</label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="John Doe"
-              />
-              {errors.name && (
-                <p className="text-red-300 text-sm">{errors.name}</p>
-              )}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium">College Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="yourname@akgec.ac.in"
-              />
-              {errors.email && (
-                <p className="text-red-300 text-sm">{errors.email}</p>
-              )}
-            </div>
-
-            {/* Roll & Branch */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="sm:w-1/2">
-                <label className="block text-sm font-medium">Roll Number</label>
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-2">
+              {/* Name */}
+              <div>
+                <label className="block text-sm font-medium">Full Name</label>
                 <input
                   type="text"
-                  name="rollNo"
-                  value={formData.rollNo}
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                  placeholder="24IT101"
+                  placeholder="John Doe"
                 />
-                {errors.rollNo && (
-                  <p className="text-red-300 text-sm">{errors.rollNo}</p>
+                {errors.name && (
+                  <p className="text-red-300 text-sm">{errors.name}</p>
                 )}
               </div>
 
-              <div className="sm:w-1/2">
-                <label className="block text-sm font-medium">Branch</label>
-                <select
-                  name="branch"
-                  value={formData.branch}
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium">College Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  className="mt-1 w-full h-[45px] px-4 rounded-xl bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                >
-                  <option value="">Select Branch</option>
-                  {branches.map((branch, idx) => (
-                    <option key={idx} value={branch} className="text-black">
-                      {branch}
-                    </option>
-                  ))}
-                </select>
-                {errors.branch && (
-                  <p className="text-red-300 text-sm">{errors.branch}</p>
+                  className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="yourname@akgec.ac.in"
+                />
+                {errors.email && (
+                  <p className="text-red-300 text-sm">{errors.email}</p>
                 )}
               </div>
-            </div>
 
-            {/* Domain + GitHub */}
-            {role === "Student" && (
+              {/* Roll & Branch */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="sm:w-1/2">
-                  <label className="block text-sm font-medium">Domain</label>
+                  <label className="block text-sm font-medium">Roll Number</label>
+                  <input
+                    type="text"
+                    name="rollNo"
+                    value={formData.rollNo}
+                    onChange={handleChange}
+                    className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    placeholder="24IT101"
+                  />
+                  {errors.rollNo && (
+                    <p className="text-red-300 text-sm">{errors.rollNo}</p>
+                  )}
+                </div>
+
+                <div className="sm:w-1/2">
+                  <label className="block text-sm font-medium">Branch</label>
                   <select
-                    name="domain"
-                    value={formData.domain}
+                    name="branch"
+                    value={formData.branch}
                     onChange={handleChange}
                     className="mt-1 w-full h-[45px] px-4 rounded-xl bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   >
-                    <option value="">Select Domain</option>
-                    {domains.map((domain, idx) => (
-                      <option key={idx} value={domain} className="text-black">
-                        {domain}
+                    <option value="">Select Branch</option>
+                    {branches.map((branch, idx) => (
+                      <option key={idx} value={branch} className="text-black">
+                        {branch}
                       </option>
                     ))}
                   </select>
-                  {errors.domain && (
-                    <p className="text-red-300 text-sm">{errors.domain}</p>
-                  )}
-                </div>
-
-                <div className="sm:w-1/2">
-                  <label className="block text-sm font-medium">
-                    GitHub Profile
-                  </label>
-                  <input
-                    type="url"
-                    name="github"
-                    value={formData.github}
-                    onChange={handleChange}
-                    className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                    placeholder="https://github.com/username"
-                  />
-                  {errors.github && (
-                    <p className="text-red-300 text-sm">{errors.github}</p>
+                  {errors.branch && (
+                    <p className="text-red-300 text-sm">{errors.branch}</p>
                   )}
                 </div>
               </div>
-            )}
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium">Password</label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-                placeholder="••••••"
-              />
-              {errors.password && (
-                <p className="text-red-300 text-sm">{errors.password}</p>
+              {/* Domain + GitHub */}
+              {role === "Student" && (
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="sm:w-1/2">
+                    <label className="block text-sm font-medium">Domain</label>
+                    <select
+                      name="domain"
+                      value={formData.domain}
+                      onChange={handleChange}
+                      className="mt-1 w-full h-[45px] px-4 rounded-xl bg-white/20 text-white border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    >
+                      <option value="">Select Domain</option>
+                      {domains.map((domain, idx) => (
+                        <option key={idx} value={domain} className="text-black">
+                          {domain}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.domain && (
+                      <p className="text-red-300 text-sm">{errors.domain}</p>
+                    )}
+                  </div>
+
+                  <div className="sm:w-1/2">
+                    <label className="block text-sm font-medium">
+                      GitHub Profile
+                    </label>
+                    <input
+                      type="url"
+                      name="github"
+                      value={formData.github}
+                      onChange={handleChange}
+                      className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                      placeholder="https://github.com/username"
+                    />
+                    {errors.github && (
+                      <p className="text-red-300 text-sm">{errors.github}</p>
+                    )}
+                  </div>
+                </div>
               )}
-            </div>
 
-            {/* Admin Security Code */}
-            {role === "Admin" && (
+              {/* Password */}
               <div>
-                <label className="block text-sm font-medium">
-                  Security Code
-                </label>
+                <label className="block text-sm font-medium">Password</label>
                 <input
                   type="password"
-                  name="code"
-                  value={formData.code}
+                  name="password"
+                  value={formData.password}
                   onChange={handleChange}
                   className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   placeholder="••••••"
                 />
-                {errors.code && (
-                  <p className="text-red-300 text-sm">{errors.code}</p>
+                {errors.password && (
+                  <p className="text-red-300 text-sm">{errors.password}</p>
                 )}
               </div>
-            )}
 
-            {/* Submit */}
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-xl mt-3 h-[45px] font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
-            >
-              {loading ? "Registering..." : "Register"}
-            </motion.button>
-          </form>
-        </div>
-      </motion.div>
-    </div>
+              {/* Admin Security Code */}
+              {role === "Admin" && (
+                <div>
+                  <label className="block text-sm font-medium">
+                    Security Code
+                  </label>
+                  <input
+                    type="password"
+                    name="code"
+                    value={formData.code}
+                    onChange={handleChange}
+                    className="mt-1 w-full px-4 py-2 h-[45px] rounded-xl bg-white/20 text-white placeholder-white/70 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    placeholder="••••••"
+                  />
+                  {errors.code && (
+                    <p className="text-red-300 text-sm">{errors.code}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Submit */}
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.02 }}
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 rounded-xl mt-3 h-[45px] font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
+              >
+                {loading ? "Registering..." : "Register"}
+              </motion.button>
+            </form>
+          </div>
+        </motion.div>
+      </div>
     </>
   );
 }

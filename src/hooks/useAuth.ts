@@ -1,6 +1,7 @@
 "use client"
 import { useEffect } from "react";
 import * as jwtDecode from "jwt-decode";
+import { useRouter } from "next/navigation";
 
 type TokenPayload = {
   id: string;
@@ -11,11 +12,11 @@ type TokenPayload = {
 const decodeToken = jwtDecode as unknown as <T>(token: string) => T;
 
 export function useAuth(requiredRole?: "Admin" | "Student") {
+  const router = useRouter();
+
   useEffect(() => {
     // Only run on client
     if (typeof window === "undefined") return;
-
-    const router = require("next/router").useRouter(); // dynamically import router
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -31,5 +32,5 @@ export function useAuth(requiredRole?: "Admin" | "Student") {
     } catch {
       router.replace("/login"); // invalid token
     }
-  }, [requiredRole]);
+  }, [requiredRole, router]);
 }
