@@ -13,7 +13,7 @@ interface JwtPayload {
   exp?: number;
 }
 
-const Navbar = (req: Request) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [role, setRole] = useState<string | null>(null);
   const [loggedIn, setLoggedIn] = useState(false);
