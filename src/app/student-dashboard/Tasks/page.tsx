@@ -66,7 +66,7 @@ export default function UserTasks() {
   }
 
   return (
-    <div className="min-h-screen  to-red-950 p-8">
+    <div className="min-h-screen  to-red-950 sm:p-8">
       {/* Title */}
       {/* <h1
         style={{

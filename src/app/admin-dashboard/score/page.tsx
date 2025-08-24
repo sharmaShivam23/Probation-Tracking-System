@@ -124,6 +124,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Loading from "@/components/Loading2";
 
 type Attendance = {
   total: number;
@@ -176,7 +177,7 @@ export default function ScorePage() {
   const top3 = users.slice(0, 3);
 
   return (
-    <div className="min-h-screen  p-6 text-white">
+    <div className="min-h-screen  sm:p-6 text-white">
       <h1 style={{
             fontFamily: "'Orbitron', sans-serif",
             WebkitBackgroundClip: "text",
@@ -186,7 +187,7 @@ export default function ScorePage() {
       <p className="text-gray-300 text-center mb-6">Track attendance and top performers.</p>
 
       {/* Loading */}
-      {loading && <p className="text-blue-400 animate-pulse">Loading users...</p>}
+      {loading && <Loading/>}
 
     
       {!loading && top3.length > 0 && (

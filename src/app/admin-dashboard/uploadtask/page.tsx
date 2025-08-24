@@ -253,7 +253,7 @@ export default function TaskForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-lg mx-auto mt-10 mb-10 p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-5 text-white transition-transform hover:scale-[1.02]"
+      className="max-w-lg mx-auto mt-10 mb-10 p-3 sm:p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-5 text-white transition-transform hover:scale-[1.02]"
     >
       <h2 className="text-2xl text-center bg-gradient-to-r text-white font-bold bg-clip-text ">
          Upload Task

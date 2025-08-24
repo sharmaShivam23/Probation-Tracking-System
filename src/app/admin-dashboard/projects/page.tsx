@@ -60,7 +60,7 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <div className="p-6 min-h-screen text-white">
+    <div className="sm:p-6 min-h-screen text-white">
       <h1
         style={{
           fontFamily: "'Orbitron', sans-serif",

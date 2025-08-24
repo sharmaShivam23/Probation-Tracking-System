@@ -44,7 +44,7 @@ export default function UploadTaskForm() {
   };
 
   return (
-    <div className="min flex justify-center  backdrop-blur-2xl p-6">
+    <div className="min flex justify-center  backdrop-blur-2xl sm:p-6">
       {/* Toast container */}
       <Toaster position="top-right" reverseOrder={false} />
 

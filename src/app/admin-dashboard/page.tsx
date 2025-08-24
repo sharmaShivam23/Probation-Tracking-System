@@ -10,7 +10,7 @@ import {
 
 export default function AdminDashboardHome() {
   return (
-    <div className="min-h-screen  text-white p-6">
+    <div className="min-h-screen  text-white sm:p-6">
       {/* Header */}
       <header className="mb-12 text-center">
         <h1

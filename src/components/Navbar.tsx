@@ -63,17 +63,38 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 text-white w-full z-50 bg-gradient-to-r from-red-400 via-black to-gray-900 
  backdrop-blur-xl
  shadow-lg">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div style={{
+              fontFamily: "'Orbitron', sans-serif",
+              WebkitBackgroundClip: "text",
+              textShadow:
+                "0 0 15px rgba(70,15,14,1), 0 0 30px rgba(99,102,241,0.5)",
+            }} className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent"
+          className="text-2xl font-extrabold text-white bg-clip-text "
         >
-          MyLogo
+          EduPortal
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 text-white dark:text-gray-200">
+
+          <Link
+              href="/"
+              className="relative group transition"
+            >
+             Home
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+            </Link>
+
+             <div
+            className="cursor-pointer relative group"
+            onClick={handleDashboard}
+          >
+            Dashboard
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover:w-full" />
+          </div>
 
           {!token &&
             <Link
@@ -105,21 +126,15 @@ const Navbar = () => {
             href="/contact"
             className="relative group transition"
           >
-            Contact
+            Help
             <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full" />
           </Link>
-          <div
-            className="cursor-pointer relative group"
-            onClick={handleDashboard}
-          >
-            Dashboard
-            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover:w-full" />
-          </div>
+         
         </div>
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none"
+          className="md:hidden  text-white focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
@@ -154,9 +169,9 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-white/80 dark:bg-gray-900/90 backdrop-blur-md shadow-lg"
+          className="md:hidden bg-white/30 text-white dark:bg-gray-900/90 backdrop-blur-md shadow-lg"
         >
-          <div className="flex flex-col items-center py-6 space-y-6 text-lg font-semibold text-gray-800 dark:text-gray-200">
+          <div className="flex flex-col items-center py-6 space-y-6 text-lg font-semibold text-white dark:text-gray-200">
             <Link href="/register" onClick={() => setIsOpen(false)}>Register</Link>
             {loggedIn ? (
               <div
@@ -173,7 +188,7 @@ const Navbar = () => {
             )}
             <Link href="/contact" onClick={() => setIsOpen(false)}>Contact</Link>
             <div
-              className="cursor-pointer text-blue-600"
+              className="cursor-pointer"
               onClick={() => {
                 setIsOpen(false);
                 handleDashboard();

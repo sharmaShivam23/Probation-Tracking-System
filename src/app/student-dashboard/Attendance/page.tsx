@@ -57,7 +57,7 @@ export default function MyAttendancePage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center p-6">
+    <div className="min-h-screen flex flex-col w-full items-center sm:p-6">
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl w-full max-w-4xl p-6">
         <h2 
          style={{
@@ -115,7 +115,7 @@ export default function MyAttendancePage() {
 
             
               <div className="flex gap-6 mt-4 text-white text-md">
-                <p className="flex items-center gap-1">
+                <p className="flex justify-center items-center gap-1">
                   <CheckCircle className="text-green-400" size={18} /> {presentCount} Present
                 </p>
                 <p className="flex items-center gap-1">
@@ -158,12 +158,12 @@ export default function MyAttendancePage() {
               </table>
             </div>
 
-            {/* Mobile Card View */}
+        
             <div className="grid gap-4 md:hidden">
               {attendance.map((a) => (
                 <motion.div
                   key={a._id}
-                  className="p-4 rounded-xl bg-white/10 border border-white/20 text-white shadow-md hover:scale-[1.03] transition"
+                  className="p-4 flex justify-evenly items-center rounded-xl bg-white/10 border border-white/20 text-white shadow-md hover:scale-[1.03] transition"
                   whileTap={{ scale: 0.97 }}
                 >
                   <p className="text-sm text-gray-300">

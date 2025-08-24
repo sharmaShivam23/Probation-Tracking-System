@@ -63,7 +63,7 @@ export default function AllTasks() {
   ];
 
   return (
-    <div className="p-6 mb-5 max-w-7xl mx-auto">
+    <div className="sm:p-6 mb-5 max-w-7xl mx-auto">
       {/* Heading */}
       <h1 
         style={{
