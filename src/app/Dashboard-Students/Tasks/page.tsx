@@ -68,7 +68,7 @@ export default function UserTasks() {
   return (
     <div className="min-h-screen  to-red-950 p-8">
       {/* Title */}
-      <h1
+      {/* <h1
         style={{
             fontFamily: "'Orbitron', sans-serif",
             WebkitBackgroundClip: "text",
@@ -78,7 +78,18 @@ export default function UserTasks() {
         className="text-5xl font-extrabold text-center  text-white mb-14 drop-shadow-lg"
       >
         {user.name}'s Uploaded Tasks
-      </h1>
+      </h1> */}
+<h1
+  style={{
+    fontFamily: "'Orbitron', sans-serif",
+    WebkitBackgroundClip: "text",
+    textShadow:
+      "0 0 15px rgba(127, 29, 29, 1), 0 0 10px rgba(127, 29, 29, 1)",
+  }}
+  className="text-5xl font-extrabold text-center  text-white mb-14 drop-shadow-lg"
+>
+  {user.name}&apos;s Uploaded Tasks
+</h1>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
