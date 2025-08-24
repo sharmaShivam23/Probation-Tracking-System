@@ -12,11 +12,11 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   const links = [
-    { href: "/Dashboard/attendance", label: "Mark Attendance" },
-    { href: "/Dashboard/projects", label: "Review Projects" },
-    { href: "/Dashboard/score", label: "See Score" },
-    { href: "/Dashboard/uploadtask", label: "Upload a Task" },
-    { href: "/Dashboard/alltasks", label: "All Tasks" },
+    { href: "/admin-dashboard/attendance", label: "Mark Attendance" },
+    { href: "/admin-dashboard/projects", label: "Review Projects" },
+    { href: "/admin-dashboard/score", label: "See Score" },
+    { href: "/admin-dashboard/uploadtask", label: "Upload a Task" },
+    { href: "/admin-dashboard/alltasks", label: "All Tasks" },
   ];
 
   return (

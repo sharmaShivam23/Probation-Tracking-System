@@ -55,8 +55,8 @@ const Navbar = () => {
 
   const handleDashboard = () => {
     if (role === "Admin") router.push("/Admin");
-    else if (role === "Student") router.push("/Dashboard-Students");
-    else router.push("/Dashboard");
+    else if (role === "Student") router.push("/student-dashboard");
+    else router.push("/admin-dashboard");
   };
 
   return (

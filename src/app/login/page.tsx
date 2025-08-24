@@ -80,9 +80,9 @@ export default function LoginPage() {
 
 
         if (userRole === "Admin") {
-          router.push("/Dashboard");
+          router.push("/admin-dashboard");
         } else if (userRole === "Student") {
-          router.push("/Dashboard-Students");
+          router.push("/student-dashboard");
         } else {
           toast.error("Invalid role");
         }

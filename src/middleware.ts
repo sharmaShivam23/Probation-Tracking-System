@@ -63,14 +63,14 @@ export async function middleware(req: NextRequest) {
     console.log("Decoded role:", role, " Path:", pathname);
 
     // ✅ Check student dashboard first
-    if (pathname.startsWith("/Dashboard-Students")) {
+    if (pathname.startsWith("/student-dashboard")) {
       if (role !== "student") {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     }
 
     // ✅ Then check admin dashboard
-    else if (pathname.startsWith("/Dashboard")) {
+    else if (pathname.startsWith("/admin-dashboard")) {
       if (role !== "admin") {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
@@ -85,9 +85,9 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/Dashboard/:path*",
-    "/Dashboard",
-    "/Dashboard-Students/:path*",
-    "/Dashboard-Students",
+    "/admin-dashboard/:path*",
+    "/admin-dashboard",
+    "/student-dashboard/:path*",
+    "/student-dashboard",
   ],
 };
