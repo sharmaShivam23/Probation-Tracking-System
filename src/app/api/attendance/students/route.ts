@@ -12,7 +12,8 @@ export async function GET(req: Request) {
     await connectDB();
 
     // fetch all students (you might want to filter only role: "Student")
-    const candidates = await Candidate.find({ role: "Student" }).select("name rollNo branch");
+    const candidates = await Candidate.find({ role: "Student" }).select("name rollNo branch").collation({ locale: "en", strength: 1 }) // case-insensitive
+  .sort({ name: 1 }); // a;
 
     // For each candidate compute presentCount & totalCount -> percentage
     // (for better perf, you can use aggregation pipeline; below is straightforward)

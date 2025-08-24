@@ -22,7 +22,7 @@ export default function DashboardLayout({
   return (
     <div className="p">
       <ProtectedRoute>
-        <div className="hidden md:flex h-screen text-white backdrop-blur-2xl bg-white/0">
+        <div className="hi md:flex h-screen text-white backdrop-blur-2xl bg-white/0">
           {/* Sidebar */}
           <aside className="w-64 bg-white/20 backdrop-blur-md shadow-lg flex flex-col">
             <div className="p-6 text-xl font-bold border-b border-white/10">

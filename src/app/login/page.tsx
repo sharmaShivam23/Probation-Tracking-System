@@ -183,7 +183,7 @@ export default function LoginPage() {
     password: "",
   });
 
-  // ✅ Auto-check token on page load
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -239,15 +239,14 @@ export default function LoginPage() {
       if (res?.data?.success) {
         toast.success("Login successful!");
 
-        // ✅ Save token only
         const token = res.data.token;
         localStorage.setItem("token", token);
+        localStorage.setItem("userId", res.data.payload.id);
 
-        // ✅ Decode token immediately
         const userRole = getUserRole(token);
         setRole(userRole);
 
-        // ✅ Redirect based on role
+    
         if (userRole === "Admin") {
           router.push("/Dashboard");
         } else if (userRole === "Student") {
@@ -271,6 +270,8 @@ export default function LoginPage() {
   // ✅ Logout clears token & role
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
     setRole(null);
     router.push("/login");
   };

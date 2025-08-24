@@ -22,7 +22,7 @@ export default function UploadTaskForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const userId = localStorage.getItem("userId"); // 👈 take userId from localStorage
+      const userId = localStorage.getItem("userId"); 
       if (!userId) {
         toast.error("User not logged in!");
         return;
@@ -36,7 +36,7 @@ export default function UploadTaskForm() {
       toast.success("Task uploaded successfully!");
       console.log(response.data);
 
-      setFormData({ title: "", description: "", github: "", deploy: "" }); // reset form
+      setFormData({ title: "", description: "", github: "", deploy: "" }); 
     } catch (error) {
       console.error(error);
       toast.error(" Failed to upload task. Try again!");
@@ -44,7 +44,7 @@ export default function UploadTaskForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center backdrop-blur-2xl p-6">
+    <div className="min flex justify-center  backdrop-blur-2xl p-6">
       {/* Toast container */}
       <Toaster position="top-right" reverseOrder={false} />
 
@@ -106,7 +106,7 @@ export default function UploadTaskForm() {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-red-900 to-red-700 hover:from-red-800 hover:to-red-600 text-white py-3 rounded-lg font-semibold shadow-lg hover:shadow-red-900/50 transition-all"
+          className="w-full bg-gradient-to-r cursor-pointer from-red-900 to-red-950 text-white py-3 rounded-lg font-semibold shadow-lg hover:bg-white/10 hover:backdrop-blur-2xl transition-all"
         >
           Submit Task
         </button>

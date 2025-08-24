@@ -31,6 +31,8 @@ const domains = [
   "Other",
 ];
 
+
+
 export default function RegisterPage() {
   const router = useRouter();
   const [role, setRole] = useState<"Student" | "Admin" | "">("Student");

@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -81,14 +79,17 @@ export default function AttendancePage() {
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto text-white">
+    <div className="sm:p-6 w-full  sm:max-w-7xl mx-auto text-white">
       {/* Heading */}
-      <h1 style={{
-            fontFamily: "'Orbitron', sans-serif",
-            WebkitBackgroundClip: "text",
-            textShadow:
-              "0 0 15px rgba(127, 29, 29, 1), 0 0 30px rgba(127, 29, 29, 1)",
-          }}  className="text-3xl font-bold mb-6 text-center  drop-shadow-lg">
+      <h1
+        style={{
+          fontFamily: "'Orbitron', sans-serif",
+          WebkitBackgroundClip: "text",
+          textShadow:
+            "0 0 15px rgba(127, 29, 29, 1), 0 0 30px rgba(127, 29, 29, 1)",
+        }}
+        className="text-3xl font-bold mb-6 text-center  drop-shadow-lg"
+      >
         Mark Attendance
       </h1>
 
@@ -112,7 +113,7 @@ export default function AttendancePage() {
       {/* Table */}
       {loading ? (
         // <p className="text-center text-gray-300">Loading students...</p>
-        <Loading/>
+        <Loading />
       ) : (
         <div className="overflow-x-auto rounded-xl backdrop-blur-lg bg-white/10 shadow-xl border border-white/20">
           <table className="w-full text-sm sm:text-base">
@@ -136,21 +137,40 @@ export default function AttendancePage() {
                   <td className="p-3">{s.name}</td>
                   <td className="p-3">{s.rollNo}</td>
                   <td className="p-3">{s.branch}</td>
-                  <td className="p-3 text-center space-x-2">
+                  <td className="p-3 text-center flex  space-x-2">
                     <button
                       disabled={markingIds.includes(s.id)}
                       onClick={() => markAttendance(s.id, "Present")}
-                      className="px-3 py-1 rounded-lg bg-green-500/80 hover:bg-green-500 text-white shadow-md disabled:opacity-50"
+                      className="px-3 hidden sm:flex py-1 rounded-lg bg-green-500/80 hover:bg-green-500 text-white shadow-md disabled:opacity-50"
                     >
                       Present
                     </button>
                     <button
                       disabled={markingIds.includes(s.id)}
                       onClick={() => markAttendance(s.id, "Absent")}
-                      className="px-3 py-1 rounded-lg bg-red-500/80 hover:bg-red-500 text-white shadow-md disabled:opacity-50"
+                      className="px-3  hidden sm:flex py-1 rounded-lg bg-red-500/80 hover:bg-red-500 text-white shadow-md disabled:opacity-50"
                     >
                       Absent
                     </button>
+
+                    <div className="flex   sm:hidden gap-2">
+                      <div
+                      
+                        onClick={() => markAttendance(s.id, "Present")}
+                        className={`w-10 h-10 flex text-xl items-center justify-center rounded-full  backdrop-blur-md bg-white/20 shadow-md 
+                  border border-white/30 text-green-800 font-bold`}
+                      >
+                        P
+                      </div>
+                      <div
+                        onClick={() => markAttendance(s.id, "Absent")}
+                        className="w-10 h-10 flex text-xl sm:hidden items-center justify-center rounded-full 
+                  backdrop-blur-md bg-white/20 shadow-md 
+                  border border-white/30 text-red-600 font-bold"
+                      >
+                        A
+                      </div>
+                    </div>
                   </td>
                   <td className="p-3 text-center font-semibold">
                     {s.attendance.percentage}%

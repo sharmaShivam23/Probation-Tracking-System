@@ -22,5 +22,13 @@ const CandidateSchema = new Schema(
   { timestamps: true }
 );
 
+CandidateSchema.pre("save", function (next) {
+  if (this.name) {
+    this.name =
+      this.name.charAt(0).toUpperCase() + this.name.slice(1).toLowerCase();
+  }
+  next();
+});
+
 const Candidate = models.Candidate || model("Candidate", CandidateSchema);
 export default Candidate;

@@ -122,7 +122,7 @@ export default function DashboardLayout({
   return (
     <div className="p">
       <ProtectedRoute>
-        <div className="hidden md:flex h-screen text-white backdrop-blur-2xl bg-white/0">
+        <div className="md:flex min-h-screen text-white backdrop-blur-2xl bg-white/0">
           {/* Sidebar */}
           <aside className="w-64 bg-white/20 backdrop-blur-md shadow-lg flex flex-col">
             <div className="p-6 text-xl font-bold border-b border-white/10">
@@ -139,7 +139,7 @@ export default function DashboardLayout({
                     href={link.href}
                     className={`block px-3 py-2 rounded-lg transition ${
                       isActive
-                        ? "bg-red-900 text-white font-semibold shadow-md"
+                        ? ":bg-white/20 backdrop-blur-xl text-white font-semibold shadow-md"
                         : "hover:bg-white/10"
                     }`}
                   >

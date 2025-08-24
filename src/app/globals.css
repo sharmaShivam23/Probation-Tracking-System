@@ -41,6 +41,20 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-meteor: meteor 5s linear infinite;
+  @keyframes meteor {
+  0% {
+    transform: rotate(var(--angle)) translateX(0);
+    opacity: 1;
+    }
+  70% {
+    opacity: 1;
+    }
+  100% {
+    transform: rotate(var(--angle)) translateX(-500px);
+    opacity: 0;
+    }
+  }
 }
 
 :root {
@@ -121,13 +135,12 @@
   }
 }
 
-
 /* Reset body defaults */
 html, body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   background: linear-gradient(to bottom, #111827, #000000, #7f1d1d);
 }
 
@@ -175,3 +188,18 @@ html {
  black;
 }
 
+@keyframes sparkle {
+  0% {
+    border-color: #7f1d1d transparent #ffffff transparent; /* red-900 + white */
+  }
+  50% {
+    border-color: #ffffff transparent #7f1d1d transparent;
+  }
+  100% {
+    border-color: #7f1d1d transparent #ffffff transparent;
+  }
+}
+
+.border-sparkle {
+  animation: spin 1s linear infinite, sparkle 1s ease-in-out infinite;
+}
