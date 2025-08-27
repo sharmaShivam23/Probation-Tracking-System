@@ -69,10 +69,19 @@ export default function RegisterPage() {
     const newErrors: Record<string, string> = {};
     let valid = true;
 
+    // if (!formData.role) {
+    //   newErrors.role = "Role is required";
+    //   valid = false;
+    // }
+
     if (!formData.role) {
       newErrors.role = "Role is required";
       valid = false;
+    } else if (!["Student", "Admin"].includes(formData.role)) {
+      newErrors.role = "Invalid role";
+      valid = false;
     }
+
     if (!formData.name) {
       newErrors.name = "Name is required";
       valid = false;
@@ -80,13 +89,32 @@ export default function RegisterPage() {
       newErrors.name = "Name must contain only alphabets";
       valid = false;
     }
+    // if (!formData.email) {
+    //   newErrors.email = "Email is required";
+    //   valid = false;
+    // } else if (!formData.email.endsWith("@akgec.ac.in")) {
+    //   newErrors.email = "Email must end with @akgec.ac.in";
+    //   valid = false;
+    // }
+
     if (!formData.email) {
       newErrors.email = "Email is required";
       valid = false;
     } else if (!formData.email.endsWith("@akgec.ac.in")) {
       newErrors.email = "Email must end with @akgec.ac.in";
       valid = false;
+    } else {
+      // role-based validation
+      if (formData.role === "Admin" && !formData.email.match(/^[a-zA-Z0-9._%+-]+23\d{5,6}@akgec\.ac\.in$/)) {
+        newErrors.email = "Admin email must contain 23 batch year";
+        valid = false;
+      } else if (formData.role === "Student" && !formData.email.match(/^[a-zA-Z0-9._%+-]+24\d{5,6}@akgec\.ac\.in$/)) {
+        newErrors.email = "Student email must contain 24 batch year";
+        valid = false;
+      }
     }
+
+
     if (!formData.rollNo) {
       newErrors.rollNo = "Roll number is required";
       valid = false;
@@ -114,14 +142,22 @@ export default function RegisterPage() {
         newErrors.github = "GitHub profile is required";
         valid = false;
       }
+      else if (!/^https:\/\/github\.com\/[A-Za-z0-9-]{1,39}$/.test(formData.github)) {
+        newErrors.github = "Invalid GitHub URL";
+        valid = false;
+      }
     }
+
+    const passReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
     if (!formData.password) {
       newErrors.password = "Password is required";
       valid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (!passReg.test(formData.password)) {
+      newErrors.password =
+        "Password must contain at least 7 characters with uppercase, lowercase, number, and special character";
       valid = false;
     }
+
     if (role === "Admin" && !formData.code) {
       newErrors.code = "Security code is required for admin";
       valid = false;
@@ -233,9 +269,9 @@ export default function RegisterPage() {
                     key={r}
                     type="button"
                     onClick={() => handleRole(r as "Student" | "Admin")}
-                    className={`px-4 py-1 rounded-xl transition ${role === r
-                        ? "bg-[#460F0E] text-white scale-105"
-                        : "bg-white/30 text-gray-800 hover:bg-white/40"
+                    className={`px-4 cursor-pointer py-1 rounded-xl transition ${role === r
+                      ? "bg-[#460F0E] text-white scale-105"
+                      : "bg-white/30 text-gray-800 hover:bg-white/40"
                       }`}
                   >
                     {r}
@@ -403,7 +439,7 @@ export default function RegisterPage() {
                 whileHover={{ scale: 1.02 }}
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl mt-3 h-[45px] font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
+                className="w-full py-3 rounded-xl cursor-pointer mt-3 h-[45px] font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
               >
                 {loading ? "Registering..." : "Register"}
               </motion.button>

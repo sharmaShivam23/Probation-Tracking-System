@@ -123,7 +123,7 @@ const Navbar = () => {
             </Link>
           )}
           <Link
-            href="/contact"
+            href="/Help"
             className="relative group transition"
           >
             Help

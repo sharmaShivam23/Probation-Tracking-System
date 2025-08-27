@@ -18,7 +18,55 @@ export async function POST(req: Request) {
       );
     }
 
-    if (code !== process.env.code) {
+    // Name validation
+    let nameReg = /^[A-Za-z ]+$/;
+    if (!nameReg.test(name)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid Name" },
+        { status: 400 }
+      );
+    }
+
+    // Email validation for admin (must contain 23 batch year)
+       let emailRegex = /^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid Email Id" },
+        { status: 400 }
+      );
+    }
+
+    // Roll number validation for admin (must start with 23)
+    let rollReg = /^23\d{5,6}$/;
+    if (!rollReg.test(rollNo)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid Student Number" },
+        { status: 400 }
+      );
+    }
+
+    if(!email.includes(rollNo)){
+      return NextResponse.json(
+        { success: false, message: "Email and student number not match" },
+        { status: 400 }
+      );
+    }
+
+    if(role !== "Admin"){
+      return NextResponse.json( { success: false, message: "Invalid User Role" },
+        { status: 400 })
+    }
+
+    // Password validation
+    const passReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
+    if (!passReg.test(password)) {
+      return NextResponse.json(
+        { success: false, message: "Password must contain at least 7 characters with uppercase, lowercase, number, and special character" },
+        { status: 400 }
+      );
+    }
+
+    if (code !== process.env.CODE) {
       return NextResponse.json(
         { success: false, message: "You are not Admin" },
         { status: 400 }

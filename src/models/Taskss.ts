@@ -5,8 +5,8 @@ const TaskSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    file: { type: String }, // store URL/path
-    link: { type: String, required: true },
+    file: { type: String , required :true },
+    link: { type: String},
     deadline: { type: Date, required: true },
     category: { 
     type: String, 
