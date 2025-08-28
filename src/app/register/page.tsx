@@ -66,6 +66,11 @@ export default function RegisterPage() {
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
+  useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_CODE);
+    
+  },[])
+  
   function validate() {
     const newErrors: Record<string, string> = {};
     let valid = true;
