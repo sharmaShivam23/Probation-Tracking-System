@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function TaskForm() {
   const [formData, setFormData] = useState({
@@ -66,12 +67,12 @@ export default function TaskForm() {
       return;
     }
     if (!code.trim()) {
-      alert("Security code is required.");
+      toast.error("Security code is required.");
       return;
     }
 
      if(code != process.env.NEXT_PUBLIC_SECURITY_CODE_FILE){
-      alert("Invalid Code");
+      toast.error("Invalid Code");
     }
 
     setLoading(true);

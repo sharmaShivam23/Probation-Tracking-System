@@ -102,7 +102,7 @@ export default function LoginPage() {
     }
   };
 
-  // ✅ Logout clears token & role
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");

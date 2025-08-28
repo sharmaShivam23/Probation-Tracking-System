@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Loader2, Github, Globe } from "lucide-react"; // icons
-
+import toast from "react-hot-toast";
 interface Task {
   _id: string;
   title: string;
@@ -21,33 +21,63 @@ export default function UserTasks() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserTasks = async () => {
-      try {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-          console.error("User not logged in");
-          return;
-        }
+  // useEffect(() => {
+  //   const fetchUserTasks = async () => {
+  //     try {
+  //       const userId = localStorage.getItem("userId");
+  //       if (!userId) {
+  //         console.error("User not logged in");
+  //         return;
+  //       }
 
-        const response = await axios.post(
-          "/api/Dashboard_Students/uplodedtasks",
-          { id: userId }
-        );
+  //       const response = await axios.post(
+  //         "/api/Dashboard_Students/uplodedtasks",
+  //         { id: userId }
+  //       );
 
-        if (response?.data?.success) {
-          setUser(response.data.user);
-        }
-      } catch (error) {
-        console.error("Failed to fetch user tasks:", error);
-      } finally {
-        setLoading(false);
+  //       if (response?.data?.success) {
+  //         setUser(response.data.user);
+  //       }
+  //     } catch (error) {
+  //       console.error("Failed to fetch user tasks:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUserTasks();
+  // }, []);
+
+useEffect(() => {
+  const fetchUserTasks = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        toast.error("User not logged in ❌");
+        return;
       }
-    };
 
-    fetchUserTasks();
-  }, []);
+      const response = await axios.post(
+        "/api/Dashboard_Students/uplodedtasks",
+        { id: userId }
+      );
 
+      if (response?.data?.success) {
+        setUser(response.data.user);
+        toast.success("User tasks fetched successfully ✅");
+      } else {
+        toast.error(response?.data?.message || "Failed to fetch user tasks ❌");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Something went wrong 🚨");
+      console.error("Failed to fetch user tasks:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchUserTasks();
+}, []);
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen text-white">

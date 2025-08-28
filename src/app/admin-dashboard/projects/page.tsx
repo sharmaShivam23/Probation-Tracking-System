@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Globe, User, Mail, Briefcase } from "lucide-react";
 import Loading from "@/components/Loading2";
-
+import toast from "react-hot-toast";
 interface SubmittedTask {
   _id: string;
   title: string;
@@ -24,6 +24,7 @@ export default function ProjectsPage() {
   const [submittedTasks, setSubmittedTasks] = useState<SubmittedTask[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<SubmittedTask[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("");
+
   const [loading , setLoading] = useState(true)
 
   const categories = [
@@ -48,19 +49,43 @@ export default function ProjectsPage() {
     }
   };
 
+  // useEffect(() => {
+  //   async function getSubmittedTasks() {
+  //     try {
+  //       const res = await axios.get("/api/Dashboard_Admin/submittedTasks");
+  //       setSubmittedTasks(res?.data?.Submittedtasks || []);
+  //       setFilteredTasks(res?.data?.Submittedtasks || []);
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //     finally{
+  //       setLoading(false)
+  //     }
+  //   }
+  //   getSubmittedTasks();
+  // }, []);
+
   useEffect(() => {
     async function getSubmittedTasks() {
       try {
+        setLoading(true);
         const res = await axios.get("/api/Dashboard_Admin/submittedTasks");
-        setSubmittedTasks(res?.data?.Submittedtasks || []);
-        setFilteredTasks(res?.data?.Submittedtasks || []);
-      } catch (err) {
-        console.log(err);
-      }
-      finally{
-        setLoading(false)
+
+        if (res?.data?.success) {
+          setSubmittedTasks(res.data.Submittedtasks || []);
+          setFilteredTasks(res.data.Submittedtasks || []);
+          toast.success("Submitted tasks fetched successfully");
+        } else {
+          toast.error(res?.data?.message || "Failed to fetch submitted tasks");
+        }
+      } catch (err: any) {
+        console.error("Error fetching submitted tasks:", err);
+        toast.error(err.response?.data?.message || "Something went wrong");
+      } finally {
+        setLoading(false);
       }
     }
+
     getSubmittedTasks();
   }, []);
 

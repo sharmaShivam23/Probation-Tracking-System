@@ -1,129 +1,8 @@
-// "use client";
-
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// type Attendance = {
-//   total: number;
-//   present: number;
-//   percentage: number;
-// };
-
-// type Candidate = {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   rollNo: string;
-//   branch: string;
-//   createdAt: string;
-//   attendance: Attendance;
-// };
-
-// export default function ScorePage() {
-//   const [users, setUsers] = useState<Candidate[]>([]);
-//   const [loading, setLoading] = useState<boolean>(true);
-
-//   useEffect(() => {
-//     const fetchUsers = async () => {
-//       try {
-//         const res = await axios.get("/api/attendance/students");
-//         if (res.data.success) {
-//           // sort descending based on attendance %
-//           const sorted = res.data.students.sort(
-//             (a: Candidate, b: Candidate) =>
-//               b.attendance.percentage - a.attendance.percentage
-//           );
-//           setUsers(sorted);
-//         } else {
-//           console.error("Failed to fetch users:", res.data.message);
-//         }
-//       } catch (err) {
-//         console.error("Error fetching users:", err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchUsers();
-//   }, []);
-
-//   const top3 = users.slice(0, 3); // Top 3 students
-
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-semibold">See Score</h1>
-//       <p className="mt-2 text-gray-600">
-//         Here you can check all registered candidates.
-//       </p>
-
-//       {/* Loading */}
-//       {loading && <p className="mt-4 text-blue-600">Loading users...</p>}
-
-//       {/* ⭐ Top 3 Students */}
-//       {!loading && top3.length > 0 && (
-//         <div className="mt-6">
-//           <h2 className="text-xl font-bold text-green-700 mb-4">
-//             🏆 Top Performers
-//           </h2>
-//           <div className="grid md:grid-cols-3 gap-4">
-//             {top3.map((student, index) => (
-//               <div
-//                 key={index}
-//                 className="bg-white shadow-lg rounded-2xl p-4 border relative"
-//               >
-//                 <span className="absolute top-2 right-2 text-2xl">
-//                   {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
-//                 </span>
-//                 <h3 className="text-lg font-semibold">{student.name}</h3>
-//                 <p className="text-gray-600">{student.rollNo}</p>
-//                 <p className="text-blue-600 font-bold mt-2">
-//                   {student.attendance.percentage}%
-//                 </p>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-
-//       {/* 📋 Full Users Table */}
-//       {!loading && users.length > 0 ? (
-//         <div className="mt-10 overflow-x-auto">
-//           <h2 className="text-lg font-semibold mb-2">📋 All Students</h2>
-//           <table className="w-full border border-gray-200 rounded-lg">
-//             <thead className="bg-gray-100 text-left">
-//               <tr>
-//                 <th className="p-3 border">Name</th>
-//                 <th className="p-3 border">Roll No</th>
-//                 <th className="p-3 border">Attendance %</th>
-//                 {/* <th className="p-3 border">Joined On</th> */}
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {users.map((user, index) => (
-//                 <tr key={index} className="hover:bg-gray-50">
-//                   <td className="p-3 border">{user.name}</td>
-//                   <td className="p-3 border">{user.rollNo}</td>
-//                   <td className={`p-3 border font-semibold ${user.attendance.percentage <= 75 ? "text-red-500" : "text-green-700"} `}>
-//                     {user.attendance.percentage}%
-//                   </td>
-                 
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       ) : (
-//         !loading && (
-//           <p className="mt-4 text-red-500">No users found.</p>
-//         )
-//       )}
-//     </div>
-//   );
-// }
 
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import Loading from "@/components/Loading2";
 
 type Attendance = {
@@ -146,13 +25,42 @@ export default function ScorePage() {
   const [users, setUsers] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const res = await axios.get("/api/attendance/students");
+  //       if (res?.data?.success) {
+  //         // Sort by percentage first, then by name if same percentage
+  //         const sorted = res?.data?.students.sort(
+  //           (a: Candidate, b: Candidate) => {
+  //             if (b.attendance.percentage === a.attendance.percentage) {
+  //               return a.name.localeCompare(b.name);
+  //             }
+  //             return b.attendance.percentage - a.attendance.percentage;
+  //           }
+  //         );
+  //         setUsers(sorted);
+  //       } else {
+  //         console.error("Failed to fetch users:", res.data.message);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching users:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUsers();
+  // }, []);
+  
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const res = await axios.get("/api/attendance/students");
-        if (res.data.success) {
+
+        if (res?.data?.success) {
           // Sort by percentage first, then by name if same percentage
-          const sorted = res.data.students.sort(
+          const sorted = res?.data?.students.sort(
             (a: Candidate, b: Candidate) => {
               if (b.attendance.percentage === a.attendance.percentage) {
                 return a.name.localeCompare(b.name);
@@ -160,11 +68,14 @@ export default function ScorePage() {
               return b.attendance.percentage - a.attendance.percentage;
             }
           );
+
           setUsers(sorted);
+          toast.success("Students fetched successfully");
         } else {
-          console.error("Failed to fetch users:", res.data.message);
+          toast.error(res?.data?.message || "Failed to fetch students");
         }
-      } catch (err) {
+      } catch (err: any) {
+        toast.error(err?.response?.data?.message || "Error fetching students");
         console.error("Error fetching users:", err);
       } finally {
         setLoading(false);

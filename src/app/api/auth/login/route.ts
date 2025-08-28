@@ -57,6 +57,7 @@ export async function POST(req: Request) {
 
     const payload = {
       id: existing._id,
+      name : existing.name,
       email: existing.email,
       role: existing.role,
       branch: existing.branch,

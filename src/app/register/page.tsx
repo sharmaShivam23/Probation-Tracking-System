@@ -221,10 +221,7 @@ export default function RegisterPage() {
     <>
       <div className="flex flex-col overflow-y-hidden relative lg:flex-row min-h-screen bg-gradient-to-b from-gray-900 via-black to-red-900 text-white">
         <Toaster />
-        {/* <div className="p absolute top-0 w-full"> */}
-        {/* <Particles/> */}
-        {/* </div> */}
-        {/* Left Section */}
+       
 
 
         <motion.div

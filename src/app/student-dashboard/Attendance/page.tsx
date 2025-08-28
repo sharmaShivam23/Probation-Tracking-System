@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle } from "lucide-react";
-
+import toast from "react-hot-toast";
 type Attendance = {
   _id: string;
   date: string;
@@ -14,10 +14,47 @@ export default function MyAttendancePage() {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [overallPercentage, setOverallPercentage] = useState<number>(0);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const userId = localStorage.getItem("userId");
+  //     if (!userId) return;
+
+  //     try {
+  //       const res = await fetch("/api/Dashboard_Students/attendance", {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify({ userId }),
+  //       });
+
+  //       const data = await res.json();
+  //       if (data?.success) {
+  //         setAttendance(data?.attendance);
+
+  //         const total = data?.attendance?.length;
+  //         const presentCount = data?.attendance?.filter(
+  //           (a: Attendance) => a.status === "Present"
+  //         ).length;
+  //         const percentage = total > 0 ? Math.round((presentCount / total) * 100) : 0;
+  //         setOverallPercentage(percentage);
+  //       }
+  //     } catch (error) {
+  //       // toast.error(error)
+  //       console.log(error);
+        
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  
   useEffect(() => {
     const fetchData = async () => {
       const userId = localStorage.getItem("userId");
-      if (!userId) return;
+      if (!userId) {
+        toast.error("User not found, please login again.");
+        return;
+      }
 
       try {
         const res = await fetch("/api/Dashboard_Students/attendance", {
@@ -26,21 +63,35 @@ export default function MyAttendancePage() {
           body: JSON.stringify({ userId }),
         });
 
-        const data = await res.json();
-        if (data?.success) {
-          setAttendance(data?.attendance);
+        // Handle non-200 errors
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => null);
+          toast.error(
+            errorData?.message || `Failed to fetch attendance (Status ${res.status})`
+          );
+          return;
+        }
 
-          const total = data?.attendance?.length;
-          const presentCount = data?.attendance?.filter(
+        const data = await res.json();
+
+        if (data?.success) {
+          setAttendance(data.attendance);
+
+          const total = data.attendance?.length || 0;
+          const presentCount = data.attendance?.filter(
             (a: Attendance) => a.status === "Present"
           ).length;
-          const percentage = total > 0 ? Math.round((presentCount / total) * 100) : 0;
+          const percentage =
+            total > 0 ? Math.round((presentCount / total) * 100) : 0;
+
           setOverallPercentage(percentage);
+          toast.success("Attendance fetched successfully ✅");
+        } else {
+          toast.error(data?.message || "Failed to load attendance");
         }
-      } catch (error) {
-        // toast.error(error)
-        console.log(error);
-        
+      } catch (error: any) {
+        toast.error(error?.message || "Something went wrong while fetching attendance");
+        console.error("Attendance fetch error:", error);
       }
     };
 

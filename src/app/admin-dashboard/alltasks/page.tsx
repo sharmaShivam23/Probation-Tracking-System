@@ -42,7 +42,7 @@ useEffect(() => {
         console.error("Error fetching tasks:", error);
 
         
-        if (error.response) {
+        if (error?.response) {
           
           toast.error(error.response.data?.message || "Server error occurred");
         } else if (error.request) {

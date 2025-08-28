@@ -34,7 +34,6 @@ export default function UploadTaskForm() {
       });
 
       toast.success("Task uploaded successfully!");
-      console.log(response.data);
 
       setFormData({ title: "", description: "", github: "", deploy: "" }); 
     } catch (error) {
