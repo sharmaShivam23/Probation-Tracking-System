@@ -24,7 +24,8 @@ export default function DashboardLayout({
   return (
     <div>
       <ProtectedRoute>
-        <div className="flex min-h-screen text-white backdrop-blur-2xl bg-white/0">
+        <div className="flex h-screen text-white backdrop-blur-2xl bg-white/0">
+        {/* <div className="flex min-h-screen text-white backdrop-blur-2xl bg-white/0"> */}
           {/* Sidebar */}
           <aside
             className={`fixed md:static  min-h-screen top-0 left-0 h-full w-64 bg-black/70 sm:bg-white/20 backdrop-blur-md shadow-lg flex flex-col transform transition-transform duration-300 z-40

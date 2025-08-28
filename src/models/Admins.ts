@@ -1,7 +1,7 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
-let nameReg = /^[A-Za-z ]+$/;
-let rollReg = /^23\d{5,6}$/;
+const nameReg = /^[A-Za-z ]+$/;
+const rollReg = /^23\d{5,6}$/;
 const AdminSchema = new Schema(
   {
     role: { type: String, required: true, enum: ["Student", "Admin"] },

@@ -27,18 +27,20 @@ export default function MyAttendancePage() {
         });
 
         const data = await res.json();
-        if (data.success) {
-          setAttendance(data.attendance);
+        if (data?.success) {
+          setAttendance(data?.attendance);
 
-          const total = data.attendance.length;
-          const presentCount = data.attendance.filter(
+          const total = data?.attendance?.length;
+          const presentCount = data?.attendance?.filter(
             (a: Attendance) => a.status === "Present"
           ).length;
           const percentage = total > 0 ? Math.round((presentCount / total) * 100) : 0;
           setOverallPercentage(percentage);
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        // toast.error(error)
+        console.log(error);
+        
       }
     };
 

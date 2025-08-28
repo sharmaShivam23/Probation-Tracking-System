@@ -1,9 +1,9 @@
 
 import mongoose, { Schema, model, models } from "mongoose";
 
-let nameReg = /^[A-Za-z ]+$/;
-let emailReg = /^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/;
-let rollReg = /^24\d{5,6}$/;
+const nameReg = /^[A-Za-z ]+$/;
+const emailReg = /^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/;
+const rollReg = /^24\d{5,6}$/;
 const githubReg = /^https:\/\/github\.com\/[A-Za-z0-9-]{1,39}$/;
 
 

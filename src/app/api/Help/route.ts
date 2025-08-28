@@ -62,8 +62,9 @@ export async function POST(req: Request) {
       console.error("Mail error:", err);
       return NextResponse.json({ success: false, message: "Message saved but failed to send email" });
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Server error:", error);
-    return NextResponse.json({ success: false, message: error.message || "Server error" });
+    const errorMessage = error instanceof Error ? error.message : "Server error";
+    return NextResponse.json({ success: false, message: errorMessage });
   }
 }

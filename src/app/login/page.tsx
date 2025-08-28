@@ -37,21 +37,21 @@ export default function LoginPage() {
     const newErrors: Record<string, string> = {};
     let valid = true;
 
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-      valid = false;
-    } else if (!formData.email.endsWith("@akgec.ac.in")) {
-      newErrors.email = "Email must end with @akgec.ac.in";
-      valid = false;
-    }
+    // if (!formData.email) {
+    //   newErrors.email = "Email is required";
+    //   valid = false;
+    // } else if (!formData.email.match(/^[a-zA-Z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/)) {
+    //   newErrors.email = "Invalid Email Id";
+    //   valid = false;
+    // }
 
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-      valid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-      valid = false;
-    }
+    // if (!formData.password) {
+    //   newErrors.password = "Password is required";
+    //   valid = false;
+    // } else if (formData.password.length < 6 || !formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/)) {
+    //   newErrors.password = "Invalid password";
+    //   valid = false;
+    // }
 
     setErrors(newErrors);
     return valid;
@@ -94,7 +94,7 @@ export default function LoginPage() {
     } catch (error: unknown) {
       console.log(error);
       const errorMessage = error instanceof Error && 'response' in error
-        ? (error as any).response?.data?.message
+        ? (error as { response?: { data?: { message?: string } } }).response?.data?.message || "Something went wrong"
         : "Something went wrong";
       toast.error(errorMessage);
     } finally {
@@ -161,7 +161,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
+            className="w-full py-3 rounded-xl cursor-pointer font-semibold bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 hover:opacity-90 transition disabled:opacity-50 shadow-lg"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
@@ -171,7 +171,7 @@ export default function LoginPage() {
         {role && (
           <button
             onClick={handleLogout}
-            className="mt-4 w-full py-2 rounded-xl font-semibold bg-red-500 text-white hover:opacity-90 transition shadow-lg"
+            className="mt-4 w-full py-2 rounded-xl cursor-pointer font-semibold bg-red-500 text-white hover:opacity-90 transition shadow-lg"
           >
             Logout ({role})
           </button>

@@ -21,6 +21,8 @@ export default function TaskForm() {
   const [code, setCode] = useState("");
 
   useEffect(() => {
+    
+    
     const storedToken = localStorage.getItem("token");
     if (storedToken) setToken(storedToken);
   }, []);
@@ -47,11 +49,13 @@ export default function TaskForm() {
       !formData.description ||
       !formData.deadline ||
       !formData.category ||
-      !file
+      !formData.link
     ) {
-      alert("All fields except link are required!");
+      alert("All fields except file are required!");
       return;
     }
+
+
     setShowVerifyModal(true);
   };
 
@@ -64,6 +68,10 @@ export default function TaskForm() {
     if (!code.trim()) {
       alert("Security code is required.");
       return;
+    }
+
+     if(code != process.env.NEXT_PUBLIC_SECURITY_CODE_FILE){
+      alert("Invalid Code");
     }
 
     setLoading(true);
@@ -199,7 +207,7 @@ export default function TaskForm() {
           type="button"
           onClick={handleVerifyClick}
           disabled={loading}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-black to-red-900 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
+          className="w-full py-3 rounded-xl cursor-pointer bg-gradient-to-r from-black to-red-900 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
         >
           {loading ? "Processing..." : "Verify"}
         </button>
@@ -221,14 +229,14 @@ export default function TaskForm() {
               type="submit"
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
+              className="w-full py-3 cursor-pointer rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
             >
               {loading ? "Submitting..." : "Submit Task"}
             </button>
             <button
               type="button"
               onClick={() => setShowVerifyModal(false)}
-              className="mt-4 w-full py-2 rounded-xl bg-gray-700/80 text-white hover:bg-gray-600 transition"
+              className="mt-4 w-full py-2 cursor-pointer rounded-xl bg-gray-700/80 text-white hover:bg-gray-600 transition"
             >
               Cancel
             </button>

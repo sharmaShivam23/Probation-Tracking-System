@@ -44,7 +44,7 @@ export function middleware(req: NextRequest) {
     // Allow request
     return NextResponse.next();
 
-  } catch (error) {
+  } catch {
     // Invalid/expired token
     return NextResponse.redirect(new URL("/login", req.url));
   }

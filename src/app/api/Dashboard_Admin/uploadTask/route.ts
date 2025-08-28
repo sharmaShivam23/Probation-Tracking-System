@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File | null;
   
 
-    if (!title || !description || !deadline || !category || !file) {
+    if (!title || !description || !deadline || !category) {
       return NextResponse.json(
         { success: false, message: "Title, description, category, and deadline are required" },
         { status: 400 }
@@ -83,15 +83,13 @@ if (!code) {
   );
 }
 
-if(code !== process.env.SECURITY_CODE_fILE){
+if(code !== process.env.NEXT_PUBLIC_SECURITY_CODE_fILE){
     return NextResponse.json(
     { success: false, message: "Invalid Security Code" },
     { status: 400 }
   );
 }
 
-
-  
 
 
   

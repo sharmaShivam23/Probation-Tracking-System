@@ -5,8 +5,8 @@ const TaskSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    file: { type: String , required :true },
-    link: { type: String},
+    file: { type: String  },
+    link: { type: String , required : true},
     deadline: { type: Date, required: true },
     category: { 
     type: String, 

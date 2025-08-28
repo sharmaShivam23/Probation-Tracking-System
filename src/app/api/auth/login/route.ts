@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       );
     }
 
-   let emailRegex = /^[a-z]{3,15}24|23\d{5,6}@akgec\.ac\.in$/;
+    const emailRegex = /^[a-z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: "Invalid Email" },

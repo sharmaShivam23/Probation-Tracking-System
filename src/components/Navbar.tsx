@@ -85,7 +85,7 @@ const Navbar = () => {
               className="relative group transition"
             >
              Home
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-800 transition-all duration-300 group-hover:w-full" />
             </Link>
 
              <div
@@ -93,7 +93,7 @@ const Navbar = () => {
             onClick={handleDashboard}
           >
             Dashboard
-            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-indigo-500 transition-all duration-300 group-hover:w-full" />
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-900 transitio-all duration-300 group-hover:w-full" />
           </div>
 
           {!token &&
@@ -102,7 +102,7 @@ const Navbar = () => {
               className="relative group transition"
             >
               Register
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
             </Link>
           }
           {token ? (
@@ -119,7 +119,7 @@ const Navbar = () => {
               className="relative group transition"
             >
               Login
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-green-500 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-800 transition-all duration-300 group-hover:w-full" />
             </Link>
           )}
           <Link
@@ -127,7 +127,7 @@ const Navbar = () => {
             className="relative group transition"
           >
             Help
-            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full" />
+            <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-800 transition-all duration-300 group-hover:w-full" />
           </Link>
          
         </div>

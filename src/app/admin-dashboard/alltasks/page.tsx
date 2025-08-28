@@ -5,7 +5,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "@/components/Loading2";
-
+import toast from "react-hot-toast";
 interface Task {
   _id: string;
   title: string;
@@ -24,23 +24,41 @@ export default function AllTasks() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<string>("All"); 
 
-  useEffect(() => {
+useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get<{ tasks: Task[] }>(
+        const res = await axios.get<{ success: boolean; tasks: Task[] }>(
           "/api/Dashboard_Admin/uploadTask"
         );
-        setTasks(res.data.tasks || []);
-        setAllTasks(res.data.tasks || []); 
-      } catch (error) {
+
+        if (res?.data?.success) {
+          setTasks(res.data.tasks || []);
+          setAllTasks(res.data.tasks || []);
+          toast.success("Fetched tasks successfully");
+        } else {
+          toast.error("Failed to fetch tasks");
+        }
+      } catch (error: any) {
         console.error("Error fetching tasks:", error);
+
+        
+        if (error.response) {
+          
+          toast.error(error.response.data?.message || "Server error occurred");
+        } else if (error.request) {
+          
+          toast.error("No response from server. Please try again later.");
+        } else {
+          
+          toast.error("An unexpected error occurred");
+        }
       } finally {
         setLoading(false);
       }
     };
+
     fetchTasks();
   }, []);
-
   function handleFilter(category: string) {
     setActiveFilter(category);
     if (category === "All") {
@@ -85,7 +103,7 @@ export default function AllTasks() {
           <button
             key={index}
             onClick={() => handleFilter(value)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+            className={`px-4 py-2 cursor-pointer rounded-lg text-sm font-medium transition-all duration-300 ${
               activeFilter === value
                 ? "bg-gradient-to-r from-red-900 to-red-950 text-white shadow-lg"
                 : "bg-white/10 text-gray-300 hover:bg-white/20"
@@ -135,6 +153,7 @@ export default function AllTasks() {
                     📄 View PDF
                   </a>
                 )}
+
 
               
                 <p className="mt-4 text-gray-200 line-clamp-3">

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -38,6 +38,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState<"Student" | "Admin" | "">("Student");
   const [loading, setLoading] = useState(false);
 
+
   const [formData, setFormData] = useState({
     role: "",
     name: "",
@@ -69,10 +70,6 @@ export default function RegisterPage() {
     const newErrors: Record<string, string> = {};
     let valid = true;
 
-    // if (!formData.role) {
-    //   newErrors.role = "Role is required";
-    //   valid = false;
-    // }
 
     if (!formData.role) {
       newErrors.role = "Role is required";
@@ -89,13 +86,7 @@ export default function RegisterPage() {
       newErrors.name = "Name must contain only alphabets";
       valid = false;
     }
-    // if (!formData.email) {
-    //   newErrors.email = "Email is required";
-    //   valid = false;
-    // } else if (!formData.email.endsWith("@akgec.ac.in")) {
-    //   newErrors.email = "Email must end with @akgec.ac.in";
-    //   valid = false;
-    // }
+   
 
     if (!formData.email) {
       newErrors.email = "Email is required";
@@ -105,10 +96,10 @@ export default function RegisterPage() {
       valid = false;
     } else {
       // role-based validation
-      if (formData.role === "Admin" && !formData.email.match(/^[a-zA-Z0-9._%+-]+23\d{5,6}@akgec\.ac\.in$/)) {
+      if (formData.role === "Admin" && !formData.email.match(/^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/)) {
         newErrors.email = "Admin email must contain 23 batch year";
         valid = false;
-      } else if (formData.role === "Student" && !formData.email.match(/^[a-zA-Z0-9._%+-]+24\d{5,6}@akgec\.ac\.in$/)) {
+      } else if (formData.role === "Student" && !formData.email.match(/^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/)) {
         newErrors.email = "Student email must contain 24 batch year";
         valid = false;
       }
@@ -119,14 +110,19 @@ export default function RegisterPage() {
       newErrors.rollNo = "Roll number is required";
       valid = false;
     } else if (
-      (role === "Admin" && !formData.rollNo.startsWith("23")) ||
-      (role === "Student" && !formData.rollNo.startsWith("24"))
+      (role === "Admin" && !formData.rollNo.match(/^23\d{5,6}$/)) ||
+      (role === "Student" && !formData.rollNo.match(/^24\d{5,6}/))
     ) {
       newErrors.rollNo =
         role === "Admin"
           ? "Admin roll number must start with 23"
           : "Student roll number must start with 24";
       valid = false;
+    }
+
+    if(!formData.email.includes(formData.rollNo)){
+   newErrors.email = "Email student number mismatch";
+        valid = false;
     }
 
     if (!formData.branch) {
@@ -160,6 +156,10 @@ export default function RegisterPage() {
 
     if (role === "Admin" && !formData.code) {
       newErrors.code = "Security code is required for admin";
+      valid = false;
+    }
+    if (role === "Admin" && formData.code != process.env.NEXT_PUBLIC_CODE) {
+      newErrors.code = "Invalid Security Code";
       valid = false;
     }
 
@@ -204,7 +204,7 @@ export default function RegisterPage() {
     } catch (error: unknown) {
       console.log(error);
       const errorMessage = error instanceof Error && 'response' in error
-        ? (error as any).response?.data?.message
+        ? (error as { response?: { data?: { message?: string } } }).response?.data?.message || "Something went wrong"
         : "Something went wrong";
       toast.error(errorMessage);
     } finally {

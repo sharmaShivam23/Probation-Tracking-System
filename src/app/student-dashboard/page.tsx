@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { FaTasks, FaUserCheck, FaFileUpload, FaProjectDiagram } from "react-icons/fa";
-import { Menu, X } from "lucide-react";
+
 export default function StudentDashboardHome() {
   return (
     <div className="min-h-screen text-white p-6">
-      
+
       {/* Header */}
       <header className="mb-12 text-center">
         <h1
@@ -14,21 +14,21 @@ export default function StudentDashboardHome() {
             fontFamily: "'Orbitron', sans-serif",
             WebkitBackgroundClip: "text",
             textShadow:
-            "0 0 15px rgba(127, 29, 29, 1), 0 0 30px rgba(127, 29, 29, 1)" // blue glow for students
+              "0 0 15px rgba(127, 29, 29, 1), 0 0 30px rgba(127, 29, 29, 1)" // blue glow for students
           }}
           className="text-4xl md:text-5xl font-extrabold bg-clip-text animate-text"
         >
           🎓 Student Dashboard
         </h1>
         <p className="mt-4 text-gray-300 max-w-2xl mx-auto text-sm md:text-lg">
-          Welcome! Here you can check your attendance, upload tasks, explore tasks assigned to all students, 
+          Welcome! Here you can check your attendance, upload tasks, explore tasks assigned to all students,
           and review your own submitted projects. Manage everything in one place.
         </p>
       </header>
 
       {/* Cards Section */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        
+
         {/* View Attendance */}
         <Link href="/student-dashboard/myattendance">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
@@ -88,7 +88,7 @@ export default function StudentDashboardHome() {
         >
           Dashboard Features Explained
         </h2>
-        
+
         {/* Feature 1 */}
         <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
           <h3 className="text-2xl font-semibold mb-2">1. My Attendance</h3>

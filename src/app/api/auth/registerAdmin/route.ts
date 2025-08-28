@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Admin from "@/models/Admins";
 
+
 export async function POST(req: Request) {
   try {
     await connectDB();
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
     }
 
     // Name validation
-    let nameReg = /^[A-Za-z ]+$/;
+    const nameReg = /^[A-Za-z ]+$/;
     if (!nameReg.test(name)) {
       return NextResponse.json(
         { success: false, message: "Invalid Name" },
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
     }
 
     // Email validation for admin (must contain 23 batch year)
-       let emailRegex = /^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/;
+    const emailRegex = /^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
         { success: false, message: "Invalid Email Id" },
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
     }
 
     // Roll number validation for admin (must start with 23)
-    let rollReg = /^23\d{5,6}$/;
+    const rollReg = /^23\d{5,6}$/;
     if (!rollReg.test(rollNo)) {
       return NextResponse.json(
         { success: false, message: "Invalid Student Number" },
@@ -45,15 +46,15 @@ export async function POST(req: Request) {
       );
     }
 
-    if(!email.includes(rollNo)){
+    if (!email.includes(rollNo)) {
       return NextResponse.json(
         { success: false, message: "Email and student number not match" },
         { status: 400 }
       );
     }
 
-    if(role !== "Admin"){
-      return NextResponse.json( { success: false, message: "Invalid User Role" },
+    if (role !== "Admin") {
+      return NextResponse.json({ success: false, message: "Invalid User Role" },
         { status: 400 })
     }
 
@@ -66,12 +67,17 @@ export async function POST(req: Request) {
       );
     }
 
-    if (code !== process.env.CODE) {
+    console.log("c",process.env.CODE);
+    
+
+    if (code != process.env.CODE) {
       return NextResponse.json(
         { success: false, message: "You are not Admin" },
         { status: 400 }
       )
     }
+
+  
 
 
     const existing = await Admin.findOne({ $or: [{ email }, { rollNo }] });

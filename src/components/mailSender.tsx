@@ -1,11 +1,11 @@
 
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import nodemailer from 'nodemailer';
+import 'dotenv/config';
 
-const mailSender = async (email : string, title : string, body : string) => {
+const mailSender = async (email: string, title: string, body: string) => {
   try {
-    let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,  
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAIL_HOST,
       port: 587,
       secure: false,
       auth: {
@@ -14,8 +14,8 @@ const mailSender = async (email : string, title : string, body : string) => {
       },
     });
 
-    let info = await transporter.sendMail({  
-      from: `"EduPortal" <${process.env.MAIL_USER}>`, 
+    const info = await transporter.sendMail({
+      from: `"EduPortal" <${process.env.MAIL_USER}>`,
       to: email,
       subject: title,
       html: body,
@@ -26,8 +26,8 @@ const mailSender = async (email : string, title : string, body : string) => {
 
   } catch (err) {
     console.error("MailSender error:", err);
-    throw err; 
+    throw err;
   }
 };
 
-module.exports = mailSender;
+export default mailSender;

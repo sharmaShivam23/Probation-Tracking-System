@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-export default async function ContactForm() {
-   
+export default function ContactForm() {
+
   const [form, setForm] = useState({ name: "", email: "", phoneNo: "", msg: "" });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ success?: boolean; message?: string }>({});
@@ -44,7 +44,7 @@ export default async function ContactForm() {
       const data = await res.json();
       setStatus({ success: data.success, message: data.message });
       if (data.success) setForm({ name: "", email: "", phoneNo: "", msg: "" });
-    } catch (err: any) {
+    } catch {
       setStatus({ success: false, message: "Something went wrong." });
     } finally {
       setLoading(false);
@@ -116,9 +116,8 @@ export default async function ContactForm() {
           {/* Status Message */}
           {status.message && (
             <p
-              className={`text-center  text-sm font-semibold ${
-                status.success ? "text-green-300" : "text-red-300"
-              }`}
+              className={`text-center  text-sm font-semibold ${status.success ? "text-green-300" : "text-red-300"
+                }`}
             >
               {status.message}
             </p>
