@@ -16,6 +16,7 @@ interface Task {
   uploadedBy?: { name?: string; email?: string };
   createdAt?: string;
   file?: string;
+  link?: string;
 }
 
 export default function AllTasks() {
@@ -151,6 +152,16 @@ useEffect(() => {
                     className="inline-block mt-4 px-4 py-2 rounded-lg bg-white/20 backdrop-blur-2xl text-white font-medium shadow-md hover:shadow-lg transition"
                   >
                     📄 View PDF
+                  </a>
+                )}
+                
+                {task.link && (
+                  <a
+                    href={task.link}
+                    target="_blank"
+                    className="inline-block mt-4 ml-3 px-4 py-2 rounded-lg bg-white/20 backdrop-blur-2xl text-white font-medium shadow-md hover:shadow-lg transition"
+                  >
+                    📄 View  Link
                   </a>
                 )}
 

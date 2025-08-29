@@ -208,7 +208,7 @@ export default function TaskForm() {
           type="button"
           onClick={handleVerifyClick}
           disabled={loading}
-          className="w-full py-3 rounded-xl cursor-pointer bg-gradient-to-r from-black to-red-900 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
+          className="w-full py-3 rounded-xl cursor-pointer bg-gradient-to-r from-red-800 via-black to-red-900 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
         >
           {loading ? "Processing..." : "Verify"}
         </button>

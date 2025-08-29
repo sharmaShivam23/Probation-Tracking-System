@@ -88,7 +88,7 @@ export default function ScorePage() {
   const top3 = users.slice(0, 3);
 
   return (
-    <div className="min-h-screen  sm:p-6 text-white">
+    <div className="min-h-screen  mb-10 sm:p-6 text-white">
       <h1 style={{
             fontFamily: "'Orbitron', sans-serif",
             WebkitBackgroundClip: "text",

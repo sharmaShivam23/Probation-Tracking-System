@@ -1,15 +1,15 @@
 
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Candidate from "@/models/Candidate";
+import { withRateLimit, registrationLimiter } from "@/lib/ratelimiter";
 
-export async function POST(req: Request) {
+async function registerHandler(req: NextRequest) {
   try {
     await connectDB();
     const body = await req.json();
     const { name, email, rollNo, branch, github, password, role, domain } = body;
-
 
     if (!name || !email || !rollNo || !branch || !github || !password || !role) {
       return NextResponse.json(
@@ -79,7 +79,6 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-
     const newCandidate = new Candidate({
       name,
       email,
@@ -106,3 +105,6 @@ export async function POST(req: Request) {
     );
   }
 }
+
+// Export the rate-limited version of the handler
+export const POST = withRateLimit(registerHandler, registrationLimiter);

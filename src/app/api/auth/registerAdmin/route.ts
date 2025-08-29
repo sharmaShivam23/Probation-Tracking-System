@@ -2,10 +2,32 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Admin from "@/models/Admins";
-
+import { adminRegistrationLimiter, rateLimitMiddleware } from "@/lib/ratelimiter";
 
 export async function POST(req: Request) {
   try {
+    // Apply rate limiting first
+    const rateLimitResult = await rateLimitMiddleware(req, adminRegistrationLimiter);
+
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: rateLimitResult.message,
+          retryAfter: rateLimitResult.retryAfter
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
+            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
+            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
+            'Retry-After': rateLimitResult.retryAfter?.toString() || '3600'
+          }
+        }
+      );
+    }
+
     await connectDB();
 
     const body = await req.json();
@@ -67,8 +89,8 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("c",process.env.CODE);
-    
+    console.log("c", process.env.CODE);
+
 
     if (code != process.env.CODE) {
       return NextResponse.json(
@@ -77,7 +99,7 @@ export async function POST(req: Request) {
       )
     }
 
-  
+
 
 
     const existing = await Admin.findOne({ $or: [{ email }, { rollNo }] });
