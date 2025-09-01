@@ -4,7 +4,7 @@ import { connectDB } from "@/lib/db";
 import UplodedTask from "@/models/UplodedTasks";
 import Candidate from "@/models/Candidate";
 import { globalLimiter , withRateLimit } from "@/lib/ratelimiter";
-export async function submitTask(request: Request) {
+ async function submitTask(request: Request) {
   await connectDB();
 
   try {

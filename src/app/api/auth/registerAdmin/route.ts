@@ -5,7 +5,7 @@ import Admin from "@/models/Admins";
 import schemaOTP from "@/models/otpStore";
 import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
 
-export async function adminRegister(request: Request) {
+ async function adminRegister(request: Request) {
   try {
    
 

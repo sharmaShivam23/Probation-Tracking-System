@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import { connectDB } from "@/lib/db";
 import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
-export async function HelpForm(request: Request) {
+ async function HelpForm(request: Request) {
 
   await connectDB()
    

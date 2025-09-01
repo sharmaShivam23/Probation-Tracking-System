@@ -7,7 +7,7 @@ import Candidate from "@/models/Candidate";
 import schemaOTP from "@/models/otpStore";
 import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 
-export async function studentRegister(request: NextRequest) {
+ async function studentRegister(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
