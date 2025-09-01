@@ -3,12 +3,12 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import UplodedTask from "@/models/UplodedTasks";
 import Candidate from "@/models/Candidate";
-
-export async function POST(req: Request) {
+import { globalLimiter , withRateLimit } from "@/lib/ratelimiter";
+export async function submitTask(request: Request) {
   await connectDB();
 
   try {
-    const body = await req.json();
+    const body = await request.json();
     const { title, description, github, deploy, uploadedBy } = body;
 
     if (!title || !description || !github || !deploy || !uploadedBy) {
@@ -42,3 +42,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export const POST = withRateLimit(submitTask, globalLimiter);

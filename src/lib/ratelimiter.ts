@@ -7,56 +7,53 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-// Global rate limiter for general API endpoints
+
 export const globalLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(10, "1 m"), // 10 requests per minute
+  limiter: Ratelimit.fixedWindow(3, "24 h"), 
   analytics: true,
   prefix: "global",
 });
 
-// Strict rate limiter for authentication endpoints
+
+
 export const authLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(5, "15 m"), // 5 requests per 15 minutes
+  limiter: Ratelimit.slidingWindow(5 , "15 m"), 
   analytics: true,
   prefix: "auth",
 });
 
-// Registration-specific rate limiter (more restrictive)
+
 export const registrationLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(3, "1 h"), // 3 requests per hour
+  limiter: Ratelimit.slidingWindow(15, "15 m"), 
   analytics: true,
   prefix: "registration",
 });
 
-// Admin registration rate limiter (very restrictive)
+
 export const adminRegistrationLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.slidingWindow(2, "24 h"), // 2 requests per day
+  limiter: Ratelimit.slidingWindow(2, "24 h"), 
   analytics: true,
   prefix: "admin_registration",
 });
 
-// Helper function to get client identifier
-export function getClientIdentifier(req: Request): string {
+
+export function getClientIdentifier(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for");
   const realIp = req.headers.get("x-real-ip");
   const cfConnectingIp = req.headers.get("cf-connecting-ip");
 
-  // Try to get the real IP from various headers
   const ip = cfConnectingIp || realIp || forwarded?.split(",")[0] || "unknown";
-
-  // For additional security, you can combine IP with user agent
   const userAgent = req.headers.get("user-agent") || "unknown";
 
   return `${ip}:${userAgent}`;
 }
 
-// Rate limiter middleware function
 export async function rateLimitMiddleware(
-  req: Request,
+  req: NextRequest,
   limiter: Ratelimit,
   identifier?: string
 ) {
@@ -73,7 +70,7 @@ export async function rateLimitMiddleware(
         remaining,
         reset,
         retryAfter,
-        message: `Rate limit exceeded. Try again in ${retryAfter} seconds.`
+        message: `Rate limit exceeded. Try again in ${retryAfter} seconds.`,
       };
     }
 
@@ -81,29 +78,27 @@ export async function rateLimitMiddleware(
       success: true,
       limit,
       remaining,
-      reset
+      reset,
     };
   } catch (error) {
     console.error("Rate limiting error:", error);
-    // In case of Redis failure, allow the request but log the error
     return {
-      success: true,
+      success: true, 
       limit: 0,
       remaining: 0,
       reset: 0,
-      error: "Rate limiting temporarily unavailable"
+      error: "Rate limiting temporarily unavailable",
     };
   }
 }
 
-// Higher-order function to wrap API handlers with rate limiting
+
 export function withRateLimit(
   handler: (req: NextRequest) => Promise<NextResponse>,
   limiter: Ratelimit,
   customIdentifier?: (req: NextRequest) => string
 ) {
   return async (req: NextRequest): Promise<NextResponse> => {
-    // Apply rate limiting
     const identifier = customIdentifier ? customIdentifier(req) : undefined;
     const rateLimitResult = await rateLimitMiddleware(req, limiter, identifier);
 
@@ -112,25 +107,38 @@ export function withRateLimit(
         {
           success: false,
           message: rateLimitResult.message,
-          retryAfter: rateLimitResult.retryAfter
+          retryAfter: rateLimitResult.retryAfter,
         },
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
-            'Retry-After': rateLimitResult.retryAfter?.toString() || '3600'
-          }
+            "X-RateLimit-Limit": rateLimitResult.limit.toString(),
+            "X-RateLimit-Remaining": rateLimitResult.remaining.toString(),
+            "X-RateLimit-Reset": rateLimitResult.reset.toString(),
+            "Retry-After": rateLimitResult.retryAfter?.toString() || "60",
+          },
         }
       );
     }
 
-    // Add rate limit headers to successful responses
     const response = await handler(req);
-    response.headers.set('X-RateLimit-Limit', rateLimitResult.limit.toString());
-    response.headers.set('X-RateLimit-Remaining', rateLimitResult.remaining.toString());
-    response.headers.set('X-RateLimit-Reset', rateLimitResult.reset.toString());
+
+    
+    const res = NextResponse.next({
+      request: {
+        headers: req.headers,
+      },
+    });
+    Object.entries(response.headers).forEach(([key, value]) =>
+      res.headers.set(key, value)
+    );
+
+    res.headers.set("X-RateLimit-Limit", rateLimitResult.limit.toString());
+    res.headers.set(
+      "X-RateLimit-Remaining",
+      rateLimitResult.remaining.toString()
+    );
+    res.headers.set("X-RateLimit-Reset", rateLimitResult.reset.toString());
 
     return response;
   };

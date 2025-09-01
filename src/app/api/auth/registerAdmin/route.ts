@@ -2,36 +2,17 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Admin from "@/models/Admins";
-import { adminRegistrationLimiter, rateLimitMiddleware } from "@/lib/ratelimiter";
+import schemaOTP from "@/models/otpStore";
+import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
 
-export async function POST(req: Request) {
+export async function adminRegister(request: Request) {
   try {
-    // Apply rate limiting first
-    const rateLimitResult = await rateLimitMiddleware(req, adminRegistrationLimiter);
-
-    if (!rateLimitResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: rateLimitResult.message,
-          retryAfter: rateLimitResult.retryAfter
-        },
-        {
-          status: 429,
-          headers: {
-            'X-RateLimit-Limit': rateLimitResult.limit.toString(),
-            'X-RateLimit-Remaining': rateLimitResult.remaining.toString(),
-            'X-RateLimit-Reset': rateLimitResult.reset.toString(),
-            'Retry-After': rateLimitResult.retryAfter?.toString() || '3600'
-          }
-        }
-      );
-    }
+   
 
     await connectDB();
 
-    const body = await req.json();
-    const { name, email, rollNo, branch, password, role, code } = body;
+    const body = await request.json();
+    const { name, email, rollNo, branch, password, role, code  , otp} = body;
 
 
     if (!name || !email || !rollNo || !branch || !password || !role || !code) {
@@ -49,6 +30,8 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+
 
     // Email validation for admin (must contain 23 batch year)
     const emailRegex = /^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/;
@@ -110,6 +93,16 @@ export async function POST(req: Request) {
       );
     }
 
+     
+    const otpRecord = await schemaOTP.findOne({ email });
+    if (!otpRecord) return NextResponse.json({ success: false, message: "OTP not found" }, { status: 400 });
+    
+    if (otpRecord.otp !== otp) return NextResponse.json({ success: false, message: "Invalid OTP" }, { status: 400 });
+    
+    if (new Date() > otpRecord.expiresAt) return NextResponse.json({ success: false, message: "OTP expired" }, { status: 400 });
+    
+    await schemaOTP.deleteOne({ email });
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const hashedCode = await bcrypt.hash(code, 10);
@@ -140,3 +133,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export const POST = withRateLimit(adminRegister, authLimiter);

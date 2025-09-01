@@ -151,9 +151,10 @@ async function fetchStudents() {
               <tr className="bg-white/20 text-left text-gray-200">
                 <th className="p-3">Name</th>
                 <th className="p-3">Roll No</th>
-                <th className="p-3">Branch</th>
+                <th className="p-3 hidden sm:block">Branch</th>
                 <th className="p-3 text-center">Mark</th>
-                <th className="p-3 text-center">Attendance %</th>
+                <th className="p-3 hidden sm:flex text-center">Attendance %</th>
+                <th className="p-3 flex sm:hidden text-center">%</th>
               </tr>
             </thead>
             <tbody>
@@ -173,7 +174,7 @@ async function fetchStudents() {
                 >
                   <td className="p-3">{s.name}</td>
                   <td className="p-3">{s.rollNo}</td>
-                  <td className="p-3">{s.branch}</td>
+                  <td className="p-3 max-[600px]:hidden">{s.branch}</td>
                   <td className="p-3 text-center flex space-x-2">
                     <button
                       disabled={markingIds.includes(s.id)}

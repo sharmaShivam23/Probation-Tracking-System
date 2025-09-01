@@ -1,6 +1,6 @@
 
 import nodemailer from 'nodemailer';
-import 'dotenv/config';
+// import 'dotenv/config';
 
 const mailSender = async (email: string, title: string, body: string) => {
   try {

@@ -58,10 +58,11 @@ export default function UploadTaskForm() {
             textShadow:
               "0 0 15px rgba(127, 29, 29, 1), 0 0 30px rgba(127, 29, 29, 1)",
           }}
-          className="text-3xl font-extrabold text-center text-white mb-8"
+          className="text-3xl font-extrabold text-center text-white "
         >
           Upload Your Task
         </h2>
+        <p className="text-sm font-bold mb-8 mt-2 text-center">You can upload only 3 tasks per day</p>
 
         <input
           type="text"

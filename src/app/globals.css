@@ -203,3 +203,10 @@ html {
 .border-sparkle {
   animation: spin 1s linear infinite, sparkle 1s ease-in-out infinite;
 }
+
+/* Hide default eye icon in password fields */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+}

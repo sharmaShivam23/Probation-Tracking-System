@@ -4,7 +4,8 @@ import { mailSender } from "@/components/mailSender2";
 import fs from "fs";
 import path from "path";
 import { connectDB } from "@/lib/db";
-export async function POST(req: Request) {
+import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
+export async function HelpForm(request: Request) {
 
   await connectDB()
    
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
 
     
     
-    const body = await req.json();
+    const body = await request.json();
     const { name, email, phoneNo, msg } = body;
 
    
@@ -68,3 +69,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, message: errorMessage });
   }
 }
+
+export const POST = withRateLimit(HelpForm, registrationLimiter);

@@ -3,13 +3,15 @@ import { NextResponse, NextRequest } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Candidate from "@/models/Candidate";
-import { withRateLimit, registrationLimiter } from "@/lib/ratelimiter";
+// import { withRateLimit, registrationLimiter } from "@/lib/ratelimiter";
+import schemaOTP from "@/models/otpStore";
+import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 
-async function registerHandler(req: NextRequest) {
+export async function studentRegister(request: NextRequest) {
   try {
     await connectDB();
-    const body = await req.json();
-    const { name, email, rollNo, branch, github, password, role, domain } = body;
+    const body = await request.json();
+    const { name, email, rollNo, branch, github, password, role, domain , otp } = body;
 
     if (!name || !email || !rollNo || !branch || !github || !password || !role) {
       return NextResponse.json(
@@ -76,6 +78,16 @@ async function registerHandler(req: NextRequest) {
         { status: 400 }
       );
     }
+   
+const otpRecord = await schemaOTP.findOne({ email });
+if (!otpRecord) return NextResponse.json({ success: false, message: "OTP not found" }, { status: 400 });
+
+if (otpRecord.otp !== otp) return NextResponse.json({ success: false, message: "Invalid OTP" }, { status: 400 });
+
+if (new Date() > otpRecord.expiresAt) return NextResponse.json({ success: false, message: "OTP expired" }, { status: 400 });
+
+await schemaOTP.deleteOne({ email });
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -106,5 +118,4 @@ async function registerHandler(req: NextRequest) {
   }
 }
 
-// Export the rate-limited version of the handler
-export const POST = withRateLimit(registerHandler, registrationLimiter);
+export const POST = withRateLimit(studentRegister, registrationLimiter);

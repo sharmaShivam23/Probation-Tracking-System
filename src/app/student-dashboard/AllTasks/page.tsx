@@ -70,9 +70,19 @@ useEffect(() => {
     }
   }
 
+  const categoryColors: Record<string, string> = {
+  "All": "bg-red-900 text-white",
+  "Frontend Task": "bg-red-900 text-white",
+  "Backend Task": "bg-white/20 text-white",
+  "UI/UX Task": "bg-purple-900 text-white",
+  "Cloud Computing Task": "bg-yellow-900 text-white",
+  "App Development Task": "bg-pink-900 text-white",
+  "Video Editing Task": "bg-indigo-900 text-white",
+  "General": "bg-green-500 text-white", // fallback
+};
+
   const categories = [
     "All",
-   
      "Frontend Task",
       "Backend Task",
       "UI/UX Task",
@@ -173,9 +183,16 @@ useEffect(() => {
 
           
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
-                  <span className="px-3 py-1 rounded-full bg-red-900/10 text-white font-medium">
+                  {/* <span className={`px-3 ${task.category == "All" ? "bg-red-900"} py-1 rounded-full bg-red-900/10 text-white font-medium`}>
                     {task.category || "General"}
-                  </span>
+                  </span> */}
+                  <span
+  className={`px-3 py-1 rounded-full font-medium ${
+    categoryColors[task.category || "General"] || categoryColors["General"]
+  }`}
+>
+  {task.category || "General"}
+</span>
                   {task.createdAt && (
                     <span className="text-gray-400">
                       📅 Uploaded {new Date(task.createdAt).toLocaleDateString()}

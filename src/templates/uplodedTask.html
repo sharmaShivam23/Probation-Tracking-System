@@ -1,0 +1,119 @@
+<!-- Templates/task-upload.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New Task Uploaded</title>
+    <style>
+      /* Reset */
+      body, table, td { margin:0; padding:0; }
+      body { background:#000; font-family:Arial,Helvetica,sans-serif; }
+
+      /* Container */
+      .container { width:100%; max-width:600px; margin:0 auto; background:#111; border-radius:12px; overflow:hidden; }
+
+      /* Header Bar */
+      .header {
+        background: #7f1d1d; /* Tailwind blue-900 */
+        padding:18px;
+        text-align:center;
+      }
+      .header h1 {
+        margin:0;
+        color:#fff;
+        font-size:22px;
+        font-weight:700;
+        letter-spacing:1px;
+      }
+
+      /* Card Body */
+      .content { padding:28px 24px; }
+      .subtext { font-size:14px; color:#aaa; margin:0 0 20px; text-align:center; }
+
+      /* Fields */
+      .label { font-size:13px; font-weight:600; color:#eee; margin:14px 0 4px; }
+      .value {
+        background:#1a1a1a;
+        color:#fff;
+        border-radius:6px;
+        padding:10px 12px;
+        font-size:14px;
+        border:1px solid rgba(255,255,255,0.1);
+      }
+
+      /* Button */
+      .btn {
+        display:inline-block;
+        margin-top:24px;
+        padding:12px 22px;
+        background: #7f1d1d;
+        color:#fff !important;
+        font-weight:700;
+        font-size:14px;
+        border-radius:8px;
+        text-decoration:none;
+      }
+      .btn:hover { background: #7f1d1d; }
+
+      /* Footer */
+      .footer {
+        border-top:1px solid rgba(255,255,255,0.08);
+        text-align:center;
+        padding:18px;
+        font-size:12px;
+        color:#666;
+      }
+
+      .deadline{
+        color : red;
+      }
+
+      @media screen and (max-width:600px) {
+        .header h1 { font-size:18px; }
+        .content { padding:20px 16px; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <div class="header">
+        <h1>📢 New Task Uploaded</h1>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <p class="subtext">A new task has been uploaded for you. Please check the details below:</p>
+
+        <!-- Task Title -->
+        <p class="label">Task Title</p>
+        <div class="value">{{title}}</div>
+
+        <!-- Task Category -->
+        <p class="label">Category</p>
+        <div class="value">{{category}}</div>
+
+        <!-- Deadline -->
+        <p class="label ">Deadline</p>
+        <div class="value deadline">{{deadline}}</div>
+
+        <!-- Uploaded By -->
+        <p class="label">Uploaded By</p>
+        <div class="value">{{uploadedBy}}</div>
+
+        <!-- CTA -->
+        <div style="text-align:center;">
+          <a href="https://probation-tracking-system.vercel.app/login" class="btn">View Task</a>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        © {{year}} EduPortal — All rights reserved
+      </div>
+    </div>
+  </body>
+</html>
