@@ -374,7 +374,7 @@ try {
       <Toaster />
       <form
         onSubmit={handleSubmit}
-        className="max-w-xl mx-auto mt-10 mb-10 p-3 sm:p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-5 text-white transition-transform hover:scale-[1.02]"
+        className="max-w-xl mx-auto mt-10 mb-10 p-4  sm:p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-5 text-white transition-transform hover:scale-[1.02]"
       >
       
         <h2 style={{

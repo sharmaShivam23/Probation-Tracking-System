@@ -5,13 +5,14 @@ import bcrypt from "bcryptjs";
 import Candidate from "@/models/Candidate";
 // import { withRateLimit, registrationLimiter } from "@/lib/ratelimiter";
 import schemaOTP from "@/models/otpStore";
+import axios from "axios";
 import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 
  async function studentRegister(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    const { name, email, rollNo, branch, github, password, role, domain , otp } = body;
+    const { name, email, rollNo, branch, github, password, role, domain , otp , recaptchaValue } = body;
 
     if (!name || !email || !rollNo || !branch || !github || !password || !role) {
       return NextResponse.json(
@@ -77,6 +78,31 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
         { success: false, message: "Candidate already registered" },
         { status: 400 }
       );
+    }
+
+
+     if (!recaptchaValue) {
+      return NextResponse.json(
+        { success: false, message: "recaptcha not found" },
+        { status: 400 }
+      );
+    }
+
+    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+    const secretKey = process.env.SECRET_KEY;
+    const recaptchaResponse = await axios.post(verifyUrl, null, {
+      params: {
+        secret: secretKey,
+        response: recaptchaValue,
+      },
+    });
+
+    if (!recaptchaResponse.data.success) {
+      return NextResponse.json(
+        { success: false, message: "reCAPTCHA verification failed" },
+        { status: 400 }
+      );
+
     }
    
 const otpRecord = await schemaOTP.findOne({ email });

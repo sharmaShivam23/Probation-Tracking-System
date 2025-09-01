@@ -98,7 +98,7 @@ async function fetchStudents() {
       const data = await res.json();
       if (data.success) {
         await fetchStudents();
-        // ✅ Update local highlight
+        //  Update local highlight
         setMarkedStatus((prev) => ({ ...prev, [candidateId]: status }));
       } else {
         alert(data.message || "Failed to mark attendance");
@@ -112,7 +112,7 @@ async function fetchStudents() {
   }
 
   return (
-    <div className="sm:p-6 w-full sm:max-w-7xl mx-auto text-white">
+    <div className="sm:p-6 w-[100%] sm:max-w-7xl mx-auto text-white">
       <h1
         style={{
           fontFamily: "'Orbitron', sans-serif",
@@ -174,7 +174,7 @@ async function fetchStudents() {
                 >
                   <td className="p-3">{s.name}</td>
                   <td className="p-3">{s.rollNo}</td>
-                  <td className="p-3 max-[600px]:hidden">{s.branch}</td>
+                  <td className="p-3 max-[700px]:hidden">{s.branch}</td>
                   <td className="p-3 text-center flex space-x-2">
                     <button
                       disabled={markingIds.includes(s.id)}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,7 @@ import Image from "next/image";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { ImCross } from "react-icons/im";
 import OtpInput from "react-otp-input";
-
+import ReCAPTCHA from "react-google-recaptcha";
 const branches = [
   "CSE",
   "CSE(AIML)",
@@ -43,6 +43,7 @@ export default function RegisterPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [resendDisabled, setResendDisabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  const reset = useRef<ReCAPTCHA | null>(null);
 
   function startResendTimer() {
     setResendDisabled(true);
@@ -59,7 +60,6 @@ export default function RegisterPage() {
       });
     }, 1000);
   }
-
 
   function handleResendotp() {
     sendOtp();
@@ -112,40 +112,6 @@ export default function RegisterPage() {
     }
   };
 
-  const VerifyOtp = async () => {
-    const toastID = toast.loading("Verify OTP...");
-    setOtpLoading(true);
-
-    try {
-      const response = await axios.post(
-        "/api/auth/send-otp",
-        {
-          email: formData.email,
-          otp: formData.otp,
-          rollNo: formData.rollNo,
-        },
-        { withCredentials: true }
-      );
-
-      if (response.data.success) {
-        toast.success("OTP verified successfully!", { id: toastID });
-        setShowEmail(false);
-        // Proceed with actual registration
-        await handleActualRegistration();
-      } else {
-        toast.error(response.data.message || "OTP verification failed", {
-          id: toastID,
-        });
-      }
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "OTP verification failed", {
-        id: toastID,
-      });
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
   const handleActualRegistration = async () => {
     const toastID = toast.loading("Registering...");
     setLoading(true);
@@ -171,6 +137,9 @@ export default function RegisterPage() {
           code: "",
           otp: "",
         });
+        if (reset.current) {
+          reset.current.reset();
+        }
         setRole("");
         setOtpSent(false);
       } else {
@@ -187,6 +156,14 @@ export default function RegisterPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  //   const handleRecaptchaChange = (token : string) => {
+  //   setFormData((prev) => ({ ...prev, recaptchaValue: token }));
+  // };
+  const handleRecaptchaChange = (value: string | null) => {
+    console.log("ReCAPTCHA value:", value);
+    setFormData((prev) => ({ ...prev, recaptchaValue: value }));
   };
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -610,7 +587,10 @@ export default function RegisterPage() {
               We have sent a One-Time Password (OTP) to your registered email
               address. Please check your inbox and enter the OTP in the field
               below to proceed. You have 5 minutes to enter a otp.
-              <p className="text-white font-bold text-xs"><span className="text-red-500 mr-2">Alert</span>You are able to send 3 otp in 24 hour</p>
+              <p className="text-white font-bold text-xs">
+                <span className="text-red-500 mr-2">Alert</span>You are able to
+                send 3 otp in 24 hour
+              </p>
             </div>
 
             <div className="otp flex  justify-center items-center gap-2 mt-4">
@@ -634,6 +614,7 @@ export default function RegisterPage() {
                 shouldAutoFocus
               />
             </div>
+           
             <div className="w-full flex justify-between items-center">
               <button
                 disabled={resendDisabled}
@@ -644,8 +625,20 @@ export default function RegisterPage() {
                     : "text-white cursor-pointer"
                 }`}
               >
-                {resendDisabled ? `Resend in ${timeLeft}s` : "Resend OTP"}
+                {resendDisabled ? `Resend in (${timeLeft}s)` : "Resend OTP"}
               </button>
+            </div>
+
+             <div className="block gap-2 mt-4  cursor-pointer w-full">
+              <div className="flex justify-center  items-center  z-50">
+                <ReCAPTCHA
+                  sitekey="6Le3-QArAAAAADn9ym4vDs6qMQN3DpD0yZe183m-"
+                  onChange={handleRecaptchaChange}
+                   theme="dark"
+                  className="cursor-pointer g-recaptcha"
+                  ref={reset}
+                />
+              </div>
             </div>
 
             <div className="flex justify-center mb-5 sm:mb-0  w-full sm:mt-4  items-center">
