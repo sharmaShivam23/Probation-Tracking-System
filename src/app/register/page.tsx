@@ -6,10 +6,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { IoEyeOff } from "react-icons/io5";
-import { IoEye } from "react-icons/io5";
 import { EyeClosed, EyeIcon } from "lucide-react";
-import Loading from "@/components/Loading2";
 import { ImCross } from "react-icons/im";
 import OtpInput from "react-otp-input";
 
@@ -610,7 +607,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="p sm:text-sm  text-xs text-[#CBD5E1] text-center px-2">
-              We've sent a One-Time Password (OTP) to your registered email
+              We have sent a One-Time Password (OTP) to your registered email
               address. Please check your inbox and enter the OTP in the field
               below to proceed. You have 5 minutes to enter a otp.
               <p className="text-white font-bold text-xs"><span className="text-red-500 mr-2">Alert</span>You are able to send 3 otp in 24 hour</p>

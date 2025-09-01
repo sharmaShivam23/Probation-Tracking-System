@@ -57,7 +57,7 @@ export default function ContactForm() {
         {/* Heading */}
         <h1 className="text-3xl font-bold text-white text-center">Need Help?</h1>
         <p className="text-gray-200 text-center mt-2 mb-6">
-          Reach out to us anytime. We’ll get back to you as soon as possible.
+          Reach out to us anytime. We will get back to you as soon as possible.
         </p>
 
         {/* Form */}
