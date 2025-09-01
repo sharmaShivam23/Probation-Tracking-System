@@ -1,24 +1,149 @@
-// src/app/api/tasks/route.ts
+// // src/app/api/tasks/route.ts
+// import { NextResponse } from "next/server";
+// import { connectDB } from "@/lib/db";
+// import UplodedTask from "@/models/UplodedTasks";
+// import Candidate from "@/models/Candidate";
+// import { globalLimiter , withRateLimit } from "@/lib/ratelimiter";
+// import axios from "axios";
+//  async function submitTask(request: Request) {
+//   await connectDB();
+
+//   try {
+//     const body = await request.json();
+//     const { title, description, github, deploy, uploadedBy , recaptchaValue } = body;
+
+//     if (!title || !description || !github || !deploy || !uploadedBy) {
+//       return NextResponse.json(
+//         { success: false, message: "All fields are required" },
+//         { status: 400 }
+//       );
+//     }
+    
+//      if (!recaptchaValue) {
+//       return NextResponse.json(
+//         { success: false, message: "recaptcha not found" },
+//         { status: 400 }
+//       );
+//     }
+
+//     const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+//     const secretKey = process.env.SECRET_KEY;
+//     const recaptchaResponse = await axios.post(verifyUrl, null, {
+//       params: {
+//         secret: secretKey,
+//         response: recaptchaValue,
+//       },
+//     });
+
+//     if (!recaptchaResponse.data.success) {
+//       return NextResponse.json(
+//         { success: false, message: "reCAPTCHA verification failed" },
+//         { status: 400 }
+//       );
+
+//     }
+
+
+//     const newTask = await UplodedTask.create({
+//       title,
+//       description,
+//       github,
+//       deploy,
+//       uploadedBy,
+//     });
+
+//     await Candidate.findByIdAndUpdate(
+//       uploadedBy,
+//       { $push: { uploadedTasks: newTask._id } },
+//       { new: true }
+//     );
+
+
+
+//     return NextResponse.json({ success: true, task: newTask });
+//   } catch (error: unknown) {
+//     console.error("Task creation error:", error);
+//     return NextResponse.json(
+//       { success: false, message: "Server error" },
+//       { status: 500 }
+//     );
+//   }
+// }
+
+// export const POST = withRateLimit(submitTask, globalLimiter);
+
+
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import UplodedTask from "@/models/UplodedTasks";
 import Candidate from "@/models/Candidate";
-import { globalLimiter , withRateLimit } from "@/lib/ratelimiter";
- async function submitTask(request: Request) {
+import { globalLimiter, withRateLimit } from "@/lib/ratelimiter";
+import axios from "axios";
+import Joi from "joi";
+
+
+const taskSchema = Joi.object({
+  title: Joi.string()
+    .pattern(/^[A-Za-z0-9 ]+$/) 
+    .min(3)
+    .max(30)
+    .required(),
+
+  description: Joi.string()
+    .pattern(/^[A-Za-z0-9 ]+$/)
+    .min(3)
+    .max(150)
+    .required(),
+
+  github: Joi.string()
+    .uri()
+    .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/) 
+    .required(),
+
+  deploy: Joi.string()
+    .uri()
+    .required(),
+
+  uploadedBy: Joi.string().required(),
+  recaptchaValue: Joi.string().required(),
+});
+
+async function submitTask(request: Request) {
   await connectDB();
 
   try {
     const body = await request.json();
-    const { title, description, github, deploy, uploadedBy } = body;
 
-    if (!title || !description || !github || !deploy || !uploadedBy) {
+  
+    const { error, value } = taskSchema.validate(body);
+    if (error) {
       return NextResponse.json(
-        { success: false, message: "All fields are required" },
+        { success: false, message: error.details[0].message },
         { status: 400 }
       );
     }
 
+    const { title, description, github, deploy, uploadedBy, recaptchaValue } = value;
 
+    
+    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+    const secretKey = process.env.SECRET_KEY;
+    const recaptchaResponse = await axios.post(verifyUrl, null, {
+      params: {
+        secret: secretKey,
+        response: recaptchaValue,
+      },
+    });
+
+    if (!recaptchaResponse.data.success) {
+      return NextResponse.json(
+        { success: false, message: "reCAPTCHA verification failed" },
+        { status: 400 }
+      );
+    }
+
+    
+    
     const newTask = await UplodedTask.create({
       title,
       description,

@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import Admin from "@/models/Admins";
 import schemaOTP from "@/models/otpStore";
 import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
-
+import axios from "axios";
  async function adminRegister(request: Request) {
   try {
    
@@ -12,7 +12,7 @@ import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
     await connectDB();
 
     const body = await request.json();
-    const { name, email, rollNo, branch, password, role, code  , otp} = body;
+    const { name, email, rollNo, branch, password, role, code  , otp , recaptchaValue} = body;
 
 
     if (!name || !email || !rollNo || !branch || !password || !role || !code) {
@@ -33,7 +33,7 @@ import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
 
 
 
-    // Email validation for admin (must contain 23 batch year)
+
     const emailRegex = /^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -42,7 +42,7 @@ import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
       );
     }
 
-    // Roll number validation for admin (must start with 23)
+    
     const rollReg = /^23\d{5,6}$/;
     if (!rollReg.test(rollNo)) {
       return NextResponse.json(
@@ -63,7 +63,7 @@ import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
         { status: 400 })
     }
 
-    // Password validation
+  
     const passReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
     if (!passReg.test(password)) {
       return NextResponse.json(
@@ -92,6 +92,31 @@ import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
         { status: 400 }
       );
     }
+
+
+         if (!recaptchaValue) {
+          return NextResponse.json(
+            { success: false, message: "recaptcha not found" },
+            { status: 400 }
+          );
+        }
+    
+        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+        const secretKey = process.env.SECRET_KEY;
+        const recaptchaResponse = await axios.post(verifyUrl, null, {
+          params: {
+            secret: secretKey,
+            response: recaptchaValue,
+          },
+        });
+    
+        if (!recaptchaResponse.data.success) {
+          return NextResponse.json(
+            { success: false, message: "reCAPTCHA verification failed" },
+            { status: 400 }
+          );
+    
+        }
 
      
     const otpRecord = await schemaOTP.findOne({ email });

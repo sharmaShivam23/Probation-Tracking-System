@@ -16,8 +16,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Find user and populate tasks
-    // const user = await Candidate.findById(id)
     const user = await Candidate.findById(id).populate("uploadedTasks");
 
     if (!user) {

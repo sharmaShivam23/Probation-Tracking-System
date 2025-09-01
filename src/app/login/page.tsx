@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         const token = res.data.token;
         localStorage.setItem("token", token);
-        localStorage.setItem("userId", res.data.payload.id);
+        // localStorage.setItem("userId", res.data.payload.id);
         // router.refresh();
         window.dispatchEvent(new Event("tokenChange"));
         const userRole = getUserRole(token);

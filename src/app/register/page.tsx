@@ -146,7 +146,7 @@ export default function RegisterPage() {
         toast.error(res.data.message || "Registration failed", { id: toastID });
       }
     } catch (error: unknown) {
-      console.log(error);
+      // console.log(error);
       const errorMessage =
         error instanceof Error && "response" in error
           ? (error as { response?: { data?: { message?: string } } }).response
@@ -158,11 +158,9 @@ export default function RegisterPage() {
     }
   };
 
-  //   const handleRecaptchaChange = (token : string) => {
-  //   setFormData((prev) => ({ ...prev, recaptchaValue: token }));
-  // };
+
   const handleRecaptchaChange = (value: string | null) => {
-    console.log("ReCAPTCHA value:", value);
+    // console.log("ReCAPTCHA value:", value);
     setFormData((prev) => ({ ...prev, recaptchaValue: value }));
   };
 
@@ -181,9 +179,7 @@ export default function RegisterPage() {
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
-  // useEffect(() => {
-  //   console.log(process.env.NEXT_PUBLIC_CODE);
-  // }, []);
+  
 
   function validate() {
     const newErrors: Record<string, string> = {};
@@ -326,7 +322,7 @@ export default function RegisterPage() {
           />
         </motion.div>
 
-        {/* Right Section */}
+      
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
@@ -346,9 +342,7 @@ export default function RegisterPage() {
               Create your account
             </h1>
 
-            {/* rgba(70, 15, 14, 1) */}
-
-            {/* Role Selector */}
+           
             <div className="flex justify-center mb-2 items-center">
               <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
                 {["Student", "Admin"].map((r) => (
