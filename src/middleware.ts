@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import * as jose from "jose";
 
+
 const allowedOrigins = [
   "http://localhost:3000",           
   "https://probation-tracking-system.vercel.app", 
