@@ -6,7 +6,6 @@ import schemaOTP from "@/models/otpStore";
 import { connectDB } from "@/lib/db";
 import { withRateLimit, globalLimiter } from "@/lib/ratelimiter";
 
-// Your actual handler
 async function sendOtpHandler(request: Request) {
   try {
     await connectDB();

@@ -13,7 +13,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<string | null>(null);
-  const [showpassword , setShowPassword] = useState(false)
+  const [showpassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -70,7 +70,11 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/login", formData);
+      const res = await axios.post("/api/auth/login", formData, { withCredentials: true });
+      console.log(
+        res
+      );
+
 
       if (res?.data?.success) {
         toast.success("Login successful!");
@@ -107,7 +111,7 @@ export default function LoginPage() {
     }
   };
 
-  
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
@@ -121,12 +125,12 @@ export default function LoginPage() {
       <Toaster />
 
       <div className="w-full max-w-lg bg-white/10 backdrop-blur-xl shadow-2xl rounded-2xl p-8 border border-white/30">
-        <h1  style={{
-            fontFamily: "'Orbitron', sans-serif",
-            WebkitBackgroundClip: "text",
-            textShadow:
-              "0 0 15px rgba(127, 29, 29, 1), 0 0 10px rgba(127, 29, 29, 1)",
-          }} className="text-3xl font-extrabold text-center mb-6 text-white drop-shadow-lg">
+        <h1 style={{
+          fontFamily: "'Orbitron', sans-serif",
+          WebkitBackgroundClip: "text",
+          textShadow:
+            "0 0 15px rgba(127, 29, 29, 1), 0 0 10px rgba(127, 29, 29, 1)",
+        }} className="text-3xl font-extrabold text-center mb-6 text-white drop-shadow-lg">
           Login
         </h1>
 
@@ -150,34 +154,34 @@ export default function LoginPage() {
           </div>
 
           {/* Password */}
-         <div>
-  <label className="block text-sm font-medium text-white/90">
-    Password
-  </label>
+          <div>
+            <label className="block text-sm font-medium text-white/90">
+              Password
+            </label>
 
-  <div className="relative mt-1">
-    <input
-      type={showpassword ? "text" : "password"}
-      name="password"
-      value={formData.password}
-      onChange={handleChange}
-      className="w-full px-4 py-2 pr-10 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-      placeholder="••••••"
-    />
+            <div className="relative mt-1">
+              <input
+                type={showpassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-2 pr-10 rounded-xl bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                placeholder="••••••"
+              />
 
-    {/* Eye Icon inside input */}
-    <div
-      onClick={() => setShowPassword(!showpassword)}
-      className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-white/80"
-    >
-      {showpassword ? <EyeIcon /> : <EyeClosed />}
-    </div>
-  </div>
+              {/* Eye Icon inside input */}
+              <div
+                onClick={() => setShowPassword(!showpassword)}
+                className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-white/80"
+              >
+                {showpassword ? <EyeIcon /> : <EyeClosed />}
+              </div>
+            </div>
 
-  {errors.password && (
-    <p className="text-red-300 text-sm">{errors.password}</p>
-  )}
-</div>
+            {errors.password && (
+              <p className="text-red-300 text-sm">{errors.password}</p>
+            )}
+          </div>
 
           {/* Submit */}
           <button

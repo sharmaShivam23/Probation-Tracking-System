@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
     const payload = {
       id: existing._id,
-      name : existing.name,
+      name: existing.name,
       email: existing.email,
       role: existing.role,
       branch: existing.branch,
@@ -65,7 +65,14 @@ export async function POST(req: Request) {
     };
 
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: "3h" });
+    if (!process.env.JWT_SECRET) {
+      return NextResponse.json(
+        { success: false, message: "Server misconfiguration: JWT secret missing" },
+        { status: 500 }
+      );
+    }
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3h" });
 
 
     const response = NextResponse.json(
@@ -84,6 +91,7 @@ export async function POST(req: Request) {
     });
 
     return response;
+
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json(

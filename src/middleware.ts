@@ -73,6 +73,6 @@ export const config = {
     "/admin-dashboard",
     "/student-dashboard/:path*",
     "/student-dashboard",
-    "/api/:path*",
+    // "/api/:path*",
   ],
 };
