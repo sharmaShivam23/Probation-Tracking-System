@@ -48,7 +48,7 @@ export default function AttendancePage() {
 
 async function fetchStudents() {
   try {
-    setLoading(true);
+    // setLoading(true);
     const res = await fetch("/api/attendance/students");
 
     if (!res.ok) {
@@ -59,7 +59,7 @@ async function fetchStudents() {
 
     if (data?.success) {
       setStudents(data.students);
-      toast.success("Students fetched successfully ✅");
+      toast.success("Students fetched successfully");
     } else {
       toast.error(data?.message || "Failed to fetch students ");
     }
@@ -82,7 +82,7 @@ async function fetchStudents() {
     status: "Present" | "Absent"
   ) {
     if (!date) {
-      alert("Please pick a date");
+      toast.error("Please pick a date");
       return;
     }
     try {

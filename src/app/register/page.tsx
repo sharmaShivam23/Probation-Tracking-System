@@ -256,7 +256,7 @@ export default function RegisterPage() {
         newErrors.github = "GitHub profile is required";
         valid = false;
       } else if (
-        !/^https:\/\/github\.com\/[A-Za-z0-9-]{1,39}$/.test(formData.github)
+        !/^https:\/\/github\.com\/[A-Za-z0-9-]{1,20}$/.test(formData.github)
       ) {
         newErrors.github = "Invalid GitHub URL";
         valid = false;
@@ -313,13 +313,16 @@ export default function RegisterPage() {
           <h3 className="text-center text-xl sm:text-3xl font-bold">
             Join the millions learning <br /> to code with StudyNotion for free
           </h3>
-          <Image
-            src="/r.avif"
+         {/* <Image
+            src="/register.gif"
             width={400}
             height={300}
             className="h m-auto mt-6 w-full bg-cover max-w-md shadow-xl"
             alt="register"
-          />
+          />*/
+         }
+         {/* <img src="/r.webm" alt="" /> */}
+    
         </motion.div>
 
       

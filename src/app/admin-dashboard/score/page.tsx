@@ -118,10 +118,10 @@ export default function ScorePage() {
                 <p
                   className={`mt-4 text-3xl font-extrabold ${
                     index === 0
-                      ? "text-green-500"
+                      ? "text-[#FFD700]"
                       : index === 1
-                      ? "text-amber-600"
-                      : "text-white"
+                      ? "text-[#C0C0C0]"
+                      : "text-[#CD7F32]"
                   }`}
                 >
                   {student.attendance.percentage}%

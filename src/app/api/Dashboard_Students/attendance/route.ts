@@ -2,21 +2,22 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Attendance from "@/models/Attendance";
+import { verifyToken } from "@/lib/verifyToken";
 
 export async function POST(req: Request) {
   await connectDB();
+ 
 
   try {
+     const { valid, user, error } = await verifyToken();
   
-    const { userId } = await req.json();
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, message: "User ID is required" },
-        { status: 400 }
-      );
-    }
-    const attendance = await Attendance.find({ candidate: userId }).sort({ date: -1 });
+      if (!valid || !user?.userId) {
+        return NextResponse.json(
+          { success: false, message: error || "Unauthorized" },
+          { status: 401 }
+        );
+      }
+    const attendance = await Attendance.find({ candidate: user?.userId }).sort({ date: -1 });
 
     return NextResponse.json({ success: true, attendance });
   } catch (error) {

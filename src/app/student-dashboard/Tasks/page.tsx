@@ -22,8 +22,8 @@
 //   const [user, setUser] = useState<User | null>(null);
 //   const [loading, setLoading] = useState(true);
 //  const [userId, setUserId] = useState<string | null>(null);
-  
-    
+
+
 //     useEffect(() => {
 //       const token = localStorage.getItem("token");
 //       if (token) {
@@ -32,7 +32,7 @@
 //         setUserId(null);
 //       }
 //     }
-  
+
 
 // useEffect(() => {
 //   const fetchUserTasks = async () => {
@@ -115,7 +115,7 @@
 //               key={task._id}
 //               className="group relative bg-white/5 backdrop-blur-lg p-6 rounded-2xl shadow-[0_0_20px_rgba(255,0,0,0.3)] border border-red-500/30 hover:border-red-400 transition-all duration-300 hover:scale-[1.05]"
 //             >
-          
+
 //               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-600/20 to-pink-600/20 opacity-0 group-hover:opacity-100 blur-2xl transition duration-500"></div>
 
 //               <h2 className="text-2xl font-bold text-white mb-3 relative z-10">
@@ -172,7 +172,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Loader2, Github, Globe } from "lucide-react"; // icons
 import toast from "react-hot-toast";
-import { getUserId } from "@/middleware/DecodeToken";
 
 interface Task {
   _id: string;
@@ -191,26 +190,17 @@ interface User {
 export default function UserTasks() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<string | null>(null);
 
-  
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUserId(getUserId(token));
-    } else {
-      setUserId(null);
-      setLoading(false); 
-    }
-  }, []);
 
-  
   useEffect(() => {
-    if (!userId) return;
 
     const fetchUserTasks = async () => {
       try {
-        const response = await axios.post("/api/Dashboard_Students/uplodedtasks", { id: userId });
+        const response = await axios.post("/api/Dashboard_Students/uplodedtasks", {}, {
+          withCredentials: true
+        });
+        console.log(response);
+
 
         if (response?.data?.success) {
           setUser(response.data.user);
@@ -227,7 +217,7 @@ export default function UserTasks() {
     };
 
     fetchUserTasks();
-  }, [userId]);
+  }, []);
 
   if (loading) {
     return (

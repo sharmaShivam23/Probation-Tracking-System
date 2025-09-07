@@ -1,31 +1,36 @@
+
 import { connectDB } from "@/lib/db";
 import { NextResponse } from "next/server";
 import Candidate from "@/models/Candidate";
+import { verifyToken } from "@/lib/verifyToken";
 
-export async function POST(req: Request) {
+export async function POST() {
   await connectDB();
 
   try {
-    const body = await req.json();
-    const { id } = body;
+    const { valid, user, error } = await verifyToken();
 
-    if (!id) {
+    if (!valid || !user?.userId) {
       return NextResponse.json(
-        { success: false, message: "User ID is required" },
-        { status: 400 }
+        { success: false, message: error || "Unauthorized" },
+        { status: 401 }
       );
     }
 
-    const user = await Candidate.findById(id).populate("uploadedTasks");
+    const candidate = await Candidate.findById(user?.userId).populate("uploadedTasks");
 
-    if (!user) {
+    if (!candidate) {
       return NextResponse.json(
         { success: false, message: "User not found" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ success: true, tasks: user.uploadedTasks, user });
+    return NextResponse.json({
+      success: true,
+      tasks: candidate.uploadedTasks,
+      user: candidate,
+    });
   } catch (error: unknown) {
     console.error("Fetch user error:", error);
     return NextResponse.json(
