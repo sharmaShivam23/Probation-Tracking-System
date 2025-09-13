@@ -23,7 +23,8 @@ const taskSchema = Joi.object({
 
   github: Joi.string()
     .uri()
-    .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/) 
+    .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/?$/) 
+    // .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/) 
     .required(),
 
   deploy: Joi.string()

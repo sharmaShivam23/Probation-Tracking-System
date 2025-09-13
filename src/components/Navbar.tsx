@@ -101,6 +101,8 @@ const Navbar = () => {
               <select className="bg-red-900 cursor-pointer text-white">
                 <option className="cursor-pointer" value="">{userName?.split(" ")[0]}</option>
                 <option className="cursor-pointer" value=""> {role === "Admin" ? "admin" : "Student"}</option>
+                <option className="cursor-pointer" onClick={() => router.push("/student-dashboard/profile")} value="">Profile </option>
+                {/* <option className="cursor-pointer" value=""> <Link href="/student-dashboard/profile">Profile</Link> </option> */}
               </select>
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
             </div>

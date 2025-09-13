@@ -5,7 +5,7 @@ import mailSender from "@/components/mailSender";
 import schemaOTP from "@/models/otpStore";
 import { connectDB } from "@/lib/db";
 import { withRateLimit, globalLimiter } from "@/lib/ratelimiter";
-
+import crypto from "crypto";
 async function sendOtpHandler(request: Request) {
   try {
     await connectDB();
@@ -51,11 +51,12 @@ async function sendOtpHandler(request: Request) {
         }
 
     const otp = Math.floor(10000 + Math.random() * 90000).toString();
+    const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     await schemaOTP.findOneAndUpdate(
       { email },
-      { otp, expiresAt },
+      { otp: hashedOtp, expiresAt },
       { upsert: true, new: true }
     );
 

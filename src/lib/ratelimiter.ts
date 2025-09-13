@@ -10,7 +10,7 @@ const redis = new Redis({
 
 export const globalLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.fixedWindow(10, "1 m"), 
+  limiter: Ratelimit.fixedWindow(3 , "30 m"), 
   analytics: true,
   prefix: "global",
 });
@@ -81,7 +81,7 @@ export async function rateLimitMiddleware(
       reset,
     };
   } catch (error) {
-    console.error("Rate limiting error:", error);
+    // console.error("Rate limiting error:", error);
     return {
       success: true, 
       limit: 0,

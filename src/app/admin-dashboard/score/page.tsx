@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import {toast,Toaster} from "react-hot-toast";
 import Loading from "@/components/Loading2";
 
 type Attendance = {
@@ -25,33 +25,7 @@ export default function ScorePage() {
   const [users, setUsers] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const res = await axios.get("/api/attendance/students");
-  //       if (res?.data?.success) {
-  //         // Sort by percentage first, then by name if same percentage
-  //         const sorted = res?.data?.students.sort(
-  //           (a: Candidate, b: Candidate) => {
-  //             if (b.attendance.percentage === a.attendance.percentage) {
-  //               return a.name.localeCompare(b.name);
-  //             }
-  //             return b.attendance.percentage - a.attendance.percentage;
-  //           }
-  //         );
-  //         setUsers(sorted);
-  //       } else {
-  //         console.error("Failed to fetch users:", res.data.message);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching users:", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
+  
   
   useEffect(() => {
     const fetchUsers = async () => {
@@ -76,7 +50,7 @@ export default function ScorePage() {
         }
       } catch (err: any) {
         toast.error(err?.response?.data?.message || "Error fetching students");
-        console.error("Error fetching users:", err);
+        // console.error("Error fetching users:", err);
       } finally {
         setLoading(false);
       }
@@ -89,6 +63,7 @@ export default function ScorePage() {
 
   return (
     <div className="min-h-screen  mb-10 sm:p-6 text-white">
+      <Toaster/>
       <h1 style={{
             fontFamily: "'Orbitron', sans-serif",
             WebkitBackgroundClip: "text",
@@ -113,8 +88,8 @@ export default function ScorePage() {
                 <span className="absolute -top-4 -right-4 text-4xl">
                   {index === 0 ? "🥇" : index === 1 ? "🥈" : "🥉"}
                 </span>
-                <h3 className="text-xl font-bold">{student.name}</h3>
-                <p className="text-gray-300 text-sm">{student.rollNo}</p>
+                <h3 className="text-xl font-bold">{student?.name}</h3>
+                <p className="text-gray-300 text-sm">{student?.rollNo}</p>
                 <p
                   className={`mt-4 text-3xl font-extrabold ${
                     index === 0
@@ -124,7 +99,7 @@ export default function ScorePage() {
                       : "text-[#CD7F32]"
                   }`}
                 >
-                  {student.attendance.percentage}%
+                  {student?.attendance?.percentage}%
                 </p>
               </div>
             ))}
@@ -151,16 +126,16 @@ export default function ScorePage() {
                     key={idx}
                     className="hover:bg-white/10 transition duration-200"
                   >
-                    <td className="p-3">{user.name}</td>
-                    <td className="p-3 text-center">{user.rollNo}</td>
+                    <td className="p-3">{user?.name}</td>
+                    <td className="p-3 text-center">{user?.rollNo}</td>
                     <td
                       className={`p-3 text-center font-bold ${
-                        user.attendance.percentage <= 75
+                        user?.attendance?.percentage <= 75
                           ? "text-red-400"
                           : "text-green-400"
                       }`}
                     >
-                      {user.attendance.percentage}%
+                      {user?.attendance?.percentage}%
                     </td>
                   </tr>
                 ))}

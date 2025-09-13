@@ -24,6 +24,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/Dashboard_Admin/submittedTasks", "src/lib/apiMiddleware.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/Dashboard_Admin/submittedTasks", "src/lib/apiMiddleware.js", "src/app/api/Dashboard_Students/profile"],
   "exclude": ["node_modules"]
 }

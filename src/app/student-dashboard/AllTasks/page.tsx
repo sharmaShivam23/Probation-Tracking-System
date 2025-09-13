@@ -40,9 +40,7 @@ useEffect(() => {
           toast.error("Failed to fetch tasks");
         }
       } catch (error: any) {
-        console.error("Error fetching tasks:", error);
-
-        
+        // console.error("Error fetching tasks:", error);
         if (error?.response) {
           
           toast.error(error.response.data?.message || "Server error occurred");
@@ -78,7 +76,7 @@ useEffect(() => {
   "Cloud Computing Task": "bg-yellow-900 text-white",
   "App Development Task": "bg-pink-900 text-white",
   "Video Editing Task": "bg-indigo-900 text-white",
-  "General": "bg-green-500 text-white", // fallback
+  "General": "bg-green-500 text-white", 
 };
 
   const categories = [
@@ -141,12 +139,12 @@ useEffect(() => {
                          hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 ease-in-out"
             >
           
-              {/* <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-pink-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 blur-xl transition duration-500"></div> */}
+             
 
           
               <div className="relative z-10">
                 <h2 className="text-xl font-semibold text-white">
-                  {task.title || "Untitled Task"}
+                  {task?.title || "Untitled Task"}
                 </h2>
                 <p className="text-sm text-gray-300 mt-1">
                   By {task?.uploadedBy?.name || "Unknown"} (
@@ -154,7 +152,7 @@ useEffect(() => {
                 </p>
 
         
-                {task.file && (
+                {task?.file && (
                   <a
                     href={task.file}
                     target="_blank"
@@ -165,7 +163,7 @@ useEffect(() => {
                   </a>
                 )}
                 
-                {task.link && (
+                {task?.link && (
                   <a
                     href={task.link}
                     target="_blank"
@@ -178,20 +176,18 @@ useEffect(() => {
 
               
                 <p className="mt-4 text-gray-200 line-clamp-3">
-                  {task.description || "No description provided."}
+                  {task?.description || "No description provided."}
                 </p>
 
           
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
-                  {/* <span className={`px-3 ${task.category == "All" ? "bg-red-900"} py-1 rounded-full bg-red-900/10 text-white font-medium`}>
-                    {task.category || "General"}
-                  </span> */}
+                
                   <span
   className={`px-3 py-1 rounded-full font-medium ${
-    categoryColors[task.category || "General"] || categoryColors["General"]
+    categoryColors[task?.category || "General"] || categoryColors["General"]
   }`}
 >
-  {task.category || "General"}
+  {task?.category || "General"}
 </span>
                   {task.createdAt && (
                     <span className="text-gray-400">

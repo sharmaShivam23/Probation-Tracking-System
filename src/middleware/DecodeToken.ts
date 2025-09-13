@@ -15,7 +15,7 @@ export function getUserRole(token: string): string | null {
     const decoded = decodeJwt(token) as DecodedToken;
     return decoded.role || null;
   } catch (error) {
-    console.error("Invalid token", error);
+    // console.error("Invalid token", error);
     return null;
   }
 }
@@ -25,7 +25,7 @@ export function getUserName(token: string): string | null {
     const decoded = decodeJwt(token) as DecodedToken;
     return decoded.name || null;
   } catch (error) {
-    console.error("Invalid token", error);
+    // console.error("Invalid token", error);
     return null;
   }
 }
@@ -35,7 +35,7 @@ export function getUserId(token: string): string | null {
     const decoded = decodeJwt(token) as DecodedToken;
     return decoded.id || null;
   } catch (error) {
-    console.error("Invalid token", error);
+    // console.error("Invalid token", error);
     return null;
   }
 }

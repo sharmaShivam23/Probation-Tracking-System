@@ -19,7 +19,7 @@ export default function TaskForm() {
   const [token, setToken] = useState<string | null>(null);
   const reset = useRef<ReCAPTCHA | null>(null);
 
-  // modal state
+
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [code, setCode] = useState("");
 
@@ -82,16 +82,16 @@ export default function TaskForm() {
     setLoading(true);
     try {
       const data = new FormData();
-      data.append("title", formData.title);
-      data.append("description", formData.description);
-      data.append("link", formData.link);
-      data.append("deadline", formData.deadline);
-      data.append("category", formData.category);
+      data.append("title", formData?.title);
+      data.append("description", formData?.description);
+      data.append("link", formData?.link);
+      data.append("deadline", formData?.deadline);
+      data.append("category", formData?.category);
       if (file) data.append("file", file);
       data.append("code", code);
 
-      // ✅ Append ReCAPTCHA value
-      if (formData.recaptchaValue) {
+      
+      if (formData?.recaptchaValue) {
         data.append("recaptchaValue", formData.recaptchaValue);
       }
 
@@ -116,7 +116,7 @@ export default function TaskForm() {
       setCode("");
       setShowVerifyModal(false);
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
 
       const message =
         err.response?.data?.message ||

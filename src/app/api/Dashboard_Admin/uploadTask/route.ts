@@ -89,6 +89,11 @@ async function uploadTask(request: NextRequest) {
       );
     }
 
+    if (new Date(deadline) < new Date()) {
+  return NextResponse.json({ success: false, message: "Deadline must be in the future" }, { status: 400 });
+}
+
+
     if (link) {
       if (
         !/^https?:\/\/(drive\.google\.com)\/(file\/d\/|open\?id=|uc\?id=|drive\/folders\/)[a-zA-Z0-9_-]+/.test(link)
@@ -227,7 +232,11 @@ export async function GET() {
   try {
     await connectDB();
 
-    const tasks = await Task.find().populate("uploadedBy").sort({ createdAt: -1 });
+    // const tasks = await Task.find().populate("uploadedBy").sort({ createdAt: -1 });
+    const tasks = await Task.find()
+  .populate({ path: "uploadedBy", select: "name email role" }) 
+  .sort({ createdAt: -1 });
+
     return NextResponse.json({ success: true, tasks });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";

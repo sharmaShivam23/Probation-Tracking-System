@@ -30,7 +30,7 @@ export default function StudentDashboardHome() {
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
         {/* View Attendance */}
-        <Link href="/student-dashboard/myattendance">
+        <Link href="/student-dashboard/Attendance">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaUserCheck className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">My Attendance</h2>
@@ -41,7 +41,7 @@ export default function StudentDashboardHome() {
         </Link>
 
         {/* Upload Task */}
-        <Link href="/student-dashboard/uploadtask">
+        <Link href="/student-dashboard/SubmitTask">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaFileUpload className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">Upload My Task</h2>
@@ -52,7 +52,7 @@ export default function StudentDashboardHome() {
         </Link>
 
         {/* See All Tasks */}
-        <Link href="/student-dashboard/alltasks">
+        <Link href="/student-dashboard/AllTasks">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaTasks className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">All Tasks</h2>
@@ -63,7 +63,7 @@ export default function StudentDashboardHome() {
         </Link>
 
         {/* My Projects */}
-        <Link href="/student-dashboard/myprojects">
+        <Link href="/student-dashboard/Tasks">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaProjectDiagram className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">My Projects</h2>

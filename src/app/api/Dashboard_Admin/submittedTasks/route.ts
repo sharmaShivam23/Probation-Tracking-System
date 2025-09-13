@@ -1,20 +1,81 @@
 
+// import { connectDB } from "@/lib/db";
+// import UploadedTask from "@/models/UplodedTasks";
+// import { NextResponse } from "next/server";
+
+// export async function GET() {
+//   try {
+//     await connectDB();
+
+//     const Submittedtasks = await UploadedTask.find().populate("uploadedBy").sort({ createdAt: -1 });
+
+//     return NextResponse.json({ success: true, Submittedtasks });
+//   } catch (error: unknown) {
+//     console.log(error);
+//     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+//     return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
+//   }
+// }
 
 
 import { connectDB } from "@/lib/db";
 import UploadedTask from "@/models/UplodedTasks";
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-export async function GET() {
+interface DecodedToken {
+  id: string;
+  role: string;
+}
+
+export async function GET(req: Request) {
   try {
     await connectDB();
 
-    const Submittedtasks = await UploadedTask.find().populate("uploadedBy").sort({ createdAt: -1 });
+    
+    const token = req.headers.get("authorization")?.split(" ")[1];
+    if (!token) {
+      return NextResponse.json(
+        { success: false, message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
-    return NextResponse.json({ success: true, Submittedtasks });
+    let decoded: DecodedToken;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET as string) as DecodedToken;
+    } catch {
+      return NextResponse.json(
+        { success: false, message: "Invalid token" },
+        { status: 401 }
+      );
+    }
+
+    
+    if (decoded.role !== "Admin") {
+      return NextResponse.json(
+        { success: false, message: "Forbidden: Admins only" },
+        { status: 403 }
+      );
+    }
+
+    
+    const Submittedtasks  = await UploadedTask.find()
+      .populate({
+        path: "uploadedBy",
+        select: "name email rollNo  domain -_id",
+      })
+      .sort({ createdAt: -1 })
+      .limit(100); 
+
+    return NextResponse.json({ success: true, Submittedtasks  });
   } catch (error: unknown) {
-    console.log(error);
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    return NextResponse.json({ success: false, message: errorMessage }, { status: 500 });
+    console.error("Fetch submitted tasks error:", error);
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
+    return NextResponse.json(
+      { success: false, message: errorMessage },
+      { status: 500 }
+    );
   }
 }

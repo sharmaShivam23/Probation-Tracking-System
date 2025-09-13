@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import {
   FaTasks,
   FaUserCheck,
@@ -11,7 +13,7 @@ import {
 export default function AdminDashboardHome() {
   return (
     <div className="min-h-screen text-white sm:p-6">
-      
+       <Toaster/>
       <header className="mb-12 text-center">
         <h1
           style={{
@@ -32,7 +34,7 @@ export default function AdminDashboardHome() {
       </header>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <Link href="/admin-/attendance">
+        <Link href="/admin-dashboard/attendance">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaUserCheck className="text-5xl  mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">Mark Attendance</h2>
@@ -55,7 +57,7 @@ export default function AdminDashboardHome() {
         </Link>
 
         {/* Review Submitted Tasks */}
-        <Link href="/admin-dashboard/alltasks">
+        <Link href="/admin-dashboard/projects">
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaTasks className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">Review Tasks</h2>

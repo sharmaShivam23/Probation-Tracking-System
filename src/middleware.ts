@@ -48,7 +48,7 @@ export async function middleware(req: NextRequest) {
     const role = (payload.role as string)?.toLowerCase();
     const pathname = req.nextUrl.pathname;
 
-    console.log("Decoded role:", role, " Path:", pathname);
+    // console.log("Decoded role:", role, " Path:", pathname);
 
     if (pathname.startsWith("/student-dashboard")) {
       if (role !== "student") {
@@ -62,7 +62,7 @@ export async function middleware(req: NextRequest) {
 
     return NextResponse.next();
   } catch (err) {
-    console.error("JWT verification failed:", err);
+    // console.error("JWT verification failed:", err);
     return NextResponse.redirect(new URL("/login", req.url));
   }
 }

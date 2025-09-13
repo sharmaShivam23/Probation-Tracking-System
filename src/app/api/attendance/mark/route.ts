@@ -3,9 +3,9 @@ import { connectDB } from "@/lib/db";
 import Attendance from "@/models/Attendance";
 import Candidate from "@/models/Candidate";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 function normalizeDateToUTC(dateStr: string) {
-  // dateStr expected in "YYYY-MM-DD" (from input type=date)
   const d = new Date(dateStr + "T00:00:00.000Z");
   return d;
 }
@@ -13,14 +13,15 @@ function normalizeDateToUTC(dateStr: string) {
 export async function POST(req: Request) {
   try {
     await connectDB();
+    
+    
 
-    // 🔹 1. Extract token from header
     const token = req.headers.get("authorization")?.split(" ")[1];
     if (!token) {
       return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
     }
 
-    // 🔹 2. Verify token
+
     let decoded: { id: string; role: string };
     try {
       decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; role: string };
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: "Invalid token" }, { status: 401 });
     }
 
-    // 🔹 3. Check role (only admins allowed)
+  
     if (decoded.role !== "Admin") {
       return NextResponse.json(
         { success: false, message: "Only admins can mark attendance" },
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 🔹 4. Parse body
+
     const body = await req.json();
     const { candidateId, date, status } = body as {
       candidateId?: string;
@@ -50,16 +51,29 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+    
+if (!mongoose.Types.ObjectId.isValid(candidateId)) {
+  return NextResponse.json({ success: false, message: "Invalid candidateId" }, { status: 400 });
+}
 
-    // 🔹 5. Validate candidate exists
+if (!["Present", "Absent"].includes(status)) {
+  return NextResponse.json({ success: false, message: "Invalid status" }, { status: 400 });
+}
+
+const normalized = normalizeDateToUTC(date);
+if (isNaN(normalized.getTime())) {
+  return NextResponse.json({ success: false, message: "Invalid date" }, { status: 400 });
+}
+
+
     const candidate = await Candidate.findById(candidateId);
     if (!candidate) {
       return NextResponse.json({ success: false, message: "Candidate not found" }, { status: 404 });
     }
 
-    const normalized = normalizeDateToUTC(date);
+    // const normalized = normalizeDateToUTC(date);
 
-    // 🔹 6. Upsert attendance
+    
     const updated = await Attendance.findOneAndUpdate(
       { candidate: candidateId, date: normalized },
       { candidate: candidateId, date: normalized, status },

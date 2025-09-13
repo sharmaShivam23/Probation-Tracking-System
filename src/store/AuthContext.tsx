@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         });
         setRole(decoded.role);
       } catch (error) {
-        console.error("Invalid token", error);
+        // console.error("Invalid token", error);
         localStorage.removeItem("token");
       }
     }

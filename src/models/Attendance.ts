@@ -9,6 +9,6 @@ const AttendanceSchema = new Schema(
   { timestamps: true }
 );
 
-
+AttendanceSchema.index({ candidate: 1, date: 1 }, { unique: true });
 const Attendance = models.Attendance || model("Attendance", AttendanceSchema);
 export default Attendance;

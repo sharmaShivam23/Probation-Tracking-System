@@ -5,6 +5,7 @@ import Admin from "@/models/Admins";
 import schemaOTP from "@/models/otpStore";
 import { authLimiter , withRateLimit } from "@/lib/ratelimiter";
 import axios from "axios";
+import crypto from "crypto"
  async function adminRegister(request: Request) {
   try {
    
@@ -72,7 +73,7 @@ import axios from "axios";
       );
     }
 
-    console.log("c", process.env.CODE);
+    // console.log("c", process.env.CODE);
 
 
     if (code != process.env.CODE) {
@@ -118,15 +119,37 @@ import axios from "axios";
     
         }
 
-     
-    const otpRecord = await schemaOTP.findOne({ email });
-    if (!otpRecord) return NextResponse.json({ success: false, message: "OTP not found" }, { status: 400 });
-    
-    if (otpRecord.otp !== otp) return NextResponse.json({ success: false, message: "Invalid OTP" }, { status: 400 });
-    
-    if (new Date() > otpRecord.expiresAt) return NextResponse.json({ success: false, message: "OTP expired" }, { status: 400 });
-    
+        const otpRecord = await schemaOTP.findOne({ email });
+    if (!otpRecord) {
+      return NextResponse.json(
+        { success: false, message: "OTP not found. Request a new one." },
+        { status: 400 }
+      );
+    }
+
+    if (new Date() > otpRecord.expiresAt) {
+      await schemaOTP.deleteOne({ email }); 
+      return NextResponse.json(
+        { success: false, message: "OTP expired" },
+        { status: 400 }
+      );
+    }
+
+  
+    const hashedInputOtp = crypto
+      .createHash("sha256")
+      .update(otp)
+      .digest("hex");
+
+    if (hashedInputOtp !== otpRecord.otp) {
+      return NextResponse.json(
+        { success: false, message: "Invalid OTP" },
+        { status: 400 }
+      );
+    }
+
     await schemaOTP.deleteOne({ email });
+
 
 
     const hashedPassword = await bcrypt.hash(password, 10);

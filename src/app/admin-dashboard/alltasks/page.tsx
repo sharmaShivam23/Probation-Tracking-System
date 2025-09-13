@@ -40,7 +40,7 @@ useEffect(() => {
           toast.error("Failed to fetch tasks");
         }
       } catch (error: any) {
-        console.error("Error fetching tasks:", error);
+        // console.error("Error fetching tasks:", error);
 
         
         if (error?.response) {
@@ -136,7 +136,7 @@ useEffect(() => {
           
               <div className="relative z-10">
                 <h2 className="text-xl font-semibold text-white">
-                  {task.title || "Untitled Task"}
+                  {task?.title || "Untitled Task"}
                 </h2>
                 <p className="text-sm text-gray-300 mt-1">
                   By {task?.uploadedBy?.name || "Unknown"} (
@@ -144,7 +144,7 @@ useEffect(() => {
                 </p>
 
         
-                {task.file && (
+                {task?.file && (
                   <a
                     href={task.file}
                     target="_blank"
@@ -155,7 +155,7 @@ useEffect(() => {
                   </a>
                 )}
                 
-                {task.link && (
+                {task?.link && (
                   <a
                     href={task.link}
                     target="_blank"
@@ -168,20 +168,20 @@ useEffect(() => {
 
               
                 <p className="mt-4 text-gray-200 line-clamp-3">
-                  {task.description || "No description provided."}
+                  {task?.description || "No description provided."}
                 </p>
 
           
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">
                   <span className="px-3 py-1 rounded-full bg-red-900/10 text-white font-medium">
-                    {task.category || "General"}
+                    {task?.category || "General"}
                   </span>
-                  {task.createdAt && (
+                  {task?.createdAt && (
                     <span className="text-gray-400">
                       📅 Uploaded {new Date(task.createdAt).toLocaleDateString()}
                     </span>
                   )}
-                  {task.deadline && (
+                  {task?.deadline && (
                     <span className="text-red-400 font-medium">
                       ⏳ Deadline {new Date(task.deadline).toLocaleDateString()}
                     </span>

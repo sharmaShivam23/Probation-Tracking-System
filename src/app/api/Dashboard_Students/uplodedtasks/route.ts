@@ -17,7 +17,8 @@ export async function POST() {
       );
     }
 
-    const candidate = await Candidate.findById(user?.userId).populate("uploadedTasks");
+    const candidate = await Candidate.findById(user?.userId).populate("uploadedtasks");
+    // const candidate = await Candidate.findById(user?.userId)
 
     if (!candidate) {
       return NextResponse.json(

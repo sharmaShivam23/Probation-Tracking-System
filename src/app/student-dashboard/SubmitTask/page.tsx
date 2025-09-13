@@ -149,7 +149,7 @@ export default function UploadTaskForm() {
       setErrors({});
       reset.current?.reset();
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       toast.error(err?.response?.data?.message || "Failed to upload task. Try again!");
     } finally {
       setLoading(false);
@@ -236,16 +236,19 @@ export default function UploadTaskForm() {
           {errors.deploy && <p className="text-red-500 text-sm mb-2">{errors.deploy}</p>}
         </motion.div>
 
-        {/* reCAPTCHA */}
-        <div className="flex justify-center mb-4">
+      
+        <div className="flex justify-center">
           <ReCAPTCHA
             sitekey="6Le3-QArAAAAADn9ym4vDs6qMQN3DpD0yZe183m-"
             onChange={handleRecaptchaChange}
             theme="dark"
             ref={reset}
           />
-          {errors.recaptchaValue && <p className="text-red-500 text-sm mt-1">{errors.recaptchaValue}</p>}
+         
         </div>
+         <div className="p">
+          {errors.recaptchaValue && <p className="text-red-500 mb-4 text-center text-sm mt-1">{errors.recaptchaValue}</p>}
+          </div>
 
         <motion.button
           type="submit"

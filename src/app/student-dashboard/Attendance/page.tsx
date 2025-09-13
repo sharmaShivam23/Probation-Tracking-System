@@ -33,9 +33,9 @@ export default function MyAttendancePage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Send token if using header auth
+            Authorization: `Bearer ${token}`,
           },
-          credentials: "include", // Important if using cookie auth
+          credentials: "include", 
         });
 
         if (!res.ok) {

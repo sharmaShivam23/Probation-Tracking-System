@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Github, Globe, User, Mail, Briefcase } from "lucide-react";
 import Loading from "@/components/Loading2";
-import toast from "react-hot-toast";
+import {toast,Toaster} from "react-hot-toast";
 interface SubmittedTask {
   _id: string;
   title: string;
@@ -43,33 +43,31 @@ export default function ProjectsPage() {
       setFilteredTasks(submittedTasks);
     } else {
       const filtered = submittedTasks.filter(
-        (task) => task.uploadedBy.domain === cat
+        (task) => task?.uploadedBy?.domain === cat
       );
       setFilteredTasks(filtered);
     }
   };
 
-  // useEffect(() => {
-  //   async function getSubmittedTasks() {
-  //     try {
-  //       const res = await axios.get("/api/Dashboard_Admin/submittedTasks");
-  //       setSubmittedTasks(res?.data?.Submittedtasks || []);
-  //       setFilteredTasks(res?.data?.Submittedtasks || []);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //     finally{
-  //       setLoading(false)
-  //     }
-  //   }
-  //   getSubmittedTasks();
-  // }, []);
 
   useEffect(() => {
     async function getSubmittedTasks() {
       try {
+        const token = localStorage.getItem("token");
+      if (!token) {
+        toast.error("You are not logged in");
+        setLoading(false);
+        return;
+      }
         setLoading(true);
-        const res = await axios.get("/api/Dashboard_Admin/submittedTasks");
+        const res = await axios.get("/api/Dashboard_Admin/submittedTasks" , {
+          headers : {
+            Authorization : `Bearer ${token}`
+          }
+        });
+
+        // console.log(res);
+        
 
         if (res?.data?.success) {
           setSubmittedTasks(res.data.Submittedtasks || []);
@@ -79,7 +77,7 @@ export default function ProjectsPage() {
           toast.error(res?.data?.message || "Failed to fetch submitted tasks");
         }
       } catch (err: any) {
-        console.error("Error fetching submitted tasks:", err);
+        // console.error("Error fetching submitted tasks:", err);
         toast.error(err.response?.data?.message || "Something went wrong");
       } finally {
         setLoading(false);
@@ -91,6 +89,7 @@ export default function ProjectsPage() {
 
   return (
   <div className="sm:p-6 min-h-screen text-white">
+    <Toaster/>
     <h1
       style={{
         fontFamily: "'Orbitron', sans-serif",
@@ -129,7 +128,7 @@ export default function ProjectsPage() {
       </button>
     </div>
 
-    {/* 👇 Loading check comes first */}
+  
     {loading ? (
       <Loading />
     ) : filteredTasks.length === 0 ? (
@@ -149,26 +148,26 @@ export default function ProjectsPage() {
             <h2 className="text-2xl font-semibold mb-3 text-yellow-300">
               {task.title}
             </h2>
-            <p className="text-gray-200 text-sm mb-4">{task.description}</p>
+            <p className="text-gray-200 text-sm mb-4">{task?.description}</p>
 
             <div className="space-y-2 text-sm">
               <p className="flex items-center gap-2">
-                <User size={16} className="text-blue-400" /> {task.uploadedBy.name}
+                <User size={16} className="text-blue-400" /> {task?.uploadedBy?.name}
               </p>
               <p className="flex items-center gap-2">
                 <Briefcase size={16} className="text-purple-400" />{" "}
-                {task.uploadedBy.domain}
+                {task?.uploadedBy?.domain}
               </p>
               <p className="flex items-center gap-2">
-                <Mail size={16} className="text-pink-400" /> {task.uploadedBy.email}
+                <Mail size={16} className="text-pink-400" /> {task?.uploadedBy?.email}
               </p>
               <p className="text-gray-400 text-xs">
-                Uploaded At: {new Date(task.createdAt).toLocaleString()}
+                Uploaded At: {new Date(task?.createdAt).toLocaleString()}
               </p>
             </div>
 
             <div className="mt-4 flex gap-4">
-              {task.github && (
+              {task?.github && (
                 <a
                   href={task.github}
                   target="_blank"
@@ -177,7 +176,7 @@ export default function ProjectsPage() {
                   <Github size={18} /> GitHub
                 </a>
               )}
-              {task.deploy && (
+              {task?.deploy && (
                 <a
                   href={task.deploy}
                   target="_blank"

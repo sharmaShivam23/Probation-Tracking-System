@@ -20,6 +20,7 @@ export default function DashboardLayout({
     { href: "/admin-dashboard/score", label: "See Score" },
     { href: "/admin-dashboard/uploadtask", label: "Upload a Task" },
     { href: "/admin-dashboard/alltasks", label: "All Tasks" },
+    { href: "/admin-dashboard/allusers", label: "All Students" },
   ];
 
   return (
@@ -55,7 +56,7 @@ export default function DashboardLayout({
                         ? "bg-red-900 text-white font-semibold shadow-md"
                         : "hover:bg-white/10"
                     }`}
-                    onClick={() => setSidebarOpen(false)} // close sidebar after click
+                    onClick={() => setSidebarOpen(false)} 
                   >
                     {link.label}
                   </Link>

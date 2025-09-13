@@ -5,11 +5,12 @@ import bcrypt from "bcryptjs";
 import Candidate from "@/models/Candidate";
 import Admin from "@/models/Admins";
 import jwt from "jsonwebtoken";
+import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 
-export async function POST(req: Request) {
+ async function Login(request: Request) {
   try {
     await connectDB();
-    const { email, password } = await req.json();
+    const { email, password } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json(
@@ -72,7 +73,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "3h" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
 
 
     const response = NextResponse.json(
@@ -86,7 +87,7 @@ export async function POST(req: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 3 * 60 * 60,
+      maxAge: 15 * 60 ,
       path: "/",
     });
 
@@ -100,3 +101,5 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export const POST = withRateLimit(Login, registrationLimiter);
