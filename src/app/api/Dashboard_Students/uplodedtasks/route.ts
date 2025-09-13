@@ -2,6 +2,7 @@
 import { connectDB } from "@/lib/db";
 import { NextResponse } from "next/server";
 import Candidate from "@/models/Candidate";
+import UplodedTask from "@/models/UplodedTasks";
 import { verifyToken } from "@/lib/verifyToken";
 
 export async function POST() {
@@ -17,8 +18,10 @@ export async function POST() {
       );
     }
 
-    const candidate = await Candidate.findById(user?.userId).populate("uploadedtasks");
-    // const candidate = await Candidate.findById(user?.userId)
+    
+    await UplodedTask.findOne();
+
+    const candidate = await Candidate.findById(user?.userId).populate("uploadedTasks");
 
     if (!candidate) {
       return NextResponse.json(

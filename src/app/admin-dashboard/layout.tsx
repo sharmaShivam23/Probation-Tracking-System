@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import type { Metadata } from "next";
+import Head from "next/head";
 
 export default function DashboardLayout({
   children,
@@ -13,6 +15,7 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
 
   const links = [
     { href: "/admin-dashboard/attendance", label: "Mark Attendance" },
@@ -26,6 +29,16 @@ export default function DashboardLayout({
   return (
     <div>
       <ProtectedRoute>
+
+         <Head>
+        <title>TaskSphere – Admin Dashboard</title>
+        <meta
+          name="description"
+          content="Track attendance, tasks, and student progress seamlessly."
+        />
+        <link rel="icon" href="/ball2.png" />
+      </Head>
+      
         <div className="flex h-screen text-white backdrop-blur-2xl bg-white/0">
         
           <aside

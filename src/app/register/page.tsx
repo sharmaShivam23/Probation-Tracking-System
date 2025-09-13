@@ -10,6 +10,10 @@ import { EyeClosed, EyeIcon } from "lucide-react";
 import { ImCross } from "react-icons/im";
 import OtpInput from "react-otp-input";
 import ReCAPTCHA from "react-google-recaptcha";
+import Lottie from "lottie-react";
+import myAnimation2 from "../../Lottie/myAnimation3.json"
+// import myAnimation from "../../myAnimation.json";
+
 const branches = [
   "CSE",
   "CSE(AIML)",
@@ -172,12 +176,93 @@ export default function RegisterPage() {
     setErrors({ ...errors, role: "" });
   };
 
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  // ) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  //   setErrors({ ...errors, [e.target.name]: "" });
+  // };
+
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
+  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({ ...prev, [name]: value }));
+
+  // Real-time validation for just the changed field
+  const newErrors = { ...errors };
+
+  switch (name) {
+    case "name":
+      if (!value) newErrors.name = "Name is required";
+      else if (!/^[a-zA-Z\s]+$/.test(value))
+        newErrors.name = "Name must contain only alphabets";
+      else delete newErrors.name;
+      break;
+
+    case "email":
+      if (!value) newErrors.email = "Email is required";
+      else if (!value.endsWith("@akgec.ac.in"))
+        newErrors.email = "Email must end with @akgec.ac.in";
+      else if (role === "Admin" && !value.match(/^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/))
+        newErrors.email = "Admin email must contain 23 batch year";
+      else if (role === "Student" && !value.match(/^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/))
+        newErrors.email = "Student email must contain 24 batch year";
+      else if (formData.rollNo && !value.includes(formData.rollNo))
+        newErrors.email = "Email student number mismatch";
+      else delete newErrors.email;
+      break;
+
+    case "rollNo":
+      if (!value) newErrors.rollNo = "Roll number is required";
+      else if (
+        (role === "Admin" && !value.match(/^23\d{5,6}$/)) ||
+        (role === "Student" && !value.match(/^24\d{5,6}$/))
+      )
+        newErrors.rollNo =
+          role === "Admin"
+            ? "Admin roll number must start with 23"
+            : "Student roll number must start with 24";
+      else if (formData.email && !formData.email.includes(value))
+        newErrors.email = "Email student number mismatch";
+      else delete newErrors.rollNo;
+      break;
+
+    case "github":
+      if (!value) newErrors.github = "GitHub profile is required";
+      else if (!/^https:\/\/github\.com\/[A-Za-z0-9-]{1,20}$/.test(value))
+        newErrors.github = "Invalid GitHub URL";
+      else delete newErrors.github;
+      break;
+
+    case "password":
+      const passReg =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
+      if (!value)
+        newErrors.password = "Password is required";
+      else if (!passReg.test(value))
+        newErrors.password =
+          "Password must contain at least 7 characters with uppercase, lowercase, number, and special character";
+      else delete newErrors.password;
+      break;
+
+    case "code":
+      if (role === "Admin") {
+        if (!value) newErrors.code = "Security code is required for admin";
+        else if (value !== process.env.NEXT_PUBLIC_CODE)
+          newErrors.code = "Invalid Security Code";
+        else delete newErrors.code;
+      }
+      break;
+
+    default:
+      if (name in newErrors) delete newErrors[name];
+  }
+
+  setErrors(newErrors);
+};
+
 
   
 
@@ -308,11 +393,11 @@ export default function RegisterPage() {
           initial={{ opacity: 0, x: -80 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="w-full p-8 sm:w-1/2 mt-6 sm:mt-20   justify-center"
+          className="w-full p-8 sm:w-1/2 mt-6   justify-center"
         >
-          <h3 className="text-center text-xl sm:text-3xl font-bold">
+          {/* <h3 className="text-center text-xl sm:text-3xl font-bold">
             Join the millions learning <br /> to code with StudyNotion for free
-          </h3>
+          </h3> */}
          {/* <Image
             src="/register.gif"
             width={400}
@@ -322,6 +407,7 @@ export default function RegisterPage() {
           />*/
          }
          {/* <img src="/r.webm" alt="" /> */}
+          <Lottie animationData={myAnimation2} loop={true} />
     
         </motion.div>
 

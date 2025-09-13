@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation"; // ✅ App Router version
+import { useRouter } from "next/navigation"; 
+import TaskSphereSplash from "@/components/splash";
 
 function Button({
   children,
@@ -30,9 +32,16 @@ function Button({
 
 export default function Home() {
   const router = useRouter();
+  const [showSplash, setShowSplash] = useState(true); // ✅ Added state
 
   return (
-    <div className="min-h-screen flex flex-col ">
+    <div className="min-h-screen flex flex-col">
+      {/* Splash Screen (only shows once) */}
+      {showSplash && (
+        // <TaskSphereSplash />
+        <TaskSphereSplash duration={3000} onFinish={() => setShowSplash(false)} />
+      )}
+
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center flex-grow text-center px-6 py-20">
         <motion.h2
@@ -49,11 +58,8 @@ export default function Home() {
           and attendance — built for simplicity and speed.
         </p>
         <div className="mt-8 flex cursor-pointer gap-4 flex-wrap justify-center">
-          {/* ✅ Correctly trigger navigation */}
-          <Button className="cursor-pointer" onClick={() => router.push("/register")}>
-            Register as Admin
-          </Button>
-          <Button className="cursor-pointer" variant="outline" onClick={() => router.push("/register")}>
+          <Button onClick={() => router.push("/register")}>Register as Admin</Button>
+          <Button variant="outline" onClick={() => router.push("/register")}>
             Register as Student
           </Button>
         </div>

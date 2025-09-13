@@ -20,13 +20,13 @@ export default function LoginPage() {
   });
 
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const userRole = getUserRole(token);
-      setRole(userRole);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     const userRole = getUserRole(token);
+  //     setRole(userRole);
+  //   }
+  // }, []);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -169,7 +169,7 @@ export default function LoginPage() {
                 placeholder="••••••"
               />
 
-              {/* Eye Icon inside input */}
+            
               <div
                 onClick={() => setShowPassword(!showpassword)}
                 className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-white/80"
@@ -194,14 +194,14 @@ export default function LoginPage() {
         </form>
 
         {/* Logout button (for testing) */}
-        {role && (
+        {/* {role && (
           <button
             onClick={handleLogout}
             className="mt-4 w-full py-2 rounded-xl cursor-pointer font-semibold bg-red-500 text-white hover:opacity-90 transition shadow-lg"
           >
             Logout ({role})
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const mailSender = async (email: string, title: string, body: string) => {
     });
 
     const info = await transporter.sendMail({
-      from: `"EduPortal" <${process.env.MAIL_USER}>`,
+      from: `"TaskSphere" <${process.env.MAIL_USER}>`,
       to: email,
       subject: title,
       html: body,

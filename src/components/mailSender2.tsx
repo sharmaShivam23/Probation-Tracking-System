@@ -18,7 +18,7 @@ export const mailSender = async (
 
     // Send mail to yourself (admin)
     const info = await transporter.sendMail({
-      from: `"EduPortal Contact Form" <${process.env.MAIL_USER}>`,
+      from: `"TaskSphere Contact Form" <${process.env.MAIL_USER}>`,
       to: process.env.ADMIN_EMAIL, 
       subject: "New Contact Form Submission",
       html: `

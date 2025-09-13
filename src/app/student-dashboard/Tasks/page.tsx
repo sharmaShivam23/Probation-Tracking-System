@@ -44,7 +44,7 @@ export default function UserTasks() {
         }
       } catch (error: any) {
         toast.error(error.response?.data?.message || "Something went wrong");
-        console.error("Failed to fetch user tasks:", error);
+        // console.error("Failed to fetch user tasks:", error);
       } finally {
         setLoading(false);
       }

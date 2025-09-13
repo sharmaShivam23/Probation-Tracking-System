@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Lottie from "lottie-react";
+import contact from "../../Lottie/contact2.json"
 
 export default function ContactForm() {
 
@@ -52,8 +54,14 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-2 sm:p-6">
-      <div className="w-full max-w-lg backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen flex-col sm:flex-row  flex items-center justify-evenly p-2 sm:p-6">
+    
+    <div className="left sm:w-2/6 flex  justify-center items-center w-full">
+      <Lottie style={{ width: "500px", height: "500px" }}  animationData={contact} loop={true} />
+    </div>
+
+
+      <div className="w-full sm:w-3/6  max-w-lg backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-xl p-8">
         {/* Heading */}
         <h1 className="text-3xl font-bold text-white text-center">Need Help?</h1>
         <p className="text-gray-200 text-center mt-2 mb-6">
