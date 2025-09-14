@@ -151,7 +151,7 @@ export default function ProfilePage() {
           className="grid grid-cols-1 sm:grid-cols-2 gap-4 h-auto relative z-10"
         >
           <DetailItem label="Email" value={profile.email} />
-          <DetailItem label="Roll No" value={profile.rollNo} />
+          <DetailItem label="Student No" value={profile.rollNo} />
           <DetailItem label="Branch" value={profile.branch} />
           <DetailItem label="Github" value={profile.github} isLink />
           <DetailItem label="Domain" value={profile.domain || "N/A"} />

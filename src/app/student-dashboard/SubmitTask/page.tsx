@@ -252,7 +252,7 @@ export default function UploadTaskForm() {
 
         <motion.button
           type="submit"
-          className="w-full cursor-pointer bg-gradient-to-r from-red-900 to-red-950 text-white py-3 rounded-xl font-semibold shadow-lg  hover:from-red-800 hover:to-red-900 transition-all flex justify-center items-center"
+          className="w-full cursor-pointer mt-2 bg-gradient-to-r from-red-900 to-red-950 text-white py-3 rounded-xl font-semibold shadow-lg  hover:from-red-800 hover:to-red-900 transition-all flex justify-center items-center"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           disabled={loading}

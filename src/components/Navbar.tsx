@@ -362,25 +362,25 @@ const Navbar = () => {
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
             </Link>
           ) : (
-            <div className="relative group">
-              <select className="bg-red-900 cursor-pointer text-white rounded-md px-2">
-                <option value="">{userName?.split(" ")[0]}</option>
-                <option value="">{role === "Admin" ? "Admin" : "Student"}</option>
-                <option
-                  onClick={() => router.push("/student-dashboard/profile")}
-                  value=""
-                >
-                  Profile
-                </option>
-              </select>
-              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
-            </div>
+           <select
+  className="bg-red-900 cursor-pointer text-white rounded-md px-2"
+  onChange={(e) => {
+    if (e.target.value === "profile") {
+      router.push("/student-dashboard/profile");
+    }
+  }}
+>
+  <option value="username">{userName?.split(" ")[0]}</option>
+  <option value="role">{role === "Admin" ? "Admin" : "Student"}</option>
+ {role == "Student" &&   <option className="cursor-pointer" value="profile">Profile</option>}
+</select>
+
           )}
 
           {role ? (
             <div
               className="cursor-pointer relative group"
-              onClick={() => setMessageAlert(true)} // 👈 open popup instead of instant logout
+              onClick={() => setMessageAlert(true)} 
             >
               Logout
               <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-500 transition-all duration-300 group-hover:w-full" />
@@ -398,7 +398,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile Menu Button */}
+      
         <button
           className="md:hidden text-white focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
