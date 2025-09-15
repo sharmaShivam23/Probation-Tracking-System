@@ -160,11 +160,7 @@ const Navbar = () => {
             Home
             <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-800 transition-all duration-300 group-hover:w-full" />
           </Link>
-            {!role && (
-              <Link href="/register" onClick={() => setIsOpen(false)}>
-                Register
-              </Link>
-            )}
+            
             {role ? (
               <div
                 className="cursor-pointer text-red-500"
@@ -189,6 +185,27 @@ const Navbar = () => {
             >
               Dashboard
             </div>
+
+            {!role ? (
+            <Link href="/register" className="relative group transition">
+              Register
+              <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-red-600 transition-all duration-300 group-hover:w-full" />
+            </Link>
+          ) : (
+           <select
+  className="bg-red-900 cursor-pointer text-white rounded-md px-2"
+  onChange={(e) => {
+    if (e.target.value === "profile") {
+      router.push("/student-dashboard/profile");
+    }
+  }}
+>
+  <option value="username">{userName?.split(" ")[0]}</option>
+  <option value="role">{role === "Admin" ? "Admin" : "Student"}</option>
+ {role == "Student" &&   <option className="cursor-pointer" value="profile">Profile</option>}
+</select>
+
+          )}
             <Link href="/Help" onClick={() => setIsOpen(false)}>
               Help
             </Link>

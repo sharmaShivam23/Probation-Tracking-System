@@ -231,7 +231,8 @@ export default function RegisterPage() {
       else delete newErrors.rollNo;
       break;
 
-   case "phoneNumber":
+     case "phoneNumber":
+  if (value.length > 10) return; 
   if (!value) {
     newErrors.phoneNumber = "Phone number is required";
   } else if (!/^[6-9]\d{9}$/.test(value)) {
@@ -240,6 +241,7 @@ export default function RegisterPage() {
     delete newErrors.phoneNumber;
   }
   break;
+
 
 
     case "password":
@@ -610,8 +612,10 @@ export default function RegisterPage() {
                     Phone Number
                   </label>
                 <input
-                  type="number"
+                  type="tel"
                   name="phoneNumber"
+                   pattern="[6-9]{1}[0-9]{9}"
+  maxLength={10}
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   className="w-full px-4 py-2  h-[45px] pr-10 rounded-xl  bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"

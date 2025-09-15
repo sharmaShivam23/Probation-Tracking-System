@@ -59,7 +59,7 @@ import crypto from "crypto"
         { status: 400 }
       );
     }
-    
+
    if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
   return NextResponse.json(
     { success: false, message: "Invalid Phone Number" },
@@ -146,6 +146,7 @@ await schemaOTP.deleteOne({ email });
       github,
       password: hashedPassword,
       role,
+      phoneNumber,
       domain: domain || "Other",
     });
 
