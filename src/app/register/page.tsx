@@ -23,6 +23,7 @@ const branches = [
   "IT",
   "CSIT",
   "ECE",
+  "EN",
   "Mechanical",
   "Civil",
 ];
@@ -318,7 +319,7 @@ export default function RegisterPage() {
     }
 
     if (!formData.rollNo) {
-      newErrors.rollNo = "Roll number is required";
+      newErrors.rollNo = "Student number is required";
       valid = false;
     } else if (
       (role === "Admin" && !formData.rollNo.match(/^23\d{5,6}$/)) ||
@@ -327,7 +328,7 @@ export default function RegisterPage() {
       newErrors.rollNo =
         role === "Admin"
           ? "Admin roll number must start with 23"
-          : "Student roll number must start with 24";
+          : "Student  number must start with 24";
       valid = false;
     }
 
@@ -349,7 +350,8 @@ export default function RegisterPage() {
         newErrors.github = "GitHub profile is required";
         valid = false;
       } else if (
-        !/^https:\/\/github\.com\/[A-Za-z0-9-]{1,20}$/.test(formData.github)
+        // !/^https:\/\/github\.com\/[A-Za-z0-9-]{1,20}$/.test(formData.github)
+        !formData.github.startsWith("https://github.com")
       ) {
         newErrors.github = "Invalid GitHub URL";
         valid = false;

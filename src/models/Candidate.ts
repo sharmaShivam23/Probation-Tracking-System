@@ -4,14 +4,14 @@ import mongoose, { Schema, model, models } from "mongoose";
 const nameReg = /^[A-Za-z ]+$/;
 const emailReg = /^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/;
 const rollReg = /^24\d{5,6}$/;
-const githubReg = /^https:\/\/github\.com\/[A-Za-z0-9-]{1,70}$/;
+// const githubReg = /^https:\/\/github\.com\/[A-Za-z0-9-]{1,70}$/;
 const phoneReg = /^[6-9]\d{9}$/
 
 
 const CandidateSchema = new Schema(
   {
     role: { type: String, required: true, enum: ["Student", "Admin"] },
-    name: { type: String, required: true, match: [nameReg, "Inalvalid name"] },
+    name: { type: String, required: true, match: [nameReg, "Invalid name"] },
     email: { type: String, required: true, unique: true, match: [emailReg, "Invalid email"] },
     rollNo: { type: String, required: true, unique: true, match: [rollReg, "Invalid roll number"] },
     phoneNumber : { type: String, required: true, unique: true , match: [phoneReg, "Invalid phone number"]  },
@@ -24,10 +24,11 @@ const CandidateSchema = new Schema(
         "IT",
         "CSIT",
         "ECE",
+        "EN",
         "Mechanical",
         "Civil",]
     },
-    github: { type: String, required: true, match: [githubReg, "Invalid Github Id"] },
+    github: { type: String, required: true },
     password: { type: String, required: true },
     domain: {
       type: String, enum: ["Frontend Development",
