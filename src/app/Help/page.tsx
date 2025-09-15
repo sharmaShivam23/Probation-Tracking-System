@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Lottie from "lottie-react";
 import contact from "../../Lottie/contact2.json"
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function ContactForm() {
 
   const [form, setForm] = useState({ name: "", email: "", phoneNo: "", msg: "" });
+  const [recaptchaValue, setRecaptchaValue] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ success?: boolean; message?: string }>({});
+  const reset = useRef<ReCAPTCHA | null>(null);
 
   // Handle input
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -20,6 +23,9 @@ export default function ContactForm() {
     if (!form.name || !form.email || !form.phoneNo || !form.msg) {
       return "All fields are required.";
     }
+    if (!recaptchaValue) {
+      return "Please complete the reCAPTCHA verification.";
+    }
     if (!/^[A-Za-z ]+$/.test(form.name)) return "Invalid Name";
     if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(form.email))
       return "Invalid Email (only Gmail allowed)";
@@ -28,6 +34,11 @@ export default function ContactForm() {
     if (!/^[a-zA-Z0-9 .,!?'-]+$/.test(form.msg)) return "Message contains invalid characters";
     return null;
   };
+
+  const handleRecaptchaChange = (value: string | null) => {
+    setRecaptchaValue(value);
+  };
+
 
   // Submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,12 +52,22 @@ export default function ContactForm() {
       const res = await fetch("/api/Help", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, recaptchaValue }),
       });
+      console.log(res);
+
       const data = await res.json();
       setStatus({ success: data.success, message: data.message });
-      if (data.success) setForm({ name: "", email: "", phoneNo: "", msg: "" });
-    } catch {
+      if (data.success) {
+        setForm({ name: "", email: "", phoneNo: "", msg: "" });
+        setRecaptchaValue(null);
+        if (reset.current) {
+          reset.current.reset();
+        }
+      }
+    } catch (err) {
+      console.log(err);
+
       setStatus({ success: false, message: "Something went wrong." });
     } finally {
       setLoading(false);
@@ -55,10 +76,10 @@ export default function ContactForm() {
 
   return (
     <div className="min-h-screen flex-col sm:flex-row  flex items-center justify-evenly p-2 sm:p-6">
-    
-    <div className="left sm:w-2/6 flex  justify-center items-center w-full">
-      <Lottie style={{ width: "500px", height: "500px" }}  animationData={contact} loop={true} />
-    </div>
+
+      <div className="left sm:w-2/6 flex  justify-center items-center w-full">
+        <Lottie style={{ width: "500px", height: "500px" }} animationData={contact} loop={true} />
+      </div>
 
 
       <div className="w-full sm:w-3/6  max-w-lg backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-xl p-8">
@@ -130,6 +151,17 @@ export default function ContactForm() {
               {status.message}
             </p>
           )}
+
+          <div className="flex justify-center">
+            <ReCAPTCHA
+              sitekey="6Le3-QArAAAAADn9ym4vDs6qMQN3DpD0yZe183m-"
+              onChange={handleRecaptchaChange}
+              theme="dark"
+              ref={reset}
+            />
+
+          </div>
+
 
           {/* Submit */}
           <button

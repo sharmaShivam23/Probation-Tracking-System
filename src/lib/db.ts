@@ -4,13 +4,13 @@ let isConnected = false; // track connection
 
 export async function connectDB() {
   if (isConnected) {
-    console.log("✅ Using existing database connection");
+    // console.log("✅ Using existing database connection");
     return;
   }
 
   try {
     const conn = await mongoose.connect(process.env.URL!);
-    console.log(process.env.URL!);
+    // console.log(process.env.URL!);
     
 
     isConnected = !!conn.connections[0].readyState;

@@ -16,7 +16,7 @@ export default function DashboardLayout({
 
   const links = [
     { href: "/student-dashboard/Attendance", label: "Attendance" },
-    { href: "/student-dashboard/Tasks", label: "Task" },
+    { href: "/student-dashboard/Tasks", label: "My projects" },
     { href: "/student-dashboard/SubmitTask", label: "Submit Task" },
     { href: "/student-dashboard/AllTasks", label: "All Tasks" },
   ];
@@ -33,7 +33,7 @@ export default function DashboardLayout({
           >
             <div className="p-6 text-xl font-bold border-b border-white/10 flex items-center justify-between">
               My Dashboard
-              {/* Close button (mobile only) */}
+          
               <button
                 className="md:hidden text-white"
                 onClick={() => setSidebarOpen(false)}

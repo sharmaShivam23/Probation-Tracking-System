@@ -87,7 +87,7 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 15 * 60 ,
+      maxAge: 50 * 60 ,
       path: "/",
     });
 

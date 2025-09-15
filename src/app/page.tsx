@@ -32,13 +32,13 @@ function Button({
 
 export default function Home() {
   const router = useRouter();
-  const [showSplash, setShowSplash] = useState(true); // ✅ Added state
+  const [showSplash, setShowSplash] = useState(true); 
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Splash Screen (only shows once) */}
+      
       {showSplash && (
-        // <TaskSphereSplash />
+      
         <TaskSphereSplash duration={3000} onFinish={() => setShowSplash(false)} />
       )}
 
@@ -58,8 +58,8 @@ export default function Home() {
           and attendance — built for simplicity and speed.
         </p>
         <div className="mt-8 flex cursor-pointer gap-4 flex-wrap justify-center">
-          <Button onClick={() => router.push("/register")}>Register as Admin</Button>
-          <Button variant="outline" onClick={() => router.push("/register")}>
+          {/* <Button onClick={() => router.push("/register")}>Register as Admin</Button> */}
+          <Button className="cursor-pointer"  onClick={() => router.push("/register")}>
             Register as Student
           </Button>
         </div>

@@ -7,6 +7,7 @@ import Candidate from "@/models/Candidate";
 import schemaOTP from "@/models/otpStore";
 import axios from "axios";
 import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
+import crypto from "crypto"
 
  async function studentRegister(request: NextRequest) {
   try {
@@ -108,7 +109,19 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 const otpRecord = await schemaOTP.findOne({ email });
 if (!otpRecord) return NextResponse.json({ success: false, message: "OTP not found" }, { status: 400 });
 
-if (otpRecord.otp !== otp) return NextResponse.json({ success: false, message: "Invalid OTP" }, { status: 400 });
+
+    const hashedInputOtp = crypto
+      .createHash("sha256")
+      .update(otp)
+      .digest("hex");
+
+    if (hashedInputOtp !== otpRecord.otp) {
+      return NextResponse.json(
+        { success: false, message: "Invalid OTP" },
+        { status: 400 }
+      );
+    }
+// if (otpRecord.otp !== otp) return NextResponse.json({ success: false, message: "Invalid OTP" }, { status: 400 });
 
 if (new Date() > otpRecord.expiresAt) return NextResponse.json({ success: false, message: "OTP expired" }, { status: 400 });
 

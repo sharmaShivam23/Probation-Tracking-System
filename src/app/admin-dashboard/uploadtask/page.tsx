@@ -74,10 +74,10 @@ export default function TaskForm() {
       return;
     }
 
-    if (code !== process.env.NEXT_PUBLIC_SECURITY_CODE_FILE) {
-      toast.error("Invalid Code");
-      return;
-    }
+    // if (code !== process.env.NEXT_PUBLIC_SECURITY_CODE_FILE) {
+    //   toast.error("Invalid Code");
+    //   return;
+    // }
 
     setLoading(true);
     try {

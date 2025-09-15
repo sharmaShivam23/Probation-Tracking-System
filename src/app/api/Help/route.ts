@@ -4,19 +4,18 @@ import { mailSender } from "@/components/mailSender2";
 import fs from "fs";
 import path from "path";
 import { connectDB } from "@/lib/db";
-import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
- async function HelpForm(request: Request) {
+import { registrationLimiter, withRateLimit } from "@/lib/ratelimiter";
+import axios from "axios";
+async function HelpForm(request: Request) {
 
   await connectDB()
-   
+
   try {
 
-    
-    
     const body = await request.json();
-    const { name, email, phoneNo, msg } = body;
+    const { name, email, phoneNo, msg, recaptchaValue } = body;
 
-   
+
     if (!name || !email || !phoneNo || !msg) {
       return NextResponse.json({ status: 400, success: false, message: "All fields are required" });
     }
@@ -37,11 +36,36 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
       return NextResponse.json({ status: 400, success: false, message: "Message contains invalid characters" });
     }
 
-  
+
+    if (!recaptchaValue) {
+      return NextResponse.json(
+        { success: false, message: "recaptcha not found" },
+        { status: 400 }
+      );
+    }
+
+    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
+    const secretKey = process.env.SECRET_KEY;
+    const recaptchaResponse = await axios.post(verifyUrl, null, {
+      params: {
+        secret: secretKey,
+        response: recaptchaValue,
+      },
+    });
+
+    if (!recaptchaResponse.data.success) {
+      return NextResponse.json(
+        { success: false, message: "reCAPTCHA verification failed" },
+        { status: 400 }
+      );
+
+    }
+
+
     await Help.create({ name, email, phoneNo, msg });
 
     try {
-      
+
       const templatePath = path.join(process.cwd(), "src", "templates", "contactTemplate.html");
       if (!fs.existsSync(templatePath)) {
         throw new Error("contact template not found");
@@ -49,12 +73,13 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
 
       let contactTemplate = fs.readFileSync(templatePath, "utf8");
 
-      
+
       contactTemplate = contactTemplate
         .replace("{{name}}", name)
         .replace("{{email}}", email)
         .replace("{{phoneNo}}", phoneNo)
-        .replace("{{msg}}", msg);
+        .replace("{{msg}}", msg)
+        .replace("{{year}}", new Date().getFullYear().toString());
 
       await mailSender(email, "New Contact Form Submission", contactTemplate);
 

@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 
 export const mailSender = async (
   userEmail: string,
-  name: string,
-  message: string
+  subject: string,
+  htmlContent: string
 ) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -19,14 +19,9 @@ export const mailSender = async (
     // Send mail to yourself (admin)
     const info = await transporter.sendMail({
       from: `"TaskSphere Contact Form" <${process.env.MAIL_USER}>`,
-      to: process.env.ADMIN_EMAIL, 
-      subject: "New Contact Form Submission",
-      html: `
-        <h3>New Contact Form Submission</h3>
-        <p><b>Name:</b> ${name}</p>
-        <p><b>Email:</b> ${userEmail}</p>
-        <p><b>Message:</b> ${message}</p>
-      `,
+      to: process.env.ADMIN_EMAIL,
+      subject: subject,
+      html: htmlContent,
     });
 
     return info;

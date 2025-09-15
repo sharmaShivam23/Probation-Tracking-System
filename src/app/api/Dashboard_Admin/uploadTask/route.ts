@@ -112,7 +112,7 @@ async function uploadTask(request: NextRequest) {
       );
     }
 
-    if (code !== process.env.NEXT_PUBLIC_SECURITY_CODE_fILE) {
+    if (code !== process.env.SECURITY_CODE_fILE) {
       return NextResponse.json(
         { success: false, message: "Invalid Security Code" },
         { status: 400 }
