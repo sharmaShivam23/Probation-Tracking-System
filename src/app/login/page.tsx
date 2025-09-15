@@ -41,21 +41,21 @@ export default function LoginPage() {
     const newErrors: Record<string, string> = {};
     let valid = true;
 
-    // if (!formData.email) {
-    //   newErrors.email = "Email is required";
-    //   valid = false;
-    // } else if (!formData.email.match(/^[a-zA-Z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/)) {
-    //   newErrors.email = "Invalid Email Id";
-    //   valid = false;
-    // }
+    if (!formData.email) {
+      newErrors.email = "Email is required";
+      valid = false;
+    } else if (!formData.email.match(/^[a-zA-Z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/)) {
+      newErrors.email = "Invalid Email Id";
+      valid = false;
+    }
 
-    // if (!formData.password) {
-    //   newErrors.password = "Password is required";
-    //   valid = false;
-    // } else if (formData.password.length < 6 || !formData.password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/)) {
-    //   newErrors.password = "Invalid password";
-    //   valid = false;
-    // }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+      valid = false;
+    } else if (formData.password.length < 4) {
+      newErrors.password = "Invalid password";
+      valid = false;
+    }
 
     setErrors(newErrors);
     return valid;

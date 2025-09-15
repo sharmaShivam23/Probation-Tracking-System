@@ -166,10 +166,10 @@ useEffect(() => {
                 )}
 
 
-              
-                <p className="mt-4 text-gray-200 line-clamp-3">
-                  {task?.description || "No description provided."}
-                </p>
+               <p className="mt-4 text-gray-200 break-words whitespace-pre-line flex-grow">
+      {task?.description || "No description provided."}
+    </p>
+
 
           
                 <div className="mt-6 flex flex-wrap items-center gap-2 text-sm">

@@ -90,7 +90,7 @@ export default function ContactForm() {
         </p>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-1">
           {/* Name */}
           <div>
             <label className="block text-white text-sm font-semibold mb-1">Name</label>
@@ -99,20 +99,20 @@ export default function ContactForm() {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="w-full px-4 py-2 h-[45px] rounded-lg text-white bg-white/10 backdrop-blur-xl  outline-none"
+              className="w-full px-4 py- h-[45px] rounded-lg text-white bg-white/10 backdrop-blur-xl  outline-none"
               placeholder="Enter your name"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-white text-sm font-semibold mb-1">Email</label>
+            <label className="block text-white text-sm font-semibold ">Email</label>
             <input
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full px-4 py-2 h-[45px] rounded-lg text-white bg-white/10 backdrop-blur-xl  outline-none"
+              className="w-full px-4 py- h-[45px] rounded-lg text-white bg-white/10 backdrop-blur-xl  outline-none"
               placeholder="Enter your Gmail"
             />
           </div>

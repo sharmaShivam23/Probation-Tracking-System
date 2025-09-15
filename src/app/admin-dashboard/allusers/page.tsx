@@ -20,7 +20,7 @@ interface User {
 
 export default function UsersTable() {
   const [students, setStudents] = useState<User[]>([]);
-  const [admins, setAdmins] = useState<User[]>([]);
+  // const [admins, setAdmins] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,11 +38,14 @@ export default function UsersTable() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (res.data.success) {
+        console.log(res);
+        
+
+        if (res?.data?.success) {
           setStudents(res.data.students);
-          setAdmins(res.data.admins);
+          // setAdmins(res.data.admins);
         } else {
-          toast.error(res.data.message || "Failed to fetch users");
+          toast.error(res?.data?.message || "Failed to fetch users");
         }
       } catch (err: any) {
         // console.error(err);
@@ -55,13 +58,13 @@ export default function UsersTable() {
     fetchUsers();
   }, []);
 
-  const allUsers = [...students, ...admins];
+  const allUsers = [...students];
 
   return (
     <div className="min-h-screen rounded-2xl sm:p-6">
       <Toaster/>
       <h1 className="text-4xl font-bold text-white text-center mb-10 drop-shadow-lg">
-        Users Dashboard
+        Students Data
       </h1>
 
       {loading ? (
@@ -80,7 +83,7 @@ export default function UsersTable() {
                 <th className="px-6 py-3 text-lg">Name</th>
                 <th className="px-6 py-3">Email</th>
                 <th className="px-6 py-3">Role</th>
-                <th className="px-6 py-3">Roll No</th>
+                <th className="px-6 py-3">Student No</th>
                 <th className="px-6 py-3">Domain</th>
                 <th className="px-6 py-3">Probation</th>
                 <th className="px-6 py-3">Tasks Uploaded</th>

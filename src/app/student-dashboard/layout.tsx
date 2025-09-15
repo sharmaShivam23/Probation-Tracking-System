@@ -28,7 +28,7 @@ export default function DashboardLayout({
         {/* <div className="flex min-h-screen text-white backdrop-blur-2xl bg-white/0"> */}
           {/* Sidebar */}
           <aside
-            className={`fixed md:static  min-h-screen top-0 left-0 h-full w-64 bg-black/70 sm:bg-white/20 backdrop-blur-md shadow-lg flex flex-col transform transition-transform duration-300 z-40
+            className={`fixed md:static  min-h-screen top-0 left-0 h-full w-64 bg-black/80 sm:bg-white/20 backdrop-blur-md shadow-lg flex flex-col transform transition-transform duration-300 z-40
             ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
           >
             <div className="p-6 text-xl font-bold border-b border-white/10 flex items-center justify-between">

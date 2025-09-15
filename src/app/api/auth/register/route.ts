@@ -13,7 +13,7 @@ import crypto from "crypto"
   try {
     await connectDB();
     const body = await request.json();
-    const { name, email, rollNo, branch, github, password, role, domain , otp , recaptchaValue } = body;
+    const { name, email, rollNo, branch, github, password, role, domain , otp , phoneNumber ,  recaptchaValue } = body;
 
     if (!name || !email || !rollNo || !branch || !github || !password || !role) {
       return NextResponse.json(
@@ -59,6 +59,14 @@ import crypto from "crypto"
         { status: 400 }
       );
     }
+    
+   if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
+  return NextResponse.json(
+    { success: false, message: "Invalid Phone Number" },
+    { status: 400 }
+  );
+}
+
 
     const passReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
     if (!passReg.test(password)) {

@@ -5,6 +5,7 @@ const nameReg = /^[A-Za-z ]+$/;
 const emailReg = /^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/;
 const rollReg = /^24\d{5,6}$/;
 const githubReg = /^https:\/\/github\.com\/[A-Za-z0-9-]{1,39}$/;
+const phoneReg = /^[6-9]\d{9}$/
 
 
 const CandidateSchema = new Schema(
@@ -13,6 +14,7 @@ const CandidateSchema = new Schema(
     name: { type: String, required: true, match: [nameReg, "Inalvalid name"] },
     email: { type: String, required: true, unique: true, match: [emailReg, "Invalid email"] },
     rollNo: { type: String, required: true, unique: true, match: [rollReg, "Invalid roll number"] },
+    phoneNumber : { type: String, required: true, unique: true , match: [phoneReg, "Invalid phone number"]  },
     branch: {
       type: String, required: true, enum: ["CSE",
         "CSE(AIML)",

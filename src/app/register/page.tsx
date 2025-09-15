@@ -77,6 +77,7 @@ export default function RegisterPage() {
     rollNo: "",
     branch: "",
     github: "",
+    phoneNumber : "",
     domain: "",
     password: "",
     code: "",
@@ -138,6 +139,7 @@ export default function RegisterPage() {
           github: "",
           domain: "",
           password: "",
+          phoneNumber : "",
           code: "",
           otp: "",
         });
@@ -229,12 +231,16 @@ export default function RegisterPage() {
       else delete newErrors.rollNo;
       break;
 
-    case "github":
-      if (!value) newErrors.github = "GitHub profile is required";
-      else if (!/^https:\/\/github\.com\/[A-Za-z0-9-]{1,20}$/.test(value))
-        newErrors.github = "Invalid GitHub URL";
-      else delete newErrors.github;
-      break;
+   case "phoneNumber":
+  if (!value) {
+    newErrors.phoneNumber = "Phone number is required";
+  } else if (!/^[6-9]\d{9}$/.test(value)) {
+    newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
+  } else {
+    delete newErrors.phoneNumber;
+  }
+  break;
+
 
     case "password":
       const passReg =
@@ -348,6 +354,15 @@ export default function RegisterPage() {
       }
     }
 
+   if (!formData.phoneNumber) {
+  newErrors.phoneNumber = "Phone number is required";
+  valid = false;
+} else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber)) {
+  newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
+  valid = false;
+}
+
+
     const passReg =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
     if (!formData.password) {
@@ -434,7 +449,8 @@ export default function RegisterPage() {
            
             <div className="flex justify-center mb-2 items-center">
               <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
-                {["Student", "Admin"].map((r) => (
+                {["Student"].map((r) => (
+                // {["Student", "Admin"].map((r) => (
                   <button
                     key={r}
                     type="button"
@@ -494,7 +510,7 @@ export default function RegisterPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="sm:w-1/2">
                   <label className="block text-sm font-medium">
-                    Roll Number
+                    Student Number
                   </label>
                   <input
                     type="text"
@@ -588,30 +604,56 @@ export default function RegisterPage() {
                 )}
               </div> */}
 
-              <div className="relative mt-5">
+
+              <div className="relative mt-">
+                 <label className="block text-sm font-medium">
+                    Phone Number
+                  </label>
+                <input
+                  type="number"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2  h-[45px] pr-10 rounded-xl  bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  placeholder="xxxxxxxxxx"
+                />
+</div>
+        
+
+              {errors.phoneNumber && (
+                <p className="text-red-300 text-sm">{errors.phoneNumber}</p>
+              )}
+
+              <div className="relative mt-">
+                 <label className="block text-sm font-medium">
+                    Password
+                  </label>
                 <input
                   type={showpassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 pr-10 rounded-xl  bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="w-full px-4 py-2  h-[45px] pr-10 rounded-xl  bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   placeholder="••••••"
                 />
 
-                {/* Eye Icon inside input */}
+          
                 <div
                   onClick={() => setShowPassword(!showpassword)}
-                  className="absolute inset-y-0 right-3 flex items-center cursor-pointer text-white/80"
+                  className="absolute inset-y-4 top-8 right-3 flex justify-center items-center cursor-pointer text-white/80"
                 >
                   {showpassword ? <EyeIcon /> : <EyeClosed />}
                 </div>
               </div>
 
-              {errors.password && (
+              
+               {errors.password && (
                 <p className="text-red-300 text-sm">{errors.password}</p>
               )}
 
-              {/* Admin Security Code */}
+             
+
+              {/* Security Code */}
               {role === "Admin" && (
                 <div>
                   <label className="block text-sm font-medium">
@@ -638,7 +680,7 @@ export default function RegisterPage() {
                 type="submit"
                 onClick={sendOtp}
                 disabled={loading || otpLoading}
-                className="w-full py-3 rounded-xl cursor-pointer mt-3 h-[45px] font-semibold border-[1px] border-white/10 bg-gradient-to-l from-white/10 via-red-950 to-white/10 text-white hover:opacity-90 transition disabled:opacity-50 shadow-lg"
+                className="w-full py-3  rounded-xl cursor-pointer mt-3 h-[45px] font-semibold border-[1px] border-white/10 bg-gradient-to-l from-white/10 via-red-950 to-white/10 text-white hover:opacity-90 transition disabled:opacity-50 shadow-lg"
               >
                 {loading
                   ? "Registering..."
