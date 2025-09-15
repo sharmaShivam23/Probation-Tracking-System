@@ -10,6 +10,7 @@ interface User {
   name: string;
   email: string;
   rollNo?: string;
+  phoneNumber?: string;
   domain: string;
   probationStatus?: string;
   github?: string;
@@ -38,7 +39,7 @@ export default function UsersTable() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        console.log(res);
+        // console.log(res);
         
 
         if (res?.data?.success) {
@@ -84,6 +85,7 @@ export default function UsersTable() {
                 <th className="px-6 py-3">Email</th>
                 <th className="px-6 py-3">Role</th>
                 <th className="px-6 py-3">Student No</th>
+                <th className="px-6 py-3">phone Number</th>
                 <th className="px-6 py-3">Domain</th>
                 <th className="px-6 py-3">Probation</th>
                 <th className="px-6 py-3">Tasks Uploaded</th>
@@ -105,6 +107,7 @@ export default function UsersTable() {
                   <td className="px-6 py-4 text-white/80">{user?.email}</td>
                   <td className="px-6 py-4 text-white/80">{user?.role || "Student"}</td>
                   <td className="px-6 py-4 text-white/80">{user?.rollNo || "-"}</td>
+                  <td className="px-6 py-4 text-white/80">{user?.phoneNumber || "-"}</td>
                   <td className="px-6 py-4 text-white/80">{user?.domain}</td>
                   <td className="px-6 py-4 text-white/80">{user?.probationStatus || "-"}</td>
                   <td className="px-6 py-4 text-white/80">{user?.uploadedTasksCount}</td>

@@ -31,7 +31,7 @@ export async function GET(req: Request) {
 
   
     const students = await Candidate.find({ role: "Student" })
-      .select("name email rollNo domain probationStatus github createdAt uploadedTasks").sort({ name: 1 }) 
+      .select("name email rollNo domain probationStatus phoneNumber github createdAt uploadedTasks").sort({ name: 1 }) 
       .lean();
 
     const sanitizedStudents = students.map((student) => ({
@@ -41,6 +41,7 @@ export async function GET(req: Request) {
       domain: student.domain,
       probationStatus: student.probationStatus,
       github: student.github,
+      phoneNumber : student.phoneNumber,
       joined: student.createdAt,
       uploadedTasksCount: student.uploadedTasks?.length || 0,
     }));

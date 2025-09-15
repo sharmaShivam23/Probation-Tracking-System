@@ -18,12 +18,12 @@ export default function DashboardLayout({
   
 
   const links = [
-    { href: "/admin-dashboard/attendance", label: "Mark Attendance" },
+    { href: "/admin-dashboard/attendance", label: "Attendance" },
     { href: "/admin-dashboard/projects", label: "Review Projects" },
-    { href: "/admin-dashboard/score", label: "See Score" },
-    { href: "/admin-dashboard/uploadtask", label: "Upload a Task" },
+    { href: "/admin-dashboard/score", label: "Leadership Board" },
+    { href: "/admin-dashboard/uploadtask", label: "Assign Task" },
     { href: "/admin-dashboard/alltasks", label: "All Tasks" },
-    { href: "/admin-dashboard/allusers", label: "All Students" },
+    { href: "/admin-dashboard/allusers", label: "Students Data" },
   ];
 
   return (
