@@ -34,6 +34,7 @@ const domains = [
   "App Development",
   "UI/UX Designing",
   "Cloud Computing",
+  "Machine Learning",
   "Video Editing",
   "Other",
 ];

@@ -37,6 +37,7 @@ const CandidateSchema = new Schema(
         "UI/UX Designing",
         "Cloud Computing",
         "Video Editing",
+        "Machine Learning",
         "Other",]
     },
 
