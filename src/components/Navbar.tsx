@@ -193,7 +193,7 @@ const Navbar = () => {
             </Link>
           ) : (
            <select
-  className="bg-red-900 cursor-pointer text-white rounded-md px-2"
+  className="bg-red-900 cursor-pointer text-white rounded-md h-[40px] px-2"
   onChange={(e) => {
     if (e.target.value === "profile") {
       router.push("/student-dashboard/profile");

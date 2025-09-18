@@ -65,7 +65,7 @@ export default function DashboardLayout({
           </aside>
 
       
-          <main className="flex-1 p-8 overflow-y-auto">
+          <main className="flex-1  p-3 mt-10 sm:p-8 overflow-y-auto">
             {/* Top bar with menu (only for mobile) */}
             <div className="md:hidden flex items-center mb-4">
               <button

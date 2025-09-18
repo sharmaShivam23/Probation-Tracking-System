@@ -5,7 +5,7 @@ import { FaTasks, FaUserCheck, FaFileUpload, FaProjectDiagram } from "react-icon
 
 export default function StudentDashboardHome() {
   return (
-    <div className="min-h-screen text-white p-6">
+    <div className="min-h-screen text-white p-4 sm:p-6">
 
       {/* Header */}
       <header className="mb-12 text-center">

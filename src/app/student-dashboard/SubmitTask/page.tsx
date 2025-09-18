@@ -160,12 +160,12 @@ export default function UploadTaskForm() {
     "w-full p-3 mb-2 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700 transition";
 
   return (
-    <div className="flex justify-center items-start min-h-screen p-4 sm:p-6 ">
+    <div className="flex justify-center items-start min-h-screen p-3 sm:p-6 ">
       <Toaster position="top-right" reverseOrder={false} />
 
       <motion.form
         onSubmit={handleSubmit}
-        className="bg-white/10 backdrop-blur-3xl p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-white/20"
+        className="bg-white/10 backdrop-blur-3xl p-4 sm:p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-white/20"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}

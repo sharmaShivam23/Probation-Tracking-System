@@ -79,7 +79,7 @@ export default function DashboardLayout({
           </aside>
 
         
-          <main className="flex-1 p-8 overflow-y-auto w-full">
+          <main className="flex-1 px-4 py-8 sm:p-8 overflow-y-auto w-full">
           
             <div className="md:hidden flex items-center mb-4">
               <button
