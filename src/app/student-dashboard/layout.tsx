@@ -17,7 +17,7 @@ export default function DashboardLayout({
   const links = [
     { href: "/student-dashboard/Attendance", label: "Attendance" },
     { href: "/student-dashboard/Tasks", label: "My projects" },
-    { href: "/student-dashboard/SubmitTask", label: "Submit Task" },
+    // { href: "/student-dashboard/SubmitTask", label: "Submit Task" },
     { href: "/student-dashboard/AllTasks", label: "All Tasks" },
   ];
 

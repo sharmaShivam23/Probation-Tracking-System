@@ -12,6 +12,7 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import Candidate from "@/models/Candidate";
+import UploadedTask from "@/models/UplodedTasks";
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -182,6 +183,9 @@ if (file) {
       uploadedBy: decoded.id,
     });
 
+    const decodeTask = await UploadedTask.findByIdAndUpdate(decoded.id, {
+      $push: { uploadedTasks: task._id },
+    });
     const decode = await Admin.findByIdAndUpdate(decoded.id, {
       $push: { uploadedTasks: task._id },
     });
@@ -246,3 +250,4 @@ export async function GET() {
     );
   }
 }
+

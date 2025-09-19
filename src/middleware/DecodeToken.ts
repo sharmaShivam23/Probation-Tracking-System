@@ -39,3 +39,12 @@ export function getUserId(token: string): string | null {
     return null;
   }
 }
+
+export const getTokenExpiration = (token: string): number | null => {
+  try {
+     const decoded = decodeJwt(token) as DecodedToken;
+    return decoded.exp ?? null;
+  } catch (error) {
+    return null;
+  }
+};

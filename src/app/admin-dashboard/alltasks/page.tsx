@@ -17,6 +17,7 @@ interface Task {
   createdAt?: string;
   file?: string;
   link?: string;
+  submissions : string
 }
 
 export default function AllTasks() {
@@ -32,6 +33,8 @@ useEffect(() => {
           "/api/Dashboard_Admin/uploadTask"
         );
 
+        // console.log(res);
+        
         if (res?.data?.success) {
           setTasks(res.data.tasks || []);
           setAllTasks(res.data.tasks || []);
@@ -76,6 +79,7 @@ useEffect(() => {
      "Frontend Task",
       "Backend Task",
       "UI/UX Task",
+      "Machine Learning",
       "Cloud Computing Task",
       "App Development Task",
       "Video Editing Task"
@@ -186,7 +190,16 @@ useEffect(() => {
                       ⏳ Deadline {new Date(task.deadline).toLocaleDateString()}
                     </span>
                   )}
+                  {task?.submissions && (
+                    <span className="text-white flex gap-1 font-medium">
+                      Total Submissions  <p className="text-green-500">{task.submissions.length}</p>
+                    </span>
+                  )}
                 </div>
+{/* 
+                <div className="p cursor-pointer">
+                  Submitted By
+                </div> */}
               </div>
             </div>
           ))}

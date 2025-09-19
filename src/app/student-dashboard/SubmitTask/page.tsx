@@ -5,34 +5,51 @@ import toast, { Toaster } from "react-hot-toast";
 import ReCAPTCHA from "react-google-recaptcha";
 import { motion } from "framer-motion";
 import Joi from "joi";
-
+import { useSearchParams } from "next/navigation";
 import { getUserId } from "@/middleware/DecodeToken";
 
 export default function UploadTaskForm() {
+  const searchParams = useSearchParams();
+  const taskTitle = searchParams.get("taskTitle");
+  const taskId = searchParams.get("taskId");
+
   const [formData, setFormData] = useState({
-    title: "",
+    taskId: taskId || "",
+    title: taskTitle || "",
     description: "",
     github: "",
     deploy: "",
     recaptchaValue: "",
   });
+
+   useEffect(() => {
+    if (!taskId || !taskTitle) {
+      toast.error("Missing task details. Please navigate from the dashboard.");
+      
+      
+      // Optional: Redirect the user back to the dashboard or an error page
+      // router.push("/dashboard");
+    }
+  }, [taskId, taskTitle]);
+
+
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const reset = useRef<ReCAPTCHA | null>(null);
 
+  useEffect(() => {
+  
+    setFormData((prev) => ({
+      ...prev,
+      taskId: taskId || "",
+      title: taskTitle || "",
+    }));
+  }, [taskId, taskTitle]);
+
   const schema = Joi.object({
-    title: Joi.string()
-      .pattern(/^[A-Za-z0-9 ]+$/)
-      .min(3)
-      .max(30)
-      .required()
-      .messages({
-        "string.empty": "Title is required",
-        "string.pattern.base": "Title can only contain letters, numbers, and spaces",
-        "string.min": "Title must be at least 3 characters",
-        "string.max": "Title cannot exceed 30 characters",
-      }),
+      taskId: Joi.string().required(), 
+    title: Joi.string().required(), 
     description: Joi.string()
       .pattern(/^[A-Za-z0-9 ]+$/)
       .min(3)
@@ -65,7 +82,6 @@ export default function UploadTaskForm() {
     }),
   });
 
-  // Realtime field validation
   const validateField = (name: string, value: string) => {
     const fieldSchema = schema.extract(name);
     const { error } = fieldSchema.validate(value);
@@ -83,7 +99,6 @@ export default function UploadTaskForm() {
     validateField("recaptchaValue", value ?? "");
   };
 
-  
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -91,36 +106,28 @@ export default function UploadTaskForm() {
     } else {
       setUserId(null);
     }
-
-    
     const handleTokenChange = () => {
       const newToken = localStorage.getItem("token");
-      if (newToken) {
-        setUserId(getUserId(newToken));
-      } else {
-        setUserId(null);
-      }
+      setUserId(newToken ? getUserId(newToken) : null);
     };
-
     window.addEventListener("storage", handleTokenChange);
-
-    return () => {
-      window.removeEventListener("storage", handleTokenChange);
-    };
+    return () => window.removeEventListener("storage", handleTokenChange);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Validate full form
     const { error } = schema.validate(formData, { abortEarly: false });
+  
+    
     if (error) {
       const fieldErrors: { [key: string]: string } = {};
       error.details.forEach((detail) => {
         fieldErrors[detail.path[0] as string] = detail.message;
       });
       setErrors(fieldErrors);
+      // toast.error(error);
       toast.error("Please fix errors before submitting");
       setLoading(false);
       return;
@@ -133,23 +140,27 @@ export default function UploadTaskForm() {
     }
 
     try {
-      await axios.post("/api/Dashboard_Students/submittask", {
+     const r = await axios.post("/api/Dashboard_Students/submittask", {
         ...formData,
         uploadedBy: userId,
       });
 
+      // console.log(r);
+      
+
       toast.success("Task uploaded successfully!");
-      setFormData({
-        title: "",
+      setFormData((prev) => ({
+        ...prev,
         description: "",
         github: "",
         deploy: "",
         recaptchaValue: "",
-      });
+      }));
       setErrors({});
       reset.current?.reset();
     } catch (err: any) {
-      // console.error(err);
+      // console.log(err);
+      
       toast.error(err?.response?.data?.message || "Failed to upload task. Try again!");
     } finally {
       setLoading(false);
@@ -157,12 +168,11 @@ export default function UploadTaskForm() {
   };
 
   const inputClass =
-    "w-full p-3 mb-2 rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700 transition";
+    "w-full p-3 mb-2 h-[45px] rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700 transition";
 
   return (
     <div className="flex justify-center items-start min-h-screen p-3 sm:p-6 ">
       <Toaster position="top-right" reverseOrder={false} />
-
       <motion.form
         onSubmit={handleSubmit}
         className="bg-white/10 backdrop-blur-3xl p-4 sm:p-8 rounded-3xl shadow-2xl w-full max-w-lg border border-white/20"
@@ -178,36 +188,28 @@ export default function UploadTaskForm() {
           }}
           className="text-3xl font-extrabold text-center text-white mb-2"
         >
-          Upload Your Task
+          Submit Your Task
         </h2>
-        <p className="text-sm font-bold mb-6 text-center text-white/70">
-          You can upload only 3 tasks per day
+
+        <p className="mb-4 text-gray-300 text-center">
+          Task Title: <span className="font-semibold">{taskTitle}</span>
         </p>
 
-        {/* Title */}
-        <motion.div whileFocus={{ scale: 1.02 }}>
-          <input
-            type="text"
-            name="title"
-            placeholder="Task Title"
-            value={formData.title}
-            onChange={handleChange}
-            className={`${inputClass} ${errors.title ? "border-red-500 ring-red-500" : ""}`}
-          />
-          {errors.title && <p className="text-red-500 text-sm mb-2">{errors.title}</p>}
-        </motion.div>
-
         {/* Description */}
-        <motion.div whileFocus={{ scale: 1.02 }}>
+        <motion.div className="w-full" whileFocus={{ scale: 1.02 }}>
           <textarea
             name="description"
             placeholder="Task Description"
             value={formData.description}
             onChange={handleChange}
             rows={4}
-            className={`${inputClass} ${errors.description ? "border-red-500 ring-red-500" : ""}`}
+            className={`w-full p-3 mb-2 h-[90px] rounded-xl bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-700 transition ${
+              errors.description ? "border-red-500 ring-red-500" : ""
+            }`}
           />
-          {errors.description && <p className="text-red-500 text-sm mb-2">{errors.description}</p>}
+          {errors.description && (
+            <p className="text-red-500 text-sm mb-2">{errors.description}</p>
+          )}
         </motion.div>
 
         {/* GitHub */}
@@ -236,7 +238,7 @@ export default function UploadTaskForm() {
           {errors.deploy && <p className="text-red-500 text-sm mb-2">{errors.deploy}</p>}
         </motion.div>
 
-      
+        {/* reCAPTCHA */}
         <div className="flex justify-center">
           <ReCAPTCHA
             sitekey="6Le3-QArAAAAADn9ym4vDs6qMQN3DpD0yZe183m-"
@@ -244,11 +246,10 @@ export default function UploadTaskForm() {
             theme="dark"
             ref={reset}
           />
-         
         </div>
-         <div className="p">
-          {errors.recaptchaValue && <p className="text-red-500 mb-4 text-center text-sm mt-1">{errors.recaptchaValue}</p>}
-          </div>
+        {errors.recaptchaValue && (
+          <p className="text-red-500 mb-4 text-center text-sm mt-1">{errors.recaptchaValue}</p>
+        )}
 
         <motion.button
           type="submit"

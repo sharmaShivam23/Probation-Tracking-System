@@ -29,6 +29,8 @@ export default function TaskForm() {
   }, []);
 
   const handleRecaptchaChange = (value: string | null) => {
+    // console.log(value);
+    
     setFormData((prev) => ({ ...prev, recaptchaValue: value || "" }));
   };
 
@@ -222,6 +224,9 @@ export default function TaskForm() {
             </option>
             <option value="UI/UX Task" className="text-black">
               UI/UX Task
+            </option>
+            <option value="Machine Learning Task" className="text-black">
+              Machine Learning Task
             </option>
             <option value="Cloud Computing Task" className="text-black">
               Cloud Computing Task

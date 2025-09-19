@@ -73,7 +73,7 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
       );
     }
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "30m" });
 
 
     const response = NextResponse.json(
@@ -87,7 +87,8 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 50 * 60 ,
+      maxAge: 30 * 60 ,
+      // maxAge: 50 * 60 ,
       path: "/",
     });
 
