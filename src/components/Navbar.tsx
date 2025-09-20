@@ -296,35 +296,102 @@ const Navbar = () => {
     router.push("/login");
   };
 
+
+  //   useEffect(() => {
+  //   const checkRole = () => {
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       setRole(getUserRole(token));
+  //       setUserName(getUserName(token));
+  //     } else {
+  //       setRole(null);
+  //     }
+  //   };
+
+  //   checkRole();
+  //   window.addEventListener("storage", checkRole);
+  //   window.addEventListener("tokenChange", checkRole);
+
+  //   return () => {
+  //     window.removeEventListener("storage", checkRole);
+  //     window.removeEventListener("tokenChange", checkRole);
+  //   };
+  // }, []);
+
+  // useEffect(() => {
+  //   const checkTokenValidity = () => {
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       const expirationTime = getTokenExpiration(token);
+  //       if (expirationTime) {
+  //         const currentTime = Date.now() / 1000;
+  //         if (expirationTime < currentTime) {
+  //           handleLogout("Session expired. Please log in again.");
+  //         } else {
+  //           setRole(getUserRole(token));
+  //           setUserName(getUserName(token));
+  //         }
+  //       } else {
+  //         // If token has no expiration, it's likely invalid
+  //         handleLogout("Invalid token. Please log in again.");
+  //       }
+  //     } else {
+  //       setRole(null);
+  //       setUserName(null);
+  //     }
+  //   };
+
+  //   checkTokenValidity(); // Initial check on mount
+
+  //   const intervalId = setInterval(checkTokenValidity, 60000); // Check every minute
+
+  //   return () => clearInterval(intervalId);
+  // }, []); // Run effect only once on mount
+
+
   useEffect(() => {
-    const checkTokenValidity = () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const expirationTime = getTokenExpiration(token);
-        if (expirationTime) {
-          const currentTime = Date.now() / 1000;
-          if (expirationTime < currentTime) {
-            handleLogout("Session expired. Please log in again.");
-          } else {
-            setRole(getUserRole(token));
-            setUserName(getUserName(token));
-          }
-        } else {
-          // If token has no expiration, it's likely invalid
-          handleLogout("Invalid token. Please log in again.");
-        }
+  const checkToken = () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const expirationTime = getTokenExpiration(token);
+      const currentTime = Date.now() / 1000;
+
+      if (!expirationTime) {
+        // Token has no expiration, treat as invalid
+        handleLogout("Invalid token. Please log in again.");
+      } else if (expirationTime < currentTime) {
+        // Token expired
+        handleLogout("Session expired. Please log in again.");
       } else {
-        setRole(null);
-        setUserName(null);
+        // Token is valid
+        setRole(getUserRole(token));
+        setUserName(getUserName(token));
       }
-    };
+    } else {
+      // No token
+      setRole(null);
+      setUserName(null);
+    }
+  };
 
-    checkTokenValidity(); // Initial check on mount
+  // Initial check on mount
+  checkToken();
 
-    const intervalId = setInterval(checkTokenValidity, 60000); // Check every minute
+  // Listen to storage and custom token changes
+  window.addEventListener("storage", checkToken);
+  window.addEventListener("tokenChange", checkToken);
 
-    return () => clearInterval(intervalId);
-  }, []); // Run effect only once on mount
+  // Check token validity every minute
+  const intervalId = setInterval(checkToken, 60000);
+
+  return () => {
+    window.removeEventListener("storage", checkToken);
+    window.removeEventListener("tokenChange", checkToken);
+    clearInterval(intervalId);
+  };
+}, []);
+
 
   const handleDashboard = () => {
     if (!role) {
