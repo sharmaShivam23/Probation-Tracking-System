@@ -7,6 +7,20 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, XCircle } from "lucide-react";
 import toast from "react-hot-toast";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  Legend
+} from "recharts";
+import { AnimatePresence } from "framer-motion";
+
+
+
 
 type Attendance = {
   _id: string;
@@ -86,10 +100,46 @@ export default function MyAttendancePage() {
     if (overallPercentage >= 50) return "rgb(234,179,8)";
     return "rgb(239,68,68)";
   };
+  
+  const weeklyData = attendance.reduce((acc: any[], record) => {
+  const weekLabel = getWeekRange(record.date);
+  const existing = acc.find((item) => item.week === weekLabel);
+
+  if (existing) {
+    if (record.status === "Present") existing.present += 1;
+    else existing.absent += 1;
+  } else {
+    acc.push({
+      week: weekLabel,
+      present: record.status === "Present" ? 1 : 0,
+      absent: record.status === "Absent" ? 1 : 0,
+    });
+  }
+  return acc;
+}, []);
+
+
+function getWeekRange(dateString: string) {
+  const date = new Date(dateString);
+  const day = date.getDay(); // 0=Sunday, 1=Monday ...
+  const diffToMonday = (day === 0 ? -6 : 1) - day; // move to Monday
+  const monday = new Date(date);
+  monday.setDate(date.getDate() + diffToMonday);
+
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+
+  const format = (d: Date) =>
+    d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+
+  return `${format(monday)} - ${format(sunday)}`;
+}
+
+
 
   return (
-    <div className="min-h-screen flex flex-col w-full items-center sm:p-6">
-      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl w-full max-w-4xl p-6">
+    <div className="min-h-screen overflow-x-hidden flex flex-col w-full items-center sm:p-6">
+      <div className="backdrop-blur-xl overflow-x-hidden bg-white/10 border border-white/20 rounded-2xl shadow-2xl w-full max-w-4xl p-6">
         <h2
           style={{
             fontFamily: "'Orbitron', sans-serif",
@@ -159,6 +209,8 @@ export default function MyAttendancePage() {
                 </span>
               </div>
 
+              
+
               <div className="flex gap-6 mt-4 text-white text-md">
                 <p className="flex justify-center items-center gap-1">
                   <CheckCircle className="text-green-400" size={18} />{" "}
@@ -172,7 +224,60 @@ export default function MyAttendancePage() {
               </div>
             </div>
 
-            <div className="overflow-x-auto hidden md:block">
+      <div className="w-full flex justify-center items-center flex-col min-h-[280px] sm:min-h-[350px] md:min-h-[400px] mb-8">
+  <h3 className="text-center text-lg sm:text-xl font-semibold text-white mb-3">
+    Weekly Attendance Trend
+  </h3>
+
+  <div className="w-[100%] h-[280px] sm:h-[320px] md:h-[380px] bg-white/5 rounded-2xl shadow-lg pr-2 flex justify-center items-center">
+   <ResponsiveContainer width="100%" height="100%">
+  <BarChart
+    data={weeklyData}
+    margin={{ top: 20, right: 10, left: 0, bottom: 5 }}
+    barCategoryGap="20%" // spacing between bars
+  >
+    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.15)" />
+    <XAxis dataKey="week" stroke="#fff" />
+    <YAxis stroke="#fff" allowDecimals={false} />
+    <Tooltip
+      contentStyle={{
+        background: "rgba(17, 24, 39, 0.9)",
+        backdropFilter: "blur(6px)",
+        borderRadius: "12px",
+        border: "1px solid rgba(255, 255, 255, 0.2)",
+        color: "#fff",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+      }}
+      labelStyle={{
+        color: "#9ca3af",
+        fontSize: "0.8rem",
+        marginBottom: "4px",
+      }}
+      itemStyle={{
+        fontWeight: 600,
+        fontSize: "0.9rem",
+      }}
+      cursor={{ fill: "rgba(255,255,255,0.1)" }}
+    />
+    <Legend
+      wrapperStyle={{ color: "white" }}
+      formatter={(value) =>
+        value === "present" ? "Present" : "Absent"
+      }
+    />
+    <Bar dataKey="present" fill="#22c55e" radius={[6, 6, 0, 0]} />
+    <Bar dataKey="absent" fill="#ef4444" radius={[6, 6, 0, 0]} />
+  </BarChart>
+</ResponsiveContainer>
+
+  </div>
+</div>
+
+
+
+
+
+            <div className="overflow-x-auto mt-16 md:mt-10 hidden md:block">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-white/20 text-white">
