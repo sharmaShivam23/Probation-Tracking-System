@@ -107,7 +107,7 @@ export async function GET(req: Request) {
     const Submittedtasks = await UploadedTask.find()
       .populate({
         path: "uploadedBy",
-        select: "name email rollNo domain -_id",
+        select: "name email rollNo domain _id",
       })
       .sort({ createdAt: -1 })
       .limit(100);

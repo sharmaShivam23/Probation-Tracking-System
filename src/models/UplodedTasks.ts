@@ -14,6 +14,12 @@ const TaskSchema = new Schema(
     description: { type: String, required: true },
     github: { type: String, required: true },
     deploy: { type: String, required: true },
+    rating: {
+      type: Number,
+      min: 0,
+      max: 10,
+      default: null, 
+    },
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId, 
       ref: "Candidate",
