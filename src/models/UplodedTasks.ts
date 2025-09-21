@@ -15,7 +15,7 @@ const TaskSchema = new Schema(
     github: { type: String, required: true },
     deploy: { type: String, required: true },
     uploadedBy: {
-      type: mongoose.Schema.Types.ObjectId, // references Candidate
+      type: mongoose.Schema.Types.ObjectId, 
       ref: "Candidate",
       required: true,
     },
