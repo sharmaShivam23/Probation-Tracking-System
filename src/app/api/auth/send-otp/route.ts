@@ -5,13 +5,14 @@ import mailSender from "@/components/mailSender";
 import schemaOTP from "@/models/otpStore";
 import { connectDB } from "@/lib/db";
 import { withRateLimit, globalLimiter } from "@/lib/ratelimiter";
+import Candidate from "@/models/Candidate";
 import crypto from "crypto";
 async function sendOtpHandler(request: Request) {
   try {
     await connectDB();
 
     const body = await request.json();
-    const { email , rollNo } = body;
+    const { email, rollNo } = body;
 
     if (!email) {
       return NextResponse.json(
@@ -27,6 +28,14 @@ async function sendOtpHandler(request: Request) {
       );
     }
 
+    const existing = await Candidate.findOne({ $or: [{ email }, { rollNo }] });
+    if (existing) {
+      return NextResponse.json(
+        { success: false, message: "Candidate already registered" },
+        { status: 400 }
+      );
+    }
+
     const emailRegex = /^[a-z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -35,20 +44,20 @@ async function sendOtpHandler(request: Request) {
       );
     }
 
-        const rollReg = /^(24|23)\d{5,6}$/;
-        if (!rollReg.test(rollNo)) {
-          return NextResponse.json(
-            { success: false, message: "Invalid Student Number" },
-            { status: 400 }
-          );
-        }
+    const rollReg = /^(24|23)\d{5,6}$/;
+    if (!rollReg.test(rollNo)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid Student Number" },
+        { status: 400 }
+      );
+    }
 
-        if(!email.includes(rollNo)){
-               return NextResponse.json(
-            { success: false, message: "Email , Student number mismatch" },
-            { status: 400 }
-          );
-        }
+    if (!email.includes(rollNo)) {
+      return NextResponse.json(
+        { success: false, message: "Email , Student number mismatch" },
+        { status: 400 }
+      );
+    }
 
     const otp = Math.floor(10000 + Math.random() * 90000).toString();
     const hashedOtp = crypto.createHash("sha256").update(otp).digest("hex");
@@ -95,6 +104,4 @@ async function sendOtpHandler(request: Request) {
   }
 }
 
-
 export const POST = withRateLimit(sendOtpHandler, globalLimiter);
-
