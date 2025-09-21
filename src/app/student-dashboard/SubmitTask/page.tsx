@@ -51,14 +51,14 @@ export default function UploadTaskForm() {
       taskId: Joi.string().required(), 
     title: Joi.string().required(), 
     description: Joi.string()
-      .pattern(/^[A-Za-z0-9 ]+$/)
-      .min(3)
+      .pattern(/^[A-Za-z0-9,\-._ ]+$/)
+      .min(30)
       .max(150)
       .required()
       .messages({
         "string.empty": "Description is required",
-        "string.pattern.base": "Description can only contain letters, numbers, and spaces",
-        "string.min": "Description must be at least 3 characters",
+        "string.pattern.base": "Description can only contain letters, numbers, spaces, commas, hyphens (-), dots (.) and underscores",
+        "string.min": "Description must be at least 30 characters",
         "string.max": "Description cannot exceed 150 characters",
       }),
     github: Joi.string()
@@ -199,7 +199,7 @@ export default function UploadTaskForm() {
         <motion.div className="w-full" whileFocus={{ scale: 1.02 }}>
           <textarea
             name="description"
-            placeholder="Task Description"
+            placeholder="Task Description (describe some main functionality in about 30-150 words)"
             value={formData.description}
             onChange={handleChange}
             rows={4}

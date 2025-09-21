@@ -123,7 +123,7 @@ const taskSchema = Joi.object({
     .required(),
 
   description: Joi.string()
-    .pattern(/^[A-Za-z0-9 ]+$/)
+    .pattern(/^[A-Za-z0-9,\-._ ]+$/)
     .min(3)
     .max(150)
     .required(),
