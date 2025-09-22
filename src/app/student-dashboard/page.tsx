@@ -41,7 +41,7 @@ export default function StudentDashboardHome() {
         </Link>
 
         {/* Upload Task */}
-        <Link href="/student-dashboard/SubmitTask">
+        {/* <Link href="/student-dashboard/SubmitTask"> */}
           <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-lg hover:scale-105 transition-transform flex flex-col items-center text-center">
             <FaFileUpload className="text-5xl mb-3 bounce2" />
             <h2 className="font-bold text-xl mb-2">Upload My Task</h2>
@@ -49,7 +49,7 @@ export default function StudentDashboardHome() {
               Submit your assignments, projects, or tasks easily with files and details.
             </p>
           </div>
-        </Link>
+        {/* </Link> */}
 
         {/* See All Tasks */}
         <Link href="/student-dashboard/AllTasks">
