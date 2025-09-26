@@ -406,7 +406,7 @@ export default function AllTasks() {
 
           
                 <button
-                  onClick={() => router.push(`/student-dashboard/SubmitTask?taskId=${task?._id}&taskTitle=${encodeURIComponent(task?.title)}`)}
+                  onClick={() => router.push(`/student-dashboard/SubmitTask?taskId=${task?._id}&taskTitle=${encodeURIComponent(task?.title)}&category=${task?.category}`)}
                   className="mt-5 w-full px-4 py-2 rounded-xl backdrop-blur-2xl cursor-pointer bg-white/20 t font-semibold shadow-lg hover:scale-105 transition-all duration-300"
                 >
                   Submit Task

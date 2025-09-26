@@ -116,8 +116,9 @@ import Joi from "joi";
 
 const taskSchema = Joi.object({
   taskId: Joi.string().required(), 
+  taskCategory: Joi.string().required(), 
   title: Joi.string()
-    .pattern(/^[A-Za-z0-9 ]+$/)
+    .pattern(/^[a-zA-Z0-9\-.,_\s ]+$/)
     .min(3)
     .max(30)
     .required(),
@@ -153,7 +154,7 @@ async function submitTask(request: Request) {
       );
     }
 
-    const { taskId, title, description, github, deploy, uploadedBy , recaptchaValue } = value;
+    const { taskId, title,  taskCategory ,  description, github, deploy, uploadedBy , recaptchaValue } = value;
 
     
     const verifyUrl = `https://www.google.com/recaptcha/api/siteverify`;
@@ -180,6 +181,7 @@ async function submitTask(request: Request) {
       deploy,
       uploadedBy,
       task: taskId,
+       taskCategory
     });
 
   

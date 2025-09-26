@@ -12,10 +12,12 @@ export default function UploadTaskForm() {
   const searchParams = useSearchParams();
   const taskTitle = searchParams.get("taskTitle");
   const taskId = searchParams.get("taskId");
+  const taskCategory = searchParams.get("category");
 
   const [formData, setFormData] = useState({
     taskId: taskId || "",
     title: taskTitle || "",
+    taskCategory :  taskCategory || "",
     description: "",
     github: "",
     deploy: "",
@@ -23,7 +25,7 @@ export default function UploadTaskForm() {
   });
 
    useEffect(() => {
-    if (!taskId || !taskTitle) {
+    if (!taskId || !taskTitle || !taskCategory) {
       toast.error("Missing task details. Please navigate from the dashboard.");
       
       
@@ -49,6 +51,7 @@ export default function UploadTaskForm() {
 
   const schema = Joi.object({
       taskId: Joi.string().required(), 
+       taskCategory: Joi.string().required(), 
     title: Joi.string().required(), 
     description: Joi.string()
       .pattern(/^[A-Za-z0-9,\-._ ]+$/)
@@ -118,6 +121,9 @@ export default function UploadTaskForm() {
     e.preventDefault();
     setLoading(true);
 
+    console.log(formData);
+    
+
     const { error } = schema.validate(formData, { abortEarly: false });
   
     
@@ -138,6 +144,9 @@ export default function UploadTaskForm() {
       setLoading(false);
       return;
     }
+
+
+    
 
     try {
      const r = await axios.post("/api/Dashboard_Students/submittask", {

@@ -10,7 +10,7 @@ const redis = new Redis({
 
 export const globalLimiter = new Ratelimit({
   redis,
-  limiter: Ratelimit.fixedWindow(10 , "40 m"), 
+  limiter: Ratelimit.fixedWindow(15 , "30 m"), 
   analytics: true,
   prefix: "global",
 });

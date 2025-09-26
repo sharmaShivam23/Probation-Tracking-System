@@ -20,6 +20,7 @@ interface Task {
   submissions : string
 }
 
+
 export default function AllTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [allTasks, setAllTasks] = useState<Task[]>([]); 

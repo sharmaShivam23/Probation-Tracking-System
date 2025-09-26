@@ -76,19 +76,27 @@ async function uploadTask(request: NextRequest) {
       );
     }
 
-    if (!/^[a-zA-Z0-9 ]+$/.test(title)) {
-      return NextResponse.json(
-        { success: false, message: "Title can only contain alphabets, numbers, and spaces" },
-        { status: 400 }
-      );
-    }
+   if (!/^[a-zA-Z0-9\-.,_\s ]+$/.test(title)) {
+  return NextResponse.json(
+    {
+      success: false,
+      message:
+        "Title can only contain alphabets, numbers, and spaces (no special characters).",
+    },
+    { status: 400 }
+  );
+}
 
-    if (!/^[a-zA-Z0-9 ]+$/.test(description)) {
-      return NextResponse.json(
-        { success: false, message: "Description can only contain alphabets, numbers, and spaces" },
-        { status: 400 }
-      );
-    }
+if (!/^[a-zA-Z0-9\-.,_\s]+$/.test(description)) {
+  return NextResponse.json(
+    {
+      success: false,
+      message:
+        "Description can only contain alphabets, numbers, spaces, hyphen (-), dot (.), comma (,), and underscore (_).",
+    },
+    { status: 400 }
+  );
+}
 
     if (new Date(deadline) < new Date()) {
   return NextResponse.json({ success: false, message: "Deadline must be in the future" }, { status: 400 });
