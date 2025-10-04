@@ -272,33 +272,37 @@ export default function AllTasks() {
   }, []);
 
   // Countdown timer updater
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const newCountdowns: Record<string, string> = {};
-      tasks.forEach((task) => {
-        if (task.deadline) {
-          const target = new Date(task.deadline).getTime();
-          const now = new Date().getTime();
-          const diff = target - now;
+useEffect(() => {
+  const interval = setInterval(() => {
+    const newCountdowns: Record<string, string> = {};
 
-          if (diff <= 0) {
-            newCountdowns[task._id] = "Deadline Passed";
-          } else {
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor(
-              (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-            );
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            newCountdowns[task._id] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-          }
+    tasks.forEach((task) => {
+      if (task.deadline) {
+        // Set the target deadline to 11:59:59 PM of the deadline date
+        const deadlineDate = new Date(task.deadline);
+        deadlineDate.setHours(23, 59, 59, 999); // 11:59:59 PM
+
+        const now = new Date().getTime();
+        const diff = deadlineDate.getTime() - now;
+
+        if (diff <= 0) {
+          newCountdowns[task._id] = "Deadline Passed";
+        } else {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+          newCountdowns[task._id] = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
-      });
-      setCountdowns(newCountdowns);
-    }, 1000);
+      }
+    });
 
-    return () => clearInterval(interval);
-  }, [tasks]);
+    setCountdowns(newCountdowns);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [tasks]);
+
 
   function handleFilter(category: string) {
     setActiveFilter(category);
