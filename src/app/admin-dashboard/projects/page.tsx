@@ -1020,7 +1020,7 @@ export default function ProjectsPage() {
                     </p>
                   )}
 
-                  <p className="text-gray-200 text-sm mb-4">
+                  <p className="text-gray-200 max-h-24 overflow-y-auto break-words text-sm mb-4">
                     {task?.description}
                   </p>
 

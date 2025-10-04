@@ -513,7 +513,7 @@ export default function TaskForm() {
       <Toaster />
       <form
         onSubmit={handleSubmit}
-        className="max-w-xl mx-auto mt-10 mb-10 p-4 sm:p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-5 text-white transition-transform hover:scale-[1.02]"
+        className="max-w-xl mx-auto mt-10 mb-10 p-4 sm:p-8 backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl shadow-2xl space-y-2 text-white transition-transform hover:scale-[1.02]"
       >
         <h2
           style={{
@@ -526,9 +526,9 @@ export default function TaskForm() {
         >
           Upload Task
         </h2>
-        <p className="text-sm text-center">
+        {/* <p className="text-sm text-center">
           You are able to upload only 3 tasks per day
-        </p>
+        </p> */}
 
         {/* Title */}
         <div>
@@ -542,7 +542,7 @@ export default function TaskForm() {
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-red-900"
+            className="w-full h-[45px] p-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-red-900"
           />
           {errors.title && <p className="text-red-400 text-sm mt-1">{errors.title}</p>}
         </div>
@@ -558,7 +558,7 @@ export default function TaskForm() {
             value={formData.description}
             onChange={handleChange}
             required
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
+            className="w-full p-3 min-h-[60px] rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
           />
           {errors.description && <p className="text-red-400 text-sm mt-1">{errors.description}</p>}
         </div>
@@ -574,7 +574,7 @@ export default function TaskForm() {
             placeholder="Enter drive link"
             value={formData.link}
             onChange={handleChange}
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/10"
+            className="w-full p-3 h-[45px] rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white/10"
           />
           {errors.link && <p className="text-red-400 text-sm mt-1">{errors.link}</p>}
         </div>
@@ -590,7 +590,7 @@ export default function TaskForm() {
             value={formData.category}
             onChange={handleChange}
             required
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-red-900"
+            className="w-full p-3 h-[45px] rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-red-900"
           >
             <option value="" className="text-black">
               -- Select a Category --
@@ -631,19 +631,19 @@ export default function TaskForm() {
             value={formData.deadline}
             onChange={handleChange}
             required
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-white"
+            className="w-full p-3 h-[45px] rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-white"
           />
           {errors.deadline && <p className="text-red-400 text-sm mt-1">{errors.deadline}</p>}
         </div>
 
         {/* File Upload */}
-        <div>
+        <div className="hidden">
           <label className="block mb-1 font-medium">Upload File (optional)</label>
           <input
             type="file"
             name="file"
             onChange={handleFileChange}
-            className="w-full p-3 rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-white file:bg-red-900 file:text-white file:rounded-lg file:px-4 file:py-2"
+            className="w-full p-3 h-[45px] rounded-xl bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-white file:bg-red-900 file:text-white file:rounded-lg file:px-4 file:py-2"
           />
         </div>
 
@@ -652,7 +652,7 @@ export default function TaskForm() {
           type="button"
           onClick={handleVerifyClick}
           disabled={loading}
-          className="w-full py-3 rounded-xl border-1 border-white/20 cursor-pointer bg-gradient-to-l from-white/20 via-red-950 to-white/10 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
+          className="w-full py-3 h-[45px] mt-3 rounded-xl border-1 border-white/20 cursor-pointer bg-gradient-to-l from-white/20 via-red-950 to-white/10 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
         >
           {loading ? "Processing..." : "Verify"}
         </button>
@@ -668,7 +668,7 @@ export default function TaskForm() {
               placeholder="Enter Security Code"
               value={code}
               onChange={(e) => setCode(e.target.value)}
-              className="w-full p-3 mb-2 rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
+              className="w-full p-3 mb-2 h-[45px] rounded-xl bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-red-400"
             />
 
             <div className="block gap-2 mt-2 mb-2 cursor-pointer w-full">
@@ -687,14 +687,14 @@ export default function TaskForm() {
               type="submit"
               onClick={handleSubmit}
               disabled={loading}
-              className="w-full py-3 cursor-pointer rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
+              className="w-full py-3 cursor-pointer h-[45px] rounded-xl bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg transform transition hover:scale-105 hover:shadow-2xl"
             >
               {loading ? "Submitting..." : "Submit Task"}
             </button>
             <button
               type="button"
               onClick={() => setShowVerifyModal(false)}
-              className="mt-4 w-full py-2 cursor-pointer rounded-xl bg-gray-700/80 text-white hover:bg-gray-600 transition"
+              className="mt-4 w-full py-2 h-[45px] cursor-pointer rounded-xl bg-gray-700/80 text-white hover:bg-gray-600 transition"
             >
               Cancel
             </button>

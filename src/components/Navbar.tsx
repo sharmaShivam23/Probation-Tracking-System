@@ -272,10 +272,10 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { getUserRole, getUserName, getTokenExpiration } from "@/middleware/DecodeToken"; // Import a new function to get expiration
+import { getUserRole, getUserName, getTokenExpiration } from "@/middleware/DecodeToken"; 
 import { CiMenuKebab } from "react-icons/ci";
 import { RxCross2 } from "react-icons/rx";
-import toast from "react-hot-toast"; // Import the toast library
+import toast from "react-hot-toast"; 
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -358,13 +358,13 @@ const Navbar = () => {
       const currentTime = Date.now() / 1000;
 
       if (!expirationTime) {
-        // Token has no expiration, treat as invalid
+  
         handleLogout("Invalid token. Please log in again.");
       } else if (expirationTime < currentTime) {
-        // Token expired
+  
         handleLogout("Session expired. Please log in again.");
       } else {
-        // Token is valid
+    
         setRole(getUserRole(token));
         setUserName(getUserName(token));
       }
@@ -404,7 +404,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-red-400 via-black to-gray-900 backdrop-blur-xl shadow-lg text-white">
-      {/* ... your existing JSX ... */}
+      
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center" style={{ fontFamily: "'Orbitron', sans-serif", WebkitBackgroundClip: "text", textShadow: "0 0 15px rgba(70,15,14,1), 0 0 30px rgba(99,102,241,0.5)" }}>
         <div className="flex justify-center gap-2 items-center">
           <div className="logo flex justify-center items-center">
