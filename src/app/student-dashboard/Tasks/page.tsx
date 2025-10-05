@@ -267,9 +267,11 @@ interface User {
 export default function UserTasks() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [delLoading, setDelLoading] = useState(false);
   const [messageAlert, setMessageAlert] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [password, setPassword] = useState("");
+
 
   useEffect(() => {
     const fetchUserTasks = async () => {
@@ -315,6 +317,7 @@ export default function UserTasks() {
 
   const handleDelete = async (taskId: string, title: string) => {
     const toastId = toast.loading("Deleting task...");
+    setDelLoading(true);
     try {
       const res = await axios.delete("/api/Dashboard_Students/submittask", {
         data: { id: taskId, password, userId: user._id }, 
@@ -323,6 +326,7 @@ export default function UserTasks() {
 
       if (res?.data?.success) {
         toast.success(`Task deleted successfully: ${title}`, { id: toastId });
+        setDelLoading(false)
         setUser((prev) =>
           prev
             ? {
@@ -345,6 +349,7 @@ export default function UserTasks() {
     } finally {
       setMessageAlert(false);
       setSelectedTask(null);
+      setDelLoading(false)
       setPassword("");
     }
   };
@@ -472,7 +477,29 @@ export default function UserTasks() {
               />
 
               <div className="flex gap-4 justify-center">
-                <button
+
+                {delLoading ? (
+            <svg
+              className="animate-spin h-5 w-5 mt-2 mr-3 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+          ) : <button
                   onClick={() =>
                     handleDelete(selectedTask._id, selectedTask.title)
                   }
@@ -481,7 +508,8 @@ export default function UserTasks() {
                              transition"
                 >
                   Delete
-                </button>
+                </button>}
+                
                 <button
                   onClick={() => setMessageAlert(false)}
                   className="px-5 py-2 cursor-pointer rounded-xl bg-gray-700 
