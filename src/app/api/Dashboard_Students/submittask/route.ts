@@ -26,10 +26,12 @@ const taskSchema = Joi.object({
     .max(150)
     .required(),
 
-  github: Joi.string()
-    .uri()
-    .pattern(/^https:\/\/github\.com\/.+$/) 
-    .required(),
+ github: Joi.string()
+  .uri()
+  .pattern(/^https:\/\/github\.com\/.+$/)
+  .allow("", null)
+  .optional(),
+
 
   deploy: Joi.string().uri().required(),
   uploadedBy: Joi.string().required(),

@@ -13,7 +13,7 @@ const TaskSchema = new Schema(
     title: { type: String, required: true },
     taskCategory: { type: String, required: true },
     description: { type: String, required: true },
-    github: { type: String, required: true },
+    github: { type: String  },
     deploy: { type: String, required: true },
     rating: {
       type: Number,

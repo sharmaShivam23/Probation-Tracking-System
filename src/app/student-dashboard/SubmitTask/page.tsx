@@ -14,6 +14,11 @@ export default function UploadTaskForm() {
   const taskId = searchParams.get("taskId");
   const taskCategory = searchParams.get("category");
 
+  const showGithubField = ["Frontend Task", "Backend Task", "Machine Learning Task" , "App Development Task"].includes(
+  (taskCategory || "")
+);
+
+
   const [formData, setFormData] = useState({
     taskId: taskId || "",
     title: taskTitle || "",
@@ -49,41 +54,89 @@ export default function UploadTaskForm() {
     }));
   }, [taskId, taskTitle]);
 
+  // const schema = Joi.object({
+  //     taskId: Joi.string().required(), 
+  //      taskCategory: Joi.string().required(), 
+  //   title: Joi.string().required(), 
+  //   description: Joi.string()
+  //     .pattern(/^[A-Za-z0-9,\-._ ]+$/)
+  //     .min(30)
+  //     .max(150)
+  //     .required()
+  //     .messages({
+  //       "string.empty": "Description is required",
+  //       "string.pattern.base": "Description can only contain letters, numbers, spaces, commas, hyphens (-), dots (.) and underscores",
+  //       "string.min": "Description must be at least 30 characters",
+  //       "string.max": "Description cannot exceed 150 characters",
+  //     }),
+  //   github: Joi.string()
+  //     .uri()
+  //     .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+(\/[A-Za-z0-9_.-]+)?\/?$/)
+  //     // .required()
+  //     .messages({
+  //       "string.empty": "GitHub link is required",
+  //       "string.uri": "GitHub link must be a valid URL",
+  //       "string.pattern.base": "GitHub link must be a valid GitHub URL",
+  //     }),
+  //   deploy: Joi.string()
+  //     .uri()
+  //     .required()
+  //     .messages({
+  //       "string.empty": "Deployment link is required",
+  //       "string.uri": "Deployment link must be a valid URL",
+  //     }),
+  //   recaptchaValue: Joi.string().required().messages({
+  //     "string.empty": "Please verify that you are not a robot",
+  //   }),
+  // });
+
+
+
+
+
+
   const schema = Joi.object({
-      taskId: Joi.string().required(), 
-       taskCategory: Joi.string().required(), 
-    title: Joi.string().required(), 
-    description: Joi.string()
-      .pattern(/^[A-Za-z0-9,\-._ ]+$/)
-      .min(30)
-      .max(150)
-      .required()
-      .messages({
-        "string.empty": "Description is required",
-        "string.pattern.base": "Description can only contain letters, numbers, spaces, commas, hyphens (-), dots (.) and underscores",
-        "string.min": "Description must be at least 30 characters",
-        "string.max": "Description cannot exceed 150 characters",
-      }),
-    github: Joi.string()
-      .uri()
-      .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+(\/[A-Za-z0-9_.-]+)?\/?$/)
-      .required()
-      .messages({
-        "string.empty": "GitHub link is required",
-        "string.uri": "GitHub link must be a valid URL",
-        "string.pattern.base": "GitHub link must be a valid GitHub URL",
-      }),
-    deploy: Joi.string()
-      .uri()
-      .required()
-      .messages({
-        "string.empty": "Deployment link is required",
-        "string.uri": "Deployment link must be a valid URL",
-      }),
-    recaptchaValue: Joi.string().required().messages({
-      "string.empty": "Please verify that you are not a robot",
+  taskId: Joi.string().required(),
+  taskCategory: Joi.string().required(),
+  title: Joi.string().required(),
+  description: Joi.string()
+    .pattern(/^[A-Za-z0-9,\-._ ]+$/)
+    .min(30)
+    .max(150)
+    .required()
+    .messages({
+      "string.empty": "Description is required",
+      "string.pattern.base":
+        "Description can only contain letters, numbers, spaces, commas, hyphens (-), dots (.) and underscores",
+      "string.min": "Description must be at least 30 characters",
+      "string.max": "Description cannot exceed 150 characters",
     }),
-  });
+
+  github: showGithubField
+    ? Joi.string()
+        .uri()
+        .pattern(/^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+(\/[A-Za-z0-9_.-]+)?\/?$/)
+        .required()
+        .messages({
+          "string.empty": "GitHub link is required",
+          "string.uri": "GitHub link must be a valid URL",
+          "string.pattern.base": "GitHub link must be a valid GitHub URL",
+        })
+    : Joi.string().allow("").optional(),
+
+  deploy: Joi.string()
+    .uri()
+    .required()
+    .messages({
+      "string.empty": "Deployment link is required",
+      "string.uri": "Deployment link must be a valid URL",
+    }),
+
+  recaptchaValue: Joi.string().required().messages({
+    "string.empty": "Please verify that you are not a robot",
+  }),
+});
+
 
   const validateField = (name: string, value: string) => {
     const fieldSchema = schema.extract(name);
@@ -222,7 +275,7 @@ export default function UploadTaskForm() {
         </motion.div>
 
         {/* GitHub */}
-        <motion.div whileFocus={{ scale: 1.02 }}>
+        {/* <motion.div whileFocus={{ scale: 1.02 }}>
           <input
             type="url"
             name="github"
@@ -232,14 +285,30 @@ export default function UploadTaskForm() {
             className={`${inputClass} ${errors.github ? "border-red-500 ring-red-500" : ""}`}
           />
           {errors.github && <p className="text-red-500 text-sm mb-2">{errors.github}</p>}
-        </motion.div>
+        </motion.div> */}
+        {showGithubField && (
+  <motion.div whileFocus={{ scale: 1.02 }}>
+    <input
+      type="url"
+      name="github"
+      placeholder="GitHub Repository Link"
+      value={formData.github}
+      onChange={handleChange}
+      required={showGithubField}
+      className={`${inputClass} ${errors.github ? "border-red-500 ring-red-500" : ""}`}
+    />
+    {errors.github && <p className="text-red-500 text-sm mb-2">{errors.github}</p>}
+  </motion.div>
+)}
+
 
         {/* Deployment */}
         <motion.div whileFocus={{ scale: 1.02 }}>
           <input
             type="url"
             name="deploy"
-            placeholder="Deployment Link"
+            placeholder={`${showGithubField ? "Live Demo" : ""} Link`}
+            // placeholder="Deployment Link"
             value={formData.deploy}
             onChange={handleChange}
             className={`${inputClass} ${errors.deploy ? "border-red-500 ring-red-500" : ""}`}
