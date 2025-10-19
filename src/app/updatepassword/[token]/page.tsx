@@ -62,7 +62,7 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
       toast.error("Please fix validation errors");
       return;
     }
-    if(!token){
+    if (!token) {
       toast.error("Invalid or missing token");
       return;
     }
@@ -74,7 +74,7 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
       const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: formData.password , confirmPassword : formData.confirmPassword , hashedToken :token }),
+        body: JSON.stringify({ password: formData.password, confirmPassword: formData.confirmPassword, hashedToken: token }),
       });
 
       const data = await res.json();
@@ -85,7 +85,7 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
       } else {
         toast.error(data.message || "Reset failed", { id: toastId });
       }
-    } catch (err) {
+    } catch {
       // console.error(err);
       toast.error("Something went wrong", { id: toastId });
     } finally {
@@ -110,11 +110,11 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
           transition={{ delay: 0.2 }}
 
           style={{
-          fontFamily: "'Orbitron', sans-serif",
-          WebkitBackgroundClip: "text",
-          textShadow:
-            "0 0 15px rgba(127, 29, 29, 1), 0 0 10px rgba(127, 29, 29, 1)",
-        }} 
+            fontFamily: "'Orbitron', sans-serif",
+            WebkitBackgroundClip: "text",
+            textShadow:
+              "0 0 15px rgba(127, 29, 29, 1), 0 0 10px rgba(127, 29, 29, 1)",
+          }}
           className="sm:text-2xl text-xl font-extrabold text-center text-white drop-shadow-lg"
         >
           Choose New Password
@@ -171,7 +171,7 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
           </div>
         </div>
 
-        
+
         <div className="flex flex-wrap gap-2 mt-2">
           {validationRules.map((rule, i) => {
             let isValid = false;
@@ -187,9 +187,8 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
                 initial={{ opacity: 0, y: 5 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className={`flex items-center gap-2 text-sm ${
-                  isValid ? "text-green-500" : formData.password ? "text-red-500" : "text-white/70"
-                }`}
+                className={`flex items-center gap-2 text-sm ${isValid ? "text-green-500" : formData.password ? "text-red-500" : "text-white/70"
+                  }`}
               >
                 <FaCheckCircle />
                 <span>{rule}</span>
@@ -204,11 +203,10 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
           disabled={!allValidationsPassed || loading}
           whileHover={{ scale: allValidationsPassed ? 1.03 : 1 }}
           whileTap={{ scale: allValidationsPassed ? 0.97 : 1 }}
-          className={`w-full flex justify-center items-center py-3 mt-3 rounded-xl font-semibold transition-all ${
-            allValidationsPassed
-              ? "bg-red-700 hover:bg-red-600 text-white cursor-pointer"
-              : "bg-red-900/50 text-white cursor-not-allowed"
-          }`}
+          className={`w-full flex justify-center items-center py-3 mt-3 rounded-xl font-semibold transition-all ${allValidationsPassed
+            ? "bg-red-700 hover:bg-red-600 text-white cursor-pointer"
+            : "bg-red-900/50 text-white cursor-not-allowed"
+            }`}
         >
           {loading && (
             <svg

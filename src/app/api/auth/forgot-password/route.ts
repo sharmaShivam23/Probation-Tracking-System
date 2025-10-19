@@ -10,7 +10,7 @@ import { withRateLimit, globalLimiter } from "@/lib/ratelimiter";
 
 const emailRegex = /^[a-z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/;
 
-export async function forgotpassword(request: NextRequest) {
+async function forgotpassword(request: NextRequest) {
   try {
     await connectDB();
 
