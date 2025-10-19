@@ -7,7 +7,7 @@ import Candidate from "@/models/Candidate";
 import mailSender from "@/components/mailSender";
 import { withRateLimit, globalLimiter } from "@/lib/ratelimiter";
 
-export async function resetpassword(request: NextRequest) {
+async function resetpassword(request: NextRequest) {
   try {
     await connectDB();
 
@@ -31,12 +31,12 @@ export async function resetpassword(request: NextRequest) {
       );
     }
 
-  
+
     const tokenHash = crypto.createHash("sha256").update(hashedToken).digest("hex");
     const now = Date.now();
 
 
-    let user =
+    const user =
       (await Admin.findOne({ passwordToken: tokenHash, passwordTokenExpiry: { $gt: now } })) ||
       (await Candidate.findOne({ passwordToken: tokenHash, passwordTokenExpiry: { $gt: now } }));
 
@@ -54,7 +54,7 @@ export async function resetpassword(request: NextRequest) {
 
     await user.save();
 
-  
+
     try {
       const html = `
         <p>Your password has been successfully changed. If you didn’t do this, please contact support immediately.</p>
