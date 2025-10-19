@@ -82,7 +82,7 @@ export default function MyAttendancePage() {
         toast.error(
           error?.message || "Something went wrong while fetching attendance"
         );
-        console.error("Attendance fetch error:", error);
+        // console.error("Attendance fetch error:", error);
       } finally {
         setLoading(false);
       }

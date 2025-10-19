@@ -174,7 +174,7 @@ export default function UploadTaskForm() {
     e.preventDefault();
     setLoading(true);
 
-    console.log(formData);
+    // console.log(formData);
     
 
     const { error } = schema.validate(formData, { abortEarly: false });

@@ -35,6 +35,8 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
       );
     }
 
+    
+
 
     let existing = await Candidate.findOne({ email });
     if (!existing) existing = await Admin.findOne({ email });
@@ -45,6 +47,14 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
         { status: 400 }
       );
     }
+
+    if (existing.probationStatus === "inactive") {
+    return NextResponse.json({
+      success: false,
+      status : 403,
+      message: "Your account is inactive. Please contact the admin.",
+    });
+  }
 
 
     const isPasswordValid = await bcrypt.compare(password, existing.password);

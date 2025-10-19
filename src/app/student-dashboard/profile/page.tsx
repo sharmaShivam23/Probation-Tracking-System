@@ -63,7 +63,7 @@ export default function ProfilePage() {
       toast.success("Profile updated successfully");
       setEditOpen(false);
     } catch (err: any) {
-      console.log(err);
+      // console.log(err);
       toast.error(err.response?.data?.message || "Update failed");
     } finally {
       setUpdating(false);

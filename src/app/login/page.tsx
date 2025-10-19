@@ -8,10 +8,12 @@ import { getUserRole } from "@/middleware/DecodeToken";
 import { IoEyeOff } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
 import { EyeClosed, EyeIcon } from "lucide-react";
+import { AnimatePresence , motion } from "framer-motion";
 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [messagePopup, setMessagePopup] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [showpassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -71,9 +73,12 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await axios.post("/api/auth/login", formData, { withCredentials: true });
-      // console.log(
-      //   res
-      // );
+      
+
+     if (res.status === 403 || res?.data?.message?.includes("inactive")) {
+      setMessagePopup(true);
+      return;
+    }
 
 
       if (res?.data?.success) {
@@ -101,7 +106,7 @@ export default function LoginPage() {
         toast.error(res?.data?.message || "Login failed");
       }
     } catch (error: unknown) {
-      console.log(error);
+      // console.log(error);
       const errorMessage = error instanceof Error && 'response' in error
         ? (error as { response?: { data?: { message?: string } } }).response?.data?.message || "Something went wrong"
         : "Something went wrong";
@@ -181,8 +186,13 @@ export default function LoginPage() {
             {errors.password && (
               <p className="text-red-300 text-sm">{errors.password}</p>
             )}
+            <div onClick={() => router.push("/forgotpassword")} className="p hover:-translate-x-1.5 transition-all ease-in-out duration-200 hover:opacity-45 text-sm cursor-pointer text-white/80 font-semibold w-full flex justify-end">
+            Forgot Password
           </div>
 
+          </div>
+
+          
           {/* Submit */}
           <button
             type="submit"
@@ -203,6 +213,50 @@ export default function LoginPage() {
           </button>
         )} */}
       </div>
+
+
+       <AnimatePresence>
+              {messagePopup && (
+                <>
+               <motion.div
+  className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+/>
+
+<motion.div
+  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 mt-20 w-[90%] max-w-sm bg-gradient-to-b from-black via-gray-900 to-red-900 border border-red-800 rounded-2xl p-6 shadow-2xl text-center"
+  initial={{ scale: 0.8, opacity: 0, y: -30 }}
+  animate={{ scale: 1, opacity: 1, y: 0 }}
+  exit={{ scale: 0.8, opacity: 0, y: -30 }}
+  transition={{ duration: 0.25, ease: "easeOut" }}
+>
+  <h2 className="text-xl font-bold text-white mb-3">Account Inactive</h2>
+  <p className="text-gray-200 text-sm mb-6">
+    Your probation status is <span className="text-red-400 font-semibold">inactive</span>.  
+    To reopen your account, please contact the admin.
+  </p>
+
+  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+    <button
+      onClick={() => router.push("/Help")}
+      className="px-5 py-2 rounded-xl cursor-pointer bg-red-700 hover:bg-red-800 text-white font-semibold shadow-md transition"
+    >
+      Contact Admin
+    </button>
+    <button
+      onClick={() => setMessagePopup(false)}
+      className="px-5 py-2 cursor-pointer rounded-xl bg-gray-700 hover:bg-gray-800 text-gray-100 font-medium shadow-md transition"
+    >
+      Cancel
+    </button>
+  </div>
+</motion.div>
+
+                </>
+              )}
+            </AnimatePresence>
     </div>
   );
 }

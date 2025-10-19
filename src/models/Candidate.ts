@@ -47,7 +47,7 @@ const CandidateSchema = new Schema(
         ref: "UploadedTask",
       },
     ],
-    probationStatus: { type: String, default: "active", enum: ["active", "completed", "failed"] },
+    probationStatus: { type: String, default: "active", enum: ["active", "completed", "inactive"] },
   },
   { timestamps: true }
 );

@@ -33,6 +33,8 @@ const AdminSchema = new Schema(
         "Civil",
       ],
     },
+    passwordToken : { type: String },
+    passwordTokenExpiry : { type : Date },
     password: { type: String, required: true },
     code: { type: String, required: true },
     uploadedTasks: [

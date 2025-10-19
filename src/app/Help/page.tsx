@@ -54,7 +54,7 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, recaptchaValue }),
       });
-      console.log(res);
+      // console.log(res);
 
       const data = await res.json();
       setStatus({ success: data.success, message: data.message });
@@ -66,7 +66,7 @@ export default function ContactForm() {
         }
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
 
       setStatus({ success: false, message: "Something went wrong." });
     } finally {
