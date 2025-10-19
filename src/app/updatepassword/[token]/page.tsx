@@ -126,7 +126,7 @@ const UpdatePassword: React.FC<PageProps> = ({ params }) => {
           transition={{ delay: 0.3 }}
           className="text-center text-gray-300 font-medium text-md"
         >
-          Almost done. Enter your new password and you're all set.
+          Almost done. Enter your new password and you&apos;re all set.
         </motion.p>
 
         {/* Password */}

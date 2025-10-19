@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading2";
-import {toast,Toaster} from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 interface User {
   name: string;
@@ -16,7 +16,7 @@ interface User {
   github?: string;
   uploadedTasksCount: number;
   joined?: string;
-  role?: string; 
+  role?: string;
 }
 
 export default function UsersTable() {
@@ -40,7 +40,7 @@ export default function UsersTable() {
         });
 
         // console.log(res);
-        
+
 
         if (res?.data?.success) {
           setStudents(res.data.students);
@@ -48,7 +48,7 @@ export default function UsersTable() {
         } else {
           toast.error(res?.data?.message || "Failed to fetch users");
         }
-      } catch (err: any) {
+      } catch {
         // console.error(err);
         toast.error("Something went wrong");
       } finally {
@@ -63,7 +63,7 @@ export default function UsersTable() {
 
   return (
     <div className="min-h-screen rounded-2xl sm:p-6">
-      <Toaster/>
+      <Toaster />
       <h1 className="text-4xl font-bold text-white text-center mb-10 drop-shadow-lg">
         Students Data
       </h1>
@@ -102,7 +102,7 @@ export default function UsersTable() {
                   transition={{ delay: idx * 0.05 }}
                   className="hover:bg-white/20 transition-colors cursor-pointer"
                 >
-                  <td className="px-6 py-4 text-green-500 font-semibold">{idx+1}</td>
+                  <td className="px-6 py-4 text-green-500 font-semibold">{idx + 1}</td>
                   <td className="px-6 py-4 text-yellow-300 font-semibold">{user?.name}</td>
                   <td className="px-6 py-4 text-white/80">{user?.email}</td>
                   <td className="px-6 py-4 text-white/80">{user?.role || "Student"}</td>

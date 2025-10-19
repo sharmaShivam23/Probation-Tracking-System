@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import {
   FaTasks,
@@ -13,7 +12,7 @@ import {
 export default function AdminDashboardHome() {
   return (
     <div className="min-h-screen text-white sm:p-6">
-       <Toaster/>
+      <Toaster />
       <header className="mb-12 text-center">
         <h1
           style={{
@@ -126,7 +125,7 @@ export default function AdminDashboardHome() {
           </p>
         </div>
 
-        
+
         <div className="p-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-md hover:shadow-lg transition-shadow">
           <h3 className="text-2xl font-semibold mb-2">4. Attendance Scores</h3>
           <p className="text-gray-300">

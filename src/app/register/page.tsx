@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { toast, Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { ImCross } from "react-icons/im";
 import OtpInput from "react-otp-input";
@@ -46,7 +45,7 @@ export default function RegisterPage() {
   const [showpassword, setShowPassword] = useState(false);
   const [showEmail, setShowEmail] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
+  const [, setOtpSent] = useState(false);
   const [resendDisabled, setResendDisabled] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const reset = useRef<ReCAPTCHA | null>(null);
@@ -79,7 +78,7 @@ export default function RegisterPage() {
     rollNo: "",
     branch: "",
     github: "",
-    phoneNumber : "",
+    phoneNumber: "",
     domain: "",
     password: "",
     code: "",
@@ -141,7 +140,7 @@ export default function RegisterPage() {
           github: "",
           domain: "",
           password: "",
-          phoneNumber : "",
+          phoneNumber: "",
           code: "",
           otp: "",
         });
@@ -158,7 +157,7 @@ export default function RegisterPage() {
       const errorMessage =
         error instanceof Error && "response" in error
           ? (error as { response?: { data?: { message?: string } } }).response
-              ?.data?.message || "Something went wrong"
+            ?.data?.message || "Something went wrong"
           : "Something went wrong";
       toast.error(errorMessage, { id: toastID });
     } finally {
@@ -188,93 +187,93 @@ export default function RegisterPage() {
   // };
 
   const handleChange = (
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-) => {
-  const { name, value } = e.target;
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
 
-  setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-  // Real-time validation for just the changed field
-  const newErrors = { ...errors };
+    // Real-time validation for just the changed field
+    const newErrors = { ...errors };
 
-  switch (name) {
-    case "name":
-      if (!value) newErrors.name = "Name is required";
-      else if (!/^[a-zA-Z\s]+$/.test(value))
-        newErrors.name = "Name must contain only alphabets";
-      else delete newErrors.name;
-      break;
+    switch (name) {
+      case "name":
+        if (!value) newErrors.name = "Name is required";
+        else if (!/^[a-zA-Z\s]+$/.test(value))
+          newErrors.name = "Name must contain only alphabets";
+        else delete newErrors.name;
+        break;
 
-    case "email":
-      if (!value) newErrors.email = "Email is required";
-      else if (!value.endsWith("@akgec.ac.in"))
-        newErrors.email = "Email must end with @akgec.ac.in";
-      else if (role === "Admin" && !value.match(/^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/))
-        newErrors.email = "Admin email must contain 23 batch year";
-      else if (role === "Student" && !value.match(/^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/))
-        newErrors.email = "Student email must contain 24 batch year";
-      else if (formData.rollNo && !value.includes(formData.rollNo))
-        newErrors.email = "Email student number mismatch";
-      else delete newErrors.email;
-      break;
+      case "email":
+        if (!value) newErrors.email = "Email is required";
+        else if (!value.endsWith("@akgec.ac.in"))
+          newErrors.email = "Email must end with @akgec.ac.in";
+        else if (role === "Admin" && !value.match(/^[a-z]{3,15}23\d{5,6}@akgec\.ac\.in$/))
+          newErrors.email = "Admin email must contain 23 batch year";
+        else if (role === "Student" && !value.match(/^[a-z]{3,15}24\d{5,6}@akgec\.ac\.in$/))
+          newErrors.email = "Student email must contain 24 batch year";
+        else if (formData.rollNo && !value.includes(formData.rollNo))
+          newErrors.email = "Email student number mismatch";
+        else delete newErrors.email;
+        break;
 
-    case "rollNo":
-      if (!value) newErrors.rollNo = "Roll number is required";
-      else if (
-        (role === "Admin" && !value.match(/^23\d{5,6}$/)) ||
-        (role === "Student" && !value.match(/^24\d{5,6}$/))
-      )
-        newErrors.rollNo =
-          role === "Admin"
-            ? "Admin roll number must start with 23"
-            : "Student roll number must start with 24";
-      else if (formData.email && !formData.email.includes(value))
-        newErrors.email = "Email student number mismatch";
-      else delete newErrors.rollNo;
-      break;
+      case "rollNo":
+        if (!value) newErrors.rollNo = "Roll number is required";
+        else if (
+          (role === "Admin" && !value.match(/^23\d{5,6}$/)) ||
+          (role === "Student" && !value.match(/^24\d{5,6}$/))
+        )
+          newErrors.rollNo =
+            role === "Admin"
+              ? "Admin roll number must start with 23"
+              : "Student roll number must start with 24";
+        else if (formData.email && !formData.email.includes(value))
+          newErrors.email = "Email student number mismatch";
+        else delete newErrors.rollNo;
+        break;
 
-     case "phoneNumber":
-  if (value.length > 10) return; 
-  if (!value) {
-    newErrors.phoneNumber = "Phone number is required";
-  } else if (!/^[6-9]\d{9}$/.test(value)) {
-    newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
-  } else {
-    delete newErrors.phoneNumber;
-  }
-  break;
-
-
-
-    case "password":
-      const passReg =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
-      if (!value)
-        newErrors.password = "Password is required";
-      else if (!passReg.test(value))
-        newErrors.password =
-          "Password must contain at least 7 characters with uppercase, lowercase, number, and special character";
-      else delete newErrors.password;
-      break;
-
-    case "code":
-      if (role === "Admin") {
-        if (!value) newErrors.code = "Security code is required for admin";
-        else if (value !== process.env.NEXT_PUBLIC_CODE)
-          newErrors.code = "Invalid Security Code";
-        else delete newErrors.code;
-      }
-      break;
-
-    default:
-      if (name in newErrors) delete newErrors[name];
-  }
-
-  setErrors(newErrors);
-};
+      case "phoneNumber":
+        if (value.length > 10) return;
+        if (!value) {
+          newErrors.phoneNumber = "Phone number is required";
+        } else if (!/^[6-9]\d{9}$/.test(value)) {
+          newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
+        } else {
+          delete newErrors.phoneNumber;
+        }
+        break;
 
 
-  
+
+      case "password":
+        const passReg =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+?])[A-Za-z\d!@#$%^&*()_+?]{7,}$/;
+        if (!value)
+          newErrors.password = "Password is required";
+        else if (!passReg.test(value))
+          newErrors.password =
+            "Password must contain at least 7 characters with uppercase, lowercase, number, and special character";
+        else delete newErrors.password;
+        break;
+
+      case "code":
+        if (role === "Admin") {
+          if (!value) newErrors.code = "Security code is required for admin";
+          else if (value !== process.env.NEXT_PUBLIC_CODE)
+            newErrors.code = "Invalid Security Code";
+          else delete newErrors.code;
+        }
+        break;
+
+      default:
+        if (name in newErrors) delete newErrors[name];
+    }
+
+    setErrors(newErrors);
+  };
+
+
+
 
   function validate() {
     const newErrors: Record<string, string> = {};
@@ -359,13 +358,13 @@ export default function RegisterPage() {
       }
     }
 
-   if (!formData.phoneNumber) {
-  newErrors.phoneNumber = "Phone number is required";
-  valid = false;
-} else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber)) {
-  newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
-  valid = false;
-}
+    if (!formData.phoneNumber) {
+      newErrors.phoneNumber = "Phone number is required";
+      valid = false;
+    } else if (!/^[6-9]\d{9}$/.test(formData.phoneNumber)) {
+      newErrors.phoneNumber = "Enter a valid 10-digit Indian phone number";
+      valid = false;
+    }
 
 
     const passReg =
@@ -418,20 +417,20 @@ export default function RegisterPage() {
           {/* <h3 className="text-center text-xl sm:text-3xl font-bold">
             Join the millions learning <br /> to code with StudyNotion for free
           </h3> */}
-         {/* <Image
+          {/* <Image
             src="/register.gif"
             width={400}
             height={300}
             className="h m-auto mt-6 w-full bg-cover max-w-md shadow-xl"
             alt="register"
           />*/
-         }
-         {/* <img src="/r.webm" alt="" /> */}
+          }
+          {/* <img src="/r.webm" alt="" /> */}
           <Lottie animationData={myAnimation2} loop={true} />
-    
+
         </motion.div>
 
-      
+
         <motion.div
           initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
@@ -451,20 +450,19 @@ export default function RegisterPage() {
               Create your account
             </h1>
 
-           
+
             <div className="flex justify-center mb-2 items-center">
               <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
                 {["Student"].map((r) => (
-                // {["Student", "Admin"].map((r) => (
+                  // {["Student", "Admin"].map((r) => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => handleRole(r as "Student" | "Admin")}
-                    className={`px-4 cursor-pointer py-1 rounded-xl transition ${
-                      role === r
+                    className={`px-4 cursor-pointer py-1 rounded-xl transition ${role === r
                         ? "bg-[#460F0E] text-white scale-105"
                         : "bg-white/30 text-gray-800 hover:bg-white/40"
-                    }`}
+                      }`}
                   >
                     {r}
                   </button>
@@ -611,30 +609,30 @@ export default function RegisterPage() {
 
 
               <div className="relative mt-">
-                 <label className="block text-sm font-medium">
-                    Phone Number
-                  </label>
+                <label className="block text-sm font-medium">
+                  Phone Number
+                </label>
                 <input
                   type="tel"
                   name="phoneNumber"
-                   pattern="[6-9]{1}[0-9]{9}"
-  maxLength={10}
+                  pattern="[6-9]{1}[0-9]{9}"
+                  maxLength={10}
                   value={formData.phoneNumber}
                   onChange={handleChange}
                   className="w-full px-4 py-2  h-[45px] pr-10 rounded-xl  bg-white/30 text-white placeholder-white/70 border border-white/40 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                   placeholder="xxxxxxxxxx"
                 />
-</div>
-        
+              </div>
+
 
               {errors.phoneNumber && (
                 <p className="text-red-300 text-sm">{errors.phoneNumber}</p>
               )}
 
               <div className="relative mt-">
-                 <label className="block text-sm font-medium">
-                    Password
-                  </label>
+                <label className="block text-sm font-medium">
+                  Password
+                </label>
                 <input
                   type={showpassword ? "text" : "password"}
                   name="password"
@@ -644,7 +642,7 @@ export default function RegisterPage() {
                   placeholder="••••••"
                 />
 
-          
+
                 <div
                   onClick={() => setShowPassword(!showpassword)}
                   className="absolute inset-y-4 top-8 right-3 flex justify-center items-center cursor-pointer text-white/80"
@@ -653,12 +651,12 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              
-               {errors.password && (
+
+              {errors.password && (
                 <p className="text-red-300 text-sm">{errors.password}</p>
               )}
 
-             
+
 
               {/* Security Code */}
               {role === "Admin" && (
@@ -692,8 +690,8 @@ export default function RegisterPage() {
                 {loading
                   ? "Registering..."
                   : otpLoading
-                  ? "Sending OTP..."
-                  : "Send OTP & Register"}
+                    ? "Sending OTP..."
+                    : "Send OTP & Register"}
               </motion.button>
             </form>
           </div>
@@ -746,27 +744,26 @@ export default function RegisterPage() {
                 shouldAutoFocus
               />
             </div>
-           
+
             <div className="w-full flex justify-between items-center">
               <button
                 disabled={resendDisabled}
                 onClick={handleResendotp}
-                className={`text-lg font-semibold transition ${
-                  resendDisabled
+                className={`text-lg font-semibold transition ${resendDisabled
                     ? "text-gray-400 cursor-not-allowed"
                     : "text-white cursor-pointer"
-                }`}
+                  }`}
               >
                 {resendDisabled ? `Resend in (${timeLeft}s)` : "Resend OTP"}
               </button>
             </div>
 
-             <div className="block gap-2 mt-4  cursor-pointer w-full">
+            <div className="block gap-2 mt-4  cursor-pointer w-full">
               <div className="flex justify-center  items-center  z-50">
                 <ReCAPTCHA
                   sitekey="6Le3-QArAAAAADn9ym4vDs6qMQN3DpD0yZe183m-"
                   onChange={handleRecaptchaChange}
-                   theme="dark"
+                  theme="dark"
                   className="cursor-pointer g-recaptcha"
                   ref={reset}
                 />

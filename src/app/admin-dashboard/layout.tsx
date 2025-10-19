@@ -15,7 +15,7 @@
 // }) {
 //   const pathname = usePathname();
 //   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
 
 //   const links = [
 //     { href: "/admin-dashboard/attendance", label: "Attendance" },
@@ -38,16 +38,16 @@
 //         />
 //         <link rel="icon" href="/ball2.png" />
 //       </Head>
-      
+
 //         <div className="flex h-screen text-white backdrop-blur-2xl bg-white/0">
-        
+
 //           <aside
 //             className={`fixed md:static top-0 left-0 h-full w-64 bg-black/70 sm:bg-white/20 backdrop-blur-md shadow-lg flex flex-col transform transition-transform duration-300 z-40
 //             ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
 //           >
 //             <div className="p-6 text-xl font-bold border-b border-white/10 flex items-center justify-between">
 //               My Dashboard
-          
+
 //               <button
 //                 className="md:hidden text-white"
 //                 onClick={() => setSidebarOpen(false)}
@@ -78,9 +78,9 @@
 //             </nav>
 //           </aside>
 
-        
+
 //           <main className="flex-1 px-4 py-8 sm:p-8 overflow-y-auto w-full">
-          
+
 //             <div className="md:hidden flex items-center mb-4">
 //               <button
 //                 className="text-white"
@@ -181,11 +181,11 @@
 
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Link from "next/link"; 
+import Link from "next/link";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -222,11 +222,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   key={link.href}
                   href={link.href}
                   onClick={() => setSidebarOpen(false)}
-                  className={`w-full cursor-pointer text-left block px-3 py-2 rounded-lg transition ${
-                    isActive
+                  className={`w-full cursor-pointer text-left block px-3 py-2 rounded-lg transition ${isActive
                       ? "bg-red-900 text-white font-semibold shadow-md"
                       : "hover:bg-white/10"
-                  }`}
+                    }`}
                 >
                   {link.label}
                 </Link>

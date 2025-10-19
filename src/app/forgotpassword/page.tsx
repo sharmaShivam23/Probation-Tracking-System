@@ -12,7 +12,7 @@ const ForgotPassword: React.FC = () => {
   const [emailError, setEmailError] = useState<string>("");
   const [emailSent, setEmailSent] = useState<boolean>(false);
   const [resendTimer, setResendTimer] = useState<number>(0);
-  const [loading , setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const emailRegex = /^[a-z]{3,15}(24|23)\d{5,6}@akgec\.ac\.in$/;
 
@@ -31,7 +31,7 @@ const ForgotPassword: React.FC = () => {
     }
   };
 
-  
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (resendTimer > 0) {
@@ -47,7 +47,7 @@ const ForgotPassword: React.FC = () => {
       toast.error("Please enter a valid college email");
       return;
     }
-   setLoading(true);
+    setLoading(true);
     const toastId = toast.loading("Sending reset link...");
 
     try {
@@ -63,15 +63,15 @@ const ForgotPassword: React.FC = () => {
         toast.success(data.message || "Email sent successfully", { id: toastId });
         setLoading(false);
         setEmailSent(true);
-        setResendTimer(120); 
+        setResendTimer(120);
       } else {
         toast.error(data.message || "Something went wrong", { id: toastId });
       }
-    } catch (err) {
+    } catch {
       // console.error("Forgot password error:", err);
       toast.error("Something went wrong. Please try again.", { id: toastId });
     }
-    finally{
+    finally {
       setLoading(false);
     }
   }
@@ -131,11 +131,10 @@ const ForgotPassword: React.FC = () => {
                 value={email}
                 onChange={handleEmailChange}
                 placeholder="yourname@akgec.ac.in"
-                className={`w-full h-[50px] px-4 py-2 rounded-xl bg-white/30 text-white placeholder-white/70 border ${
-                  emailError
+                className={`w-full h-[50px] px-4 py-2 rounded-xl bg-white/30 text-white placeholder-white/70 border ${emailError
                     ? "border-red-500 focus:ring-red-600"
                     : "border-white/40 focus:ring-red-700"
-                } focus:outline-none focus:ring-2`}
+                  } focus:outline-none focus:ring-2`}
               />
               {emailError && (
                 <p className="text-red-400 text-sm mt-1">{emailError}</p>
@@ -152,41 +151,40 @@ const ForgotPassword: React.FC = () => {
             <button
               type="submit"
               disabled={!!emailError || !email || (emailSent && resendTimer > 0)}
-              className={`w-full py-3 rounded-xl font-semibold cursor-pointer bg-gradient-to-l from-white/20 via-red-950 to-white/10 border border-white/10 text-white shadow-lg transition-all ${
-                !!emailError || !email || (emailSent && resendTimer > 0)
+              className={`w-full py-3 rounded-xl font-semibold cursor-pointer bg-gradient-to-l from-white/20 via-red-950 to-white/10 border border-white/10 text-white shadow-lg transition-all ${!!emailError || !email || (emailSent && resendTimer > 0)
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:opacity-90 hover:scale-95"
-              }`}
+                }`}
             >
-              {loading ? 
-              <div className="loading flex justify-center items-center w-full">
-              <svg
-              className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8h-4l3 3-3 3h4a8 8 0 01-8 8v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
-              ></path>
-            </svg> 
-            </div>
-            : (
-              !emailSent
-                ? "Send Reset Link"
-                : resendTimer > 0
-                ? `Resend Email (${resendTimer}s)`
-                : "Resend Email"
+              {loading ?
+                <div className="loading flex justify-center items-center w-full">
+                  <svg
+                    className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 018 8h-4l3 3-3 3h4a8 8 0 01-8 8v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                    ></path>
+                  </svg>
+                </div>
+                : (
+                  !emailSent
+                    ? "Send Reset Link"
+                    : resendTimer > 0
+                      ? `Resend Email (${resendTimer}s)`
+                      : "Resend Email"
                 )}
             </button>
           </motion.div>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Loading from "@/components/Loading2";
-import {toast,Toaster} from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 interface User {
   name: string;
@@ -41,7 +41,7 @@ export default function UsersDashboard() {
         } else {
           toast.error(res?.data?.message || "Failed to fetch users");
         }
-      } catch (err: any) {
+      } catch {
         // console.error(err);
         toast.error("Something went wrong");
       } finally {
@@ -54,7 +54,7 @@ export default function UsersDashboard() {
 
   const Table = ({ title, users }: { title: string; users: User[] }) => (
     <div className="overflow-x-auto  m-auto mb-12">
-      <Toaster/>
+      <Toaster />
       <h2 className="text-2xl text-white font-bold mb-4 drop-shadow-lg">{title}</h2>
       <motion.table
         initial={{ opacity: 0, y: 30 }}

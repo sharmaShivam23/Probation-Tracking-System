@@ -65,7 +65,7 @@ export default function ContactForm() {
           reset.current.reset();
         }
       }
-    } catch (err) {
+    } catch {
       // console.log(err);
 
       setStatus({ success: false, message: "Something went wrong." });
