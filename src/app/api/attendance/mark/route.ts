@@ -71,7 +71,7 @@ if (isNaN(normalized.getTime())) {
       return NextResponse.json({ success: false, message: "Candidate not found" }, { status: 404 });
     }
 
-    // const normalized = normalizeDateToUTC(date);
+  
 
     
     const updated = await Attendance.findOneAndUpdate(
