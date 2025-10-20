@@ -30,6 +30,8 @@ const CandidateSchema = new Schema(
     },
     github: { type: String, required: true },
     password: { type: String, required: true },
+    passwordToken : { type: String },
+    passwordTokenExpiry : { type : Date },
     domain: {
       type: String, enum: ["Frontend Development",
         "Backend Development",
@@ -40,9 +42,6 @@ const CandidateSchema = new Schema(
         "Machine Learning",
         "Other",]
     },
-    passwordToken : { type: String },
-    passwordTokenExpiry : { type : Date },
-
     uploadedTasks: [
       {
         type: mongoose.Schema.Types.ObjectId,

@@ -31,10 +31,10 @@ async function forgotpassword(request: NextRequest) {
       return NextResponse.json({ success: false, message: "Email not registered" }, { status: 404 });
     }
 
-    // Generate token and hash
+  
     const rawToken = crypto.randomBytes(32).toString("hex");
     const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
-    const tokenExpiry = Date.now() + 5 * 60 * 1000; // 5 minutes
+    const tokenExpiry = Date.now() + 5 * 60 * 1000; 
 
     // Save token
     user.passwordToken = hashedToken;
