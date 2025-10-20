@@ -40,6 +40,8 @@ const CandidateSchema = new Schema(
         "Machine Learning",
         "Other",]
     },
+    passwordToken : { type: String },
+    passwordTokenExpiry : { type : Date },
 
     uploadedTasks: [
       {
