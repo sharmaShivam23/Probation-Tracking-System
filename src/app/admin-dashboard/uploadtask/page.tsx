@@ -288,6 +288,9 @@ export default function TaskForm() {
             <option value="Video Editing Task" className="text-black">
               Video Editing Task
             </option>
+            <option value="Full Stack Task" className="text-black">
+              Full Stack Task
+            </option>
           </select>
           {errors.category && <p className="text-red-400 text-sm mt-1">{errors.category}</p>}
         </div>

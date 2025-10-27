@@ -114,6 +114,7 @@ export default function AllTasks() {
     "Cloud Computing Task",
     "App Development Task",
     "Video Editing Task",
+    "Full Stack Task"
   ];
 
   const categoryColors: Record<string, string> = {
@@ -124,6 +125,7 @@ export default function AllTasks() {
     "Cloud Computing Task": "bg-yellow-900 text-white",
     "App Development Task": "bg-pink-900 text-white",
     "Video Editing Task": "bg-indigo-900 text-white",
+    "Full Stack Task": "bg-indigo-900 text-white",
     General: "bg-green-500 text-white",
   };
 

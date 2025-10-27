@@ -58,6 +58,7 @@ const TaskSchema = new Schema(
         "Cloud Computing Task",
         "App Development Task",
         "Video Editing Task",
+        "Full Stack Task"
       ],
       required: true,
     },

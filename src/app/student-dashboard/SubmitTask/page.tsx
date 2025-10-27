@@ -14,7 +14,7 @@ export default function UploadTaskForm() {
   const taskId = searchParams.get("taskId");
   const taskCategory = searchParams.get("category");
 
-  const showGithubField = ["Frontend Task", "Backend Task", "Machine Learning Task" , "App Development Task"].includes(
+  const showGithubField = ["Frontend Task", "Backend Task", "Machine Learning Task" , "App Development Task" , "Full Stack Task"].includes(
   (taskCategory || "")
 );
 

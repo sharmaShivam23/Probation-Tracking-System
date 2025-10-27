@@ -319,10 +319,11 @@ useEffect(() => {
     "Frontend Task",
     "Backend Task",
     "UI/UX Task",
-    "Machine Learning",
+    "Machine Learning Task",
     "Cloud Computing Task",
     "App Development Task",
     "Video Editing Task",
+    "Full Stack Task"
   ];
 
   return (

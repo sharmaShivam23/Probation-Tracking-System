@@ -833,6 +833,7 @@ export default function ProjectsPage() {
     "Cloud Computing Task",
     "App Development Task",
     "Video Editing Task",
+    "Full Stack Task"
   ];
 
   const handleCat = (cat: string) => {
