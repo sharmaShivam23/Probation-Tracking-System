@@ -55,7 +55,7 @@ export default function Home() {
         </motion.h2>
         <p className="mt-6 max-w-2xl text-lg text-white">
           A modern system for students and admins to manage tasks, submissions,
-          and attendance — built for simplicity and speed.
+          and attendance built for simplicity and speed.
         </p>
         <div className="mt-8 flex cursor-pointer gap-4 flex-wrap justify-center">
           {/* <Button onClick={() => router.push("/register")}>Register as Admin</Button> */}
