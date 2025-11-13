@@ -51,48 +51,54 @@
 #             sudo docker image prune -f
 
 
+
+
+
+
+
+
 name: CI/CD Pipeline for Next.js Fullstack
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout Repository
+      # Step 1: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Setup Node.js environment
+      # Step 2: Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Use your Node.js version
+          node-version: '20'
 
-      # Step 3: Install dependencies and build Next.js
+      # Step 3: Install dependencies & build Next.js app
       - name: Install & Build
         run: |
-          npm install
+          npm ci
           npm run build
 
       # Step 4: Build Docker image
       - name: Build Docker Image
-        run: docker build -t shivam232006/nextjs-fullstack:latest .
+        run: docker build -t shivam232006/tasksphere:latest .
 
       # Step 5: Login to Docker Hub
       - name: Login to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       # Step 6: Push Docker image to Docker Hub
-      - name: Push Image to Docker Hub
-        run: docker push shivam232006/nextjs-fullstack:latest
+      - name: Push Docker Image
+        run: docker push shivam232006/tasksphere:latest
 
-      # Step 7: Deploy to EC2 via SSH
-      - name: Deploy to EC2 via SSH
+      # Step 7: Deploy to AWS EC2
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -100,26 +106,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            echo "Stopping any container using port 3000..."
-            for cid in $(sudo docker ps -q --filter "publish=3000"); do
-                sudo docker stop $cid || true
-                sudo docker rm $cid || true
-            done
-
-            echo "Stopping old container named nextjs-app..."
-            if [ $(sudo docker ps -a -q -f name=nextjs-app) ]; then
-                sudo docker stop nextjs-app || true
-                sudo docker rm nextjs-app || true
-            fi
+            echo "Stopping old Next.js container..."
+            sudo docker rm -f nextjs-app || true
 
             echo "Pulling latest Docker image..."
-            sudo docker pull shivam232006/nextjs-fullstack:latest
+            sudo docker pull shivam232006/tasksphere:latest
 
             echo "Running new container..."
             sudo docker run -d --name nextjs-app -p 3000:3000 \
                 --env-file /home/${{ secrets.EC2_USER }}/.env \
                 --restart always \
-                shivam232006/nextjs-fullstack:latest
+                shivam232006/tasksphere:latest npm run start
 
             echo "Cleaning up dangling images..."
             sudo docker images -f "dangling=true" -q | xargs -r sudo docker rmi -f
