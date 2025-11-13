@@ -56,7 +56,6 @@
 
 
 
-
 name: CI/CD Pipeline for Next.js Fullstack
 
 on:
@@ -106,8 +105,17 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            echo "Stopping old Next.js container..."
-            sudo docker rm -f nextjs-app || true
+            echo "Stopping containers using port 3000..."
+            for cid in $(sudo docker ps -q --filter "publish=3000"); do
+                sudo docker stop $cid || true
+                sudo docker rm $cid || true
+            done
+
+            echo "Stopping old container named nextjs-app..."
+            if [ $(sudo docker ps -a -q -f name=nextjs-app) ]; then
+                sudo docker stop nextjs-app || true
+                sudo docker rm nextjs-app || true
+            fi
 
             echo "Pulling latest Docker image..."
             sudo docker pull shivam232006/tasksphere:latest
