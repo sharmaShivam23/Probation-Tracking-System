@@ -1,6 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
+import { addSecurityHeaders } from "./securityMiddleware";
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -103,7 +104,7 @@ export function withRateLimit(
     const rateLimitResult = await rateLimitMiddleware(req, limiter, identifier);
 
     if (!rateLimitResult.success) {
-      return NextResponse.json(
+      const rateLimitResponse = NextResponse.json(
         {
           success: false,
           message: rateLimitResult.message,
@@ -119,27 +120,20 @@ export function withRateLimit(
           },
         }
       );
+      return addSecurityHeaders(rateLimitResponse);
     }
 
     const response = await handler(req);
 
-    
-    const res = NextResponse.next({
-      request: {
-        headers: req.headers,
-      },
-    });
-    Object.entries(response.headers).forEach(([key, value]) =>
-      res.headers.set(key, value)
-    );
-
-    res.headers.set("X-RateLimit-Limit", rateLimitResult.limit.toString());
-    res.headers.set(
+    // Add rate limit headers to the response
+    response.headers.set("X-RateLimit-Limit", rateLimitResult.limit.toString());
+    response.headers.set(
       "X-RateLimit-Remaining",
       rateLimitResult.remaining.toString()
     );
-    res.headers.set("X-RateLimit-Reset", rateLimitResult.reset.toString());
+    response.headers.set("X-RateLimit-Reset", rateLimitResult.reset.toString());
 
-    return response;
+    // Add security headers to the response
+    return addSecurityHeaders(response);
   };
 }

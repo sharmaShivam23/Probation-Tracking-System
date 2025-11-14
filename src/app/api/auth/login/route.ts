@@ -1,16 +1,20 @@
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import bcrypt from "bcryptjs";
 import Candidate from "@/models/Candidate";
 import Admin from "@/models/Admins";
 import jwt from "jsonwebtoken";
 import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
+import { getSanitizedBody } from "@/lib/securityMiddleware";
 
- async function Login(request: Request) {
+ async function Login(request: NextRequest) {
   try {
     await connectDB();
-    const { email, password } = await request.json();
+    
+    // Read and sanitize request body
+    const body = await getSanitizedBody(request);
+    const { email, password } = body || {};
 
     if (!email || !password) {
       return NextResponse.json(
@@ -113,4 +117,6 @@ import { registrationLimiter , withRateLimit } from "@/lib/ratelimiter";
   }
 }
 
-export const POST = withRateLimit(Login, registrationLimiter);
+// Combine rate limiting with security middleware
+const securedLogin = withRateLimit(Login, registrationLimiter);
+export const POST = securedLogin;
