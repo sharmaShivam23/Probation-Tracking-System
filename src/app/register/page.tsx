@@ -453,8 +453,8 @@ export default function RegisterPage() {
 
             <div className="flex justify-center mb-2 items-center">
               <div className="flex gap-6 bg-white/10 px-8 py-2 rounded-2xl">
-                {["Student"].map((r) => (
-                  // {["Student", "Admin"].map((r) => (
+                {/* {["Student"].map((r) => ( */}
+                  {["Student", "Admin"].map((r) => (
                   <button
                     key={r}
                     type="button"
