@@ -10,7 +10,8 @@ import { addSecurityHeaders } from "@/lib/securityMiddleware";
 const allowedOrigins = [
   "http://localhost:3000",
   // "https://probation-tracking-system.vercel.app",
-  "https://tasksphere25.vercel.app"
+  "https://tasksphere25.vercel.app",
+  "https://main.d26arhhgrnp3xa.amplifyapp.com"
 ];
 
 export async function middleware(req: NextRequest) {
